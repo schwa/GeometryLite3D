@@ -91,7 +91,7 @@ struct SIMDExtensionsTests {
             [9, 10, 11, 12],
             [13, 14, 15, 16]
         )
-        let upperLeft = matrix.upperLeft
+        let upperLeft = matrix.upperLeft3x3
         #expect(upperLeft.columns.0 == [1, 2, 3])
         #expect(upperLeft.columns.1 == [5, 6, 7])
         #expect(upperLeft.columns.2 == [9, 10, 11])
