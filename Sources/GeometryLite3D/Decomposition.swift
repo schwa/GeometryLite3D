@@ -55,60 +55,6 @@ public struct TransformComponents: Sendable, Equatable {
     )
 }
 
-public struct Euler {
-    public enum Order {
-        case zyx
-    }
-
-    public var order: Order = .zyx
-    public var roll: Float
-    public var pitch: Float
-    public var yaw: Float
-}
-
-extension Euler {
-    init(_ q: simd_quatf) {
-        /// Converts a quaternion to Euler angles in radians (yaw, pitch, roll)
-        /// Order: ZYX = Yaw (Z), Pitch (Y), Roll (X)
-        let x = q.imag.x
-        let y = q.imag.y
-        let z = q.imag.z
-        let w = q.real
-
-        // Roll (x-axis rotation)
-        let sinr_cosp = 2 * (w * x + y * z)
-        let cosr_cosp = 1 - 2 * (x * x + y * y)
-        roll = atan2(sinr_cosp, cosr_cosp)
-
-        // Pitch (y-axis rotation)
-        let sinp = 2 * (w * y - z * x)
-        if abs(sinp) >= 1 {
-            pitch = copysign(.pi / 2, sinp) // use 90 degrees if out of range
-        } else {
-            pitch = asin(sinp)
-        }
-
-        // Yaw (z-axis rotation)
-        let siny_cosp = 2 * (w * z + x * y)
-        let cosy_cosp = 1 - 2 * (y * y + z * z)
-        yaw = atan2(siny_cosp, cosy_cosp)
-    }
-}
-
-public struct Skew: Sendable, Equatable {
-    public var xy: Float
-    public var xz: Float
-    public var yz: Float
-
-    public init(xy: Float, xz: Float, yz: Float) {
-        self.xy = xy
-        self.xz = xz
-        self.yz = yz
-    }
-
-    public static let zero = Self(xy: 0, xz: 0, yz: 0)
-}
-
 public extension float4x4 {
     /// Decomposes a 4x4 transformation matrix into its constituent components.
     ///
