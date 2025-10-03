@@ -46,7 +46,7 @@ struct Packed3Tests {
     @Test
     func conversionFromSIMD3() {
         let simd = SIMD3<Float>(10, 20, 30)
-        let packed = Packed3<Float>(x: simd.x, y: simd.y, z: simd.z)
+        let packed = Packed3<Float>(simd)
         #expect(packed.x == 10)
         #expect(packed.y == 20)
         #expect(packed.z == 30)
@@ -55,10 +55,27 @@ struct Packed3Tests {
     @Test
     func conversionToSIMD3() {
         let packed = Packed3<Float>(x: 5, y: 10, z: 15)
-        let simd = SIMD3<Float>(packed.x, packed.y, packed.z)
+        let simd = SIMD3(packed)
         #expect(simd.x == 5)
         #expect(simd.y == 10)
         #expect(simd.z == 15)
+    }
+
+    @Test
+    func simdRoundTrip() {
+        let original = SIMD3<Float>(-4, 2, 9)
+        let packed = Packed3<Float>(original)
+        let recovered = SIMD3(packed)
+        #expect(recovered == original)
+    }
+
+    @Test
+    func multiplicationWithIntegerScalars() {
+        let packed = Packed3<Int>(x: 1, y: -2, z: 3)
+        let result = packed * 3
+        #expect(result.x == 3)
+        #expect(result.y == -6)
+        #expect(result.z == 9)
     }
 
     @Test

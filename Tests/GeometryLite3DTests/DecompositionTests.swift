@@ -118,6 +118,28 @@ struct DecompositionTests {
     }
 
     @Test
+    func decomposeMatrixWithPerspective() {
+        let matrix = float4x4(
+            [1, 0, 0, 0.2],
+            [0, 1, 0, -0.3],
+            [0, 0, 1, 0.4],
+            [0, 0, 0, 1]
+        )
+        let components = matrix.decompose
+
+        #expect(components != nil)
+        if let components = components {
+            #expect(abs(components.perspective.x - 0.2) < 1e-6)
+            #expect(abs(components.perspective.y + 0.3) < 1e-6)
+            #expect(abs(components.perspective.z - 0.4) < 1e-6)
+            #expect(abs(components.perspective.w - 1) < 1e-6)
+            #expect(components.translate == .zero)
+            #expect(components.scale == .one)
+            #expect(components.skew == Skew.zero)
+        }
+    }
+
+    @Test
     func decomposeSingularMatrix() {
         let singular = float4x4(
             [1, 0, 0, 0],
@@ -135,5 +157,45 @@ struct DecompositionTests {
         let euler = Euler(quat)
 
         #expect(abs(euler.pitch - .pi / 2) < 1e-5)
+    }
+
+    @Test
+    func decomposeMatrixWithSkew() {
+        let matrix = float4x4(
+            [1, 0, 0, 0],
+            [0.5, 1, 0, 0],
+            [0.25, 0.75, 1, 0],
+            [0, 0, 0, 1]
+        )
+        let components = matrix.decompose
+
+        #expect(components != nil)
+        if let components = components {
+            #expect(abs(components.skew.xy - 0.5) < 1e-6)
+            #expect(abs(components.skew.xz - 0.25) < 1e-6)
+            #expect(abs(components.skew.yz - 0.75) < 1e-6)
+            #expect(components.scale == .one)
+            #expect(components.translate == .zero)
+        }
+    }
+
+    @Test
+    func decomposeNegativeScaleMatrix() {
+        let matrix = float4x4(
+            [-2, 0, 0, 0],
+            [0, 3, 0, 0],
+            [0, 0, 4, 0],
+            [0, 0, 0, 1]
+        )
+        let components = matrix.decompose
+
+        #expect(components != nil)
+        if let components = components {
+            #expect(components.translate == .zero)
+            #expect(abs(components.scale.x + 2) < 1e-6)
+            #expect(abs(components.scale.y + 3) < 1e-6)
+            #expect(abs(components.scale.z + 4) < 1e-6)
+            #expect(abs(components.rotation.angle - .pi) < 1e-5)
+        }
     }
 }
