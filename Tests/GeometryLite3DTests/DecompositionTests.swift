@@ -232,6 +232,69 @@ struct DecompositionTests {
     }
 
     @Test
+    func decomposePiRotationChoosesXAxisBranch() {
+        let matrix = float4x4(
+            SIMD4<Float>(1, 0, 0, 0),
+            SIMD4<Float>(0, -1, 0, 0),
+            SIMD4<Float>(0, 0, -1, 0),
+            SIMD4<Float>(0, 0, 0, 1)
+        )
+
+        let components = matrix.decompose
+        #expect(components != nil)
+        if let components = components {
+            #expect(components.scale == .one)
+            #expect(abs(components.rotation.angle - Float.pi) < 1e-5)
+            let axis = components.rotation.axis
+            #expect(abs(abs(axis.x) - 1) < 1e-5)
+            #expect(abs(axis.y) < 1e-5)
+            #expect(abs(axis.z) < 1e-5)
+        }
+    }
+
+    @Test
+    func decomposePiRotationChoosesYAxisBranch() {
+        let matrix = float4x4(
+            SIMD4<Float>(-1, 0, 0, 0),
+            SIMD4<Float>(0, 1, 0, 0),
+            SIMD4<Float>(0, 0, -1, 0),
+            SIMD4<Float>(0, 0, 0, 1)
+        )
+
+        let components = matrix.decompose
+        #expect(components != nil)
+        if let components = components {
+            #expect(components.scale == .one)
+            #expect(abs(components.rotation.angle - Float.pi) < 1e-5)
+            let axis = components.rotation.axis
+            #expect(abs(axis.x) < 1e-5)
+            #expect(abs(abs(axis.y) - 1) < 1e-5)
+            #expect(abs(axis.z) < 1e-5)
+        }
+    }
+
+    @Test
+    func decomposePiRotationChoosesZAxisBranch() {
+        let matrix = float4x4(
+            SIMD4<Float>(-1, 0, 0, 0),
+            SIMD4<Float>(0, -1, 0, 0),
+            SIMD4<Float>(0, 0, 1, 0),
+            SIMD4<Float>(0, 0, 0, 1)
+        )
+
+        let components = matrix.decompose
+        #expect(components != nil)
+        if let components = components {
+            #expect(components.scale == .one)
+            #expect(abs(components.rotation.angle - Float.pi) < 1e-5)
+            let axis = components.rotation.axis
+            #expect(abs(axis.x) < 1e-5)
+            #expect(abs(axis.y) < 1e-5)
+            #expect(abs(abs(axis.z) - 1) < 1e-5)
+        }
+    }
+
+    @Test
     func scalingVectorToDesiredLength() {
         var vector = SIMD3<Float>(3, 0, 0)
         vector.scale(to: 6)
