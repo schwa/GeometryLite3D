@@ -140,23 +140,44 @@ struct DecompositionTests {
     }
 
     @Test
-    func decomposeSingularMatrix() {
-        let singular = float4x4(
+    func decomposeMatrixWithZeroWReturnsNil() {
+        let matrix = float4x4(
             [1, 0, 0, 0],
             [0, 1, 0, 0],
             [0, 0, 1, 0],
             [0, 0, 0, 0]
         )
-        let components = singular.decompose
-        #expect(components == nil)
+        #expect(matrix.decompose == nil)
+    }
+
+    @Test
+    func decomposeNonInvertiblePerspectiveReturnsNil() {
+        let matrix = float4x4(
+            [1, 0, 0, 1],
+            [1, 0, 0, 0],
+            [1, 0, 0, 0],
+            [0, 0, 0, 1]
+        )
+        #expect(matrix.decompose == nil)
+    }
+
+    @Test
+    func decomposeSingularMatrix() {
+        let singular = float4x4(
+            [1, 0, 0, 0],
+            [1, 0, 0, 0],
+            [0, 1, 0, 0],
+            [0, 0, 0, 1]
+        )
+        #expect(singular.decompose == nil)
     }
 
     @Test
     func eulerFromQuaternion() {
-        let quat = simd_quatf(angle: .pi / 2, axis: [0, 1, 0])
+        let quat = simd_quatf(angle: Float.pi / 2, axis: [0, 1, 0])
         let euler = Euler(quat)
 
-        #expect(abs(euler.pitch - .pi / 2) < 1e-5)
+        #expect(abs(euler.pitch - Float.pi / 2) < 1e-5)
     }
 
     @Test
@@ -195,7 +216,44 @@ struct DecompositionTests {
             #expect(abs(components.scale.x + 2) < 1e-6)
             #expect(abs(components.scale.y + 3) < 1e-6)
             #expect(abs(components.scale.z + 4) < 1e-6)
-            #expect(abs(components.rotation.angle - .pi) < 1e-5)
+            #expect(abs(components.rotation.angle - Float.pi) < 1e-5)
         }
+    }
+
+    @Test
+    func transformComponentDescriptionsIncludeNonDefaultValues() {
+        let components = TransformComponents(
+            perspective: [1, 2, 3, 4],
+            translate: [5, 6, 7],
+            scale: [2, 3, 4],
+            skew: Skew(xy: 0.1, xz: 0.2, yz: 0.3),
+            rotation: simd_quatf(angle: Float.pi / 3, axis: [0, 0, 1])
+        )
+        let description = components.description
+        #expect(description.contains("perspective"))
+        #expect(description.contains("translate"))
+        #expect(description.contains("scale"))
+        #expect(description.contains("skew"))
+        #expect(description.contains("rotation"))
+
+        let skewDescription = components.skew.description
+        #expect(skewDescription.contains("Skew"))
+
+        let shortDescription = components.translate.shortDescription
+        #expect(shortDescription.contains("5"))
+
+        let eulerDescription = Euler(components.rotation).description
+        #expect(eulerDescription.contains("Euler"))
+    }
+
+    @Test
+    func scalingVectorToDesiredLength() {
+        var vector = SIMD3<Float>(3, 0, 0)
+        vector.scale(to: 6)
+        #expect(vector == SIMD3<Float>(6, 0, 0))
+
+        var diagonal = SIMD3<Float>(1, 1, 1)
+        diagonal.scale(to: 5)
+        #expect(abs(simd_length(diagonal) - 5) < 1e-5)
     }
 }
