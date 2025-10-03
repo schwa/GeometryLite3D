@@ -1,5 +1,5 @@
-import simd
 import ModelIO
+import simd
 
 /// Bounding box information for 3D objects
 public struct BoundingBox: Equatable, Sendable {

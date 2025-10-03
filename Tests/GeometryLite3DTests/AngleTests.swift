@@ -1,6 +1,6 @@
-import Testing
 import Foundation
 @testable import GeometryLite3D
+import Testing
 
 struct AngleTests {
     @Test

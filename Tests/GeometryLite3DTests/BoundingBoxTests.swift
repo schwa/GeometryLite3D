@@ -1,7 +1,7 @@
-import Testing
-import simd
-import ModelIO
 @testable import GeometryLite3D
+import ModelIO
+import simd
+import Testing
 
 struct BoundingBoxTests {
     @Test

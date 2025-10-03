@@ -1,5 +1,5 @@
-import simd
 import CoreGraphics
+import simd
 
 public extension SIMD2<Float> {
     init(_ point: CGPoint) {

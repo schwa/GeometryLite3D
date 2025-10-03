@@ -1,7 +1,7 @@
 import GeometryLite3D
-import Testing
-import simd
 import SceneKit
+import simd
+import Testing
 
 struct ProjectionTests {
     @Test

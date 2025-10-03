@@ -1,6 +1,6 @@
-import Testing
-import simd
 @testable import GeometryLite3D
+import simd
+import Testing
 
 struct Packed3Tests {
     @Test
@@ -45,7 +45,6 @@ struct Packed3Tests {
             packed[3] = 30
         }
     }
-
 
     @Test
     func subscriptReadWriteCoversAllIndices() {

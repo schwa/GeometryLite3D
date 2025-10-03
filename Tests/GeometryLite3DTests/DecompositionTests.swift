@@ -1,6 +1,6 @@
-import Testing
-import simd
 @testable import GeometryLite3D
+import simd
+import Testing
 
 struct DecompositionTests {
     @Test
@@ -32,7 +32,7 @@ struct DecompositionTests {
         let components = identity.decompose
 
         #expect(components != nil)
-        if let components = components {
+        if let components {
             #expect(components.perspective == [0, 0, 0, 1])
             #expect(components.translate == .zero)
             #expect(components.scale == .one)
@@ -52,7 +52,7 @@ struct DecompositionTests {
         let components = translation.decompose
 
         #expect(components != nil)
-        if let components = components {
+        if let components {
             #expect(components.translate == [10, 20, 30])
             #expect(components.scale == .one)
             #expect(components.skew == Skew.zero)
@@ -70,7 +70,7 @@ struct DecompositionTests {
         let components = scale.decompose
 
         #expect(components != nil)
-        if let components = components {
+        if let components {
             #expect(components.translate == .zero)
             #expect(components.scale == [2, 3, 4])
             #expect(components.skew == Skew.zero)
@@ -84,7 +84,7 @@ struct DecompositionTests {
         let components = rotation.decompose
 
         #expect(components != nil)
-        if let components = components {
+        if let components {
             #expect(components.translate == .zero)
             #expect(abs(components.scale.x - 1) < 1e-6)
             #expect(abs(components.scale.y - 1) < 1e-6)
@@ -111,7 +111,7 @@ struct DecompositionTests {
         let components = combined.decompose
 
         #expect(components != nil)
-        if let components = components {
+        if let components {
             #expect(components.translate == [5, 10, 15])
             #expect(components.scale == [2, 2, 2])
         }
@@ -128,7 +128,7 @@ struct DecompositionTests {
         let components = matrix.decompose
 
         #expect(components != nil)
-        if let components = components {
+        if let components {
             #expect(abs(components.perspective.x - 0.2) < 1e-6)
             #expect(abs(components.perspective.y + 0.3) < 1e-6)
             #expect(abs(components.perspective.z - 0.4) < 1e-6)
@@ -211,7 +211,7 @@ struct DecompositionTests {
         let components = matrix.decompose
 
         #expect(components != nil)
-        if let components = components {
+        if let components {
             #expect(abs(components.skew.xy - 0.5) < 1e-6)
             #expect(abs(components.skew.xz - 0.25) < 1e-6)
             #expect(abs(components.skew.yz - 0.75) < 1e-6)
@@ -231,7 +231,7 @@ struct DecompositionTests {
         let components = matrix.decompose
 
         #expect(components != nil)
-        if let components = components {
+        if let components {
             #expect(components.translate == .zero)
             #expect(abs(components.scale.x + 2) < 1e-6)
             #expect(abs(components.scale.y + 3) < 1e-6)
@@ -251,7 +251,7 @@ struct DecompositionTests {
 
         let components = matrix.decompose
         #expect(components != nil)
-        if let components = components {
+        if let components {
             #expect(components.scale == .one)
             #expect(abs(components.rotation.angle - Float.pi) < 1e-5)
             let axis = components.rotation.axis
@@ -272,7 +272,7 @@ struct DecompositionTests {
 
         let components = matrix.decompose
         #expect(components != nil)
-        if let components = components {
+        if let components {
             #expect(components.scale == .one)
             #expect(abs(components.rotation.angle - Float.pi) < 1e-5)
             let axis = components.rotation.axis
@@ -293,7 +293,7 @@ struct DecompositionTests {
 
         let components = matrix.decompose
         #expect(components != nil)
-        if let components = components {
+        if let components {
             #expect(components.scale == .one)
             #expect(abs(components.rotation.angle - Float.pi) < 1e-5)
             let axis = components.rotation.axis

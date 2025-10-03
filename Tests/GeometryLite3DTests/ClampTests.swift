@@ -1,5 +1,5 @@
-import Testing
 @testable import GeometryLite3D
+import Testing
 
 struct ClampTests {
     @Test

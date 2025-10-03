@@ -53,20 +53,17 @@ public struct PerspectiveProjection: ProjectionProtocol {
                 SIMD4<Float>(0, 0, 0, -1),
                 SIMD4<Float>(0, 0, nearZ, 0)
             )
-        } else {
-            // Standard projection matrix
-            let rangeInv = 1.0 / (nearZ - farZ)
-            return float4x4(
-                SIMD4<Float>(f / aspect, 0, 0, 0),
-                SIMD4<Float>(0, f, 0, 0),
-                SIMD4<Float>(0, 0, (farZ + nearZ) * rangeInv, -1),
-                SIMD4<Float>(0, 0, 2.0 * farZ * nearZ * rangeInv, 0)
-            )
         }
-
+        // Standard projection matrix
+        let rangeInv = 1.0 / (nearZ - farZ)
+        return float4x4(
+            SIMD4<Float>(f / aspect, 0, 0, 0),
+            SIMD4<Float>(0, f, 0, 0),
+            SIMD4<Float>(0, 0, (farZ + nearZ) * rangeInv, -1),
+            SIMD4<Float>(0, 0, 2.0 * farZ * nearZ * rangeInv, 0)
+        )
     }
 }
-
 
 // MARK: -
 

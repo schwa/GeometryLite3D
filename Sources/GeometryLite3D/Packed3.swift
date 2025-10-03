@@ -25,10 +25,13 @@ public extension Packed3 {
             switch i {
             case 0:
                 return x
+
             case 1:
                 return y
+
             case 2:
                 return z
+
             default:
                 fatalError("Index out of bounds.")
             }
@@ -37,10 +40,13 @@ public extension Packed3 {
             switch i {
             case 0:
                 x = newValue
+
             case 1:
                 y = newValue
+
             case 2:
                 z = newValue
+
             default:
                 fatalError("Index out of bounds.")
             }
@@ -63,7 +69,7 @@ extension Packed3: Equatable where Scalar: Equatable {
 }
 
 public extension Packed3 where Scalar: Numeric {
-    static func *(lhs: Self, rhs: Scalar) -> Self {
+    static func * (lhs: Self, rhs: Scalar) -> Self {
         Self(x: lhs.x * rhs, y: lhs.y * rhs, z: lhs.z * rhs)
     }
 }

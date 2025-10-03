@@ -1,5 +1,5 @@
-import simd
 import Numerics
+import simd
 
 public extension SIMD where Scalar: BinaryFloatingPoint {
     // Note: This is a per-scalar comparison and does not consider vector as a whole.

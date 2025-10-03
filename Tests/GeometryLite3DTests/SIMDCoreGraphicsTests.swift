@@ -1,7 +1,7 @@
-import Testing
 import CoreGraphics
-import simd
 @testable import GeometryLite3D
+import simd
+import Testing
 
 struct SIMDCoreGraphicsTests {
     @Test

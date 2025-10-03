@@ -286,7 +286,7 @@ public extension float4x4 {
                 (column[0][1] - column[1][0]) * s,
                 0.5 * r
             )
-        } else if column[0][0] > column[1][1] && column[0][0] > column[2][2] {
+        } else if column[0][0] > column[1][1], column[0][0] > column[2][2] {
             // Q_xx is largest.
             let r = sqrt(1.0 + column[0][0] - column[1][1] - column[2][2])
             let s = 0.5 / r

@@ -1,4 +1,3 @@
-
 public extension FloatingPoint {
     func wrapped(to range: ClosedRange<Self>) -> Self {
         let rangeSize = range.upperBound - range.lowerBound

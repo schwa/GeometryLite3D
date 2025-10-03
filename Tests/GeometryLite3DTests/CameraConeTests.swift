@@ -1,7 +1,7 @@
-import Testing
+@testable import GeometryLite3D
 import simd
 import SwiftUI
-@testable import GeometryLite3D
+import Testing
 
 struct CameraConeTests {
     @Test
