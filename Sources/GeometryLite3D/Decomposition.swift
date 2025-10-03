@@ -46,7 +46,7 @@ public struct TransformComponents: Sendable, Equatable {
         self.rotation = rotation
     }
 
-    static let identity = Self(
+    public static let identity = Self(
         perspective: [0, 0, 0, 1],
         translate: .zero,
         scale: .one,
@@ -268,14 +268,5 @@ public extension float4x4 {
 
         result.rotation = .init(vector: rotation)
         return result
-    }
-}
-
-extension SIMD3<Float> {
-    mutating func scale(to desiredLength: Float) {
-        let currentLength = length(self)
-        if currentLength != 0 {
-            self *= desiredLength / currentLength
-        }
     }
 }

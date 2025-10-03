@@ -156,3 +156,12 @@ public extension float4x4 {
         .joined(separator: "\n")
     }
 }
+
+internal extension SIMD3<Float> {
+    mutating func scale(to desiredLength: Float) {
+        let currentLength = length(self)
+        if currentLength != 0 {
+            self *= desiredLength / currentLength
+        }
+    }
+}
