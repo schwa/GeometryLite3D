@@ -22,31 +22,9 @@ public extension ProjectionProtocol {
 
 // MARK: -
 
-public struct OldPerspectiveProjection: ProjectionProtocol {
-    public var verticalAngleOfView: AngleF
-    public var zClip: ClosedRange<Float>
-
-    public init(verticalAngleOfView: AngleF = .degrees(90), zClip: ClosedRange<Float> = 0.01 ... 1_000) {
-        self.verticalAngleOfView = verticalAngleOfView
-        self.zClip = zClip
-    }
-
-    public func projectionMatrix(aspectRatio: Float) -> simd_float4x4 {
-        .perspective(aspectRatio: aspectRatio, fovy: Float(verticalAngleOfView.radians), near: zClip.lowerBound, far: zClip.upperBound)
-    }
-
-    public func horizontalAngleOfView(aspectRatio: Float) -> AngleF {
-        let fovy = verticalAngleOfView.radians
-        let fovx = 2 * atan(tan(fovy / 2) * aspectRatio)
-        return AngleF(radians: fovx)
-    }
-}
-
-public typealias PerspectiveProjection = OldPerspectiveProjection
-
 // MARK: -
 
-public struct NewPerspectiveProjection: ProjectionProtocol {
+public struct PerspectiveProjection: ProjectionProtocol {
     public var verticalAngleOfView: AngleF
     public var zClip: ClosedRange<Float>
     public var reverseZ: Bool

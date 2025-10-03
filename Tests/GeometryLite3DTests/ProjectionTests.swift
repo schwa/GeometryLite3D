@@ -6,7 +6,6 @@ import SceneKit
 struct ProjectionTests {
     @Test
     func testSceneKitGroundTruth() {
-
         let scene = SCNScene()
         let cameraNode = SCNNode()
         let camera = SCNCamera()
@@ -17,11 +16,8 @@ struct ProjectionTests {
         cameraNode.camera = camera
         scene.rootNode.addChildNode(cameraNode)
         let sceneKitProjection = float4x4(camera.projectionTransform(withViewportSize: CGSize(width: 2, height: 1)))
-        let newProjection = NewPerspectiveProjection(verticalAngleOfView: .degrees(Float(camera.fieldOfView)), zClip: 1...100).projectionMatrix(width: 2, height: 1)
+        let newProjection = PerspectiveProjection(verticalAngleOfView: .degrees(Float(camera.fieldOfView)), zClip: 1...100).projectionMatrix(width: 2, height: 1)
         #expect(newProjection.isApproximatelyEqual(to: sceneKitProjection, absoluteTolerance: 1e-6))
-
-        let oldProjection = OldPerspectiveProjection(verticalAngleOfView: .degrees(Float(camera.fieldOfView)), zClip: 1...100).projectionMatrix(width: 2, height: 1)
-        #expect(oldProjection.isApproximatelyEqual(to: sceneKitProjection, absoluteTolerance: 1e-6))
 
         cameraNode.simdPosition = [0, 0, 10]
         cameraNode.simdLook(at: [0, 0, 0], up: [0, 1, 0], localFront: [0, 0, -1])
