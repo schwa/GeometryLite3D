@@ -97,7 +97,7 @@ struct ProjectionTests {
         let zScale = -(far + near) / zRange
         let wzScale = -2 * far * near / zRange
 
-        let expected = simd_float4x4([
+        let expected = float4x4([
             SIMD4<Float>(xScale, 0, 0, 0),
             SIMD4<Float>(0, yScale, 0, 0),
             SIMD4<Float>(0, 0, zScale, -1),

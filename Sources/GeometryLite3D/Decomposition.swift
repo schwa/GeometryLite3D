@@ -193,7 +193,7 @@ public extension float4x4 {
         // confusion, specifically in sorting out rotations.
 
         // Now get scale and shear.
-        var column = simd_float3x3(
+        var column = float3x3(
             localMatrix[0].xyz,
             localMatrix[1].xyz,
             localMatrix[2].xyz

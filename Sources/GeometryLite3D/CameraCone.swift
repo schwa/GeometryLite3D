@@ -13,7 +13,7 @@ public struct CameraCone: Sendable, Equatable {
         self.height = height
     }
 
-    public var cameraTransform: matrix_float4x4 {
+    public var cameraTransform: float4x4 {
         parameters.cameraMatrix(angle: Float(rotation.radians), t: height)
     }
 }
@@ -85,7 +85,7 @@ public extension CameraConeParameters {
         centerA
     }
 
-    func cameraMatrix(angle: Float, t: Float, up: SIMD3<Float> = [0, 1, 0]) -> matrix_float4x4 {
+    func cameraMatrix(angle: Float, t: Float, up: SIMD3<Float> = [0, 1, 0]) -> float4x4 {
         let cameraPosition = self.cameraPosition(angle: angle, t: t)
         let eyePosition = self.eyePosition(angle: angle, t: t)
         return LookAt(position: cameraPosition, target: eyePosition, up: up).cameraMatrix

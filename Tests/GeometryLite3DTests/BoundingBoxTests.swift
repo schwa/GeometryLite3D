@@ -24,7 +24,7 @@ struct BoundingBoxTests {
     @Test
     func transformTranslation() {
         let bbox = BoundingBox(min: [0, 0, 0], max: [2, 2, 2])
-        let translation = matrix_float4x4(
+        let translation = float4x4(
             [1, 0, 0, 0],
             [0, 1, 0, 0],
             [0, 0, 1, 0],
@@ -39,7 +39,7 @@ struct BoundingBoxTests {
     @Test
     func transformScale() {
         let bbox = BoundingBox(min: [-1, -1, -1], max: [1, 1, 1])
-        let scale = matrix_float4x4(
+        let scale = float4x4(
             [2, 0, 0, 0],
             [0, 3, 0, 0],
             [0, 0, 4, 0],
@@ -54,7 +54,7 @@ struct BoundingBoxTests {
     @Test
     func transformRotation90Z() {
         let bbox = BoundingBox(min: [0, 0, 0], max: [2, 1, 1])
-        let rotation = matrix_float4x4(
+        let rotation = float4x4(
             [0, -1, 0, 0],
             [1, 0, 0, 0],
             [0, 0, 1, 0],

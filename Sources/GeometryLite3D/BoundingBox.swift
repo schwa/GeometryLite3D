@@ -11,7 +11,7 @@ public struct BoundingBox: Equatable, Sendable {
         self.max = max
     }
 
-    public func transformed(by transform: matrix_float4x4) -> Self {
+    public func transformed(by transform: float4x4) -> Self {
         // Transform all 8 corners of the bounding box
         let corners = [
             SIMD3<Float>(min.x, min.y, min.z),

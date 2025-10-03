@@ -1,7 +1,7 @@
 import simd
 
 public extension float4x4 {
-    static let identity = simd_float4x4(diagonal: [1, 1, 1, 1])
+    static let identity = float4x4(diagonal: [1, 1, 1, 1])
 
     init(xRotation: AngleF) {
         let radians = Float(xRotation.radians)
@@ -70,11 +70,11 @@ public extension float4x4 {
         }
     }
 
-    var upperLeft3x3: simd_float3x3 {
-        simd_float3x3(columns: (
-            simd_float3(columns.0.xyz),
-            simd_float3(columns.1.xyz),
-            simd_float3(columns.2.xyz)
+    var upperLeft3x3: float3x3 {
+        float3x3(columns: (
+            SIMD3(columns.0.xyz),
+            SIMD3(columns.1.xyz),
+            SIMD3(columns.2.xyz)
         ))
     }
 }
@@ -156,4 +156,3 @@ public extension float4x4 {
         .joined(separator: "\n")
     }
 }
-

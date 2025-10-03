@@ -2,20 +2,20 @@ import CoreGraphics
 import simd
 
 public protocol ProjectionProtocol: Equatable, Sendable {
-    func projectionMatrix(aspectRatio: Float) -> simd_float4x4
+    func projectionMatrix(aspectRatio: Float) -> float4x4
 }
 
 public extension ProjectionProtocol {
-    func projectionMatrix(for viewSize: SIMD2<Float>) -> simd_float4x4 {
+    func projectionMatrix(for viewSize: SIMD2<Float>) -> float4x4 {
         let aspectRatio = viewSize.x / viewSize.y
         return self.projectionMatrix(aspectRatio: aspectRatio)
     }
 
-    func projectionMatrix(for viewSize: CGSize) -> simd_float4x4 {
+    func projectionMatrix(for viewSize: CGSize) -> float4x4 {
         projectionMatrix(for: .init(viewSize))
     }
 
-    func projectionMatrix(width: Float, height: Float) -> simd_float4x4 {
+    func projectionMatrix(width: Float, height: Float) -> float4x4 {
         projectionMatrix(for: [width, height])
     }
 }
@@ -84,7 +84,6 @@ public extension float4x4 {
         let R: SIMD4<Float> = [0, 0, zScale, -1]
         let S: SIMD4<Float> = [0, 0, wzScale, 0]
 
-        return simd_float4x4([P, Q, R, S])
+        return float4x4([P, Q, R, S])
     }
 }
-
