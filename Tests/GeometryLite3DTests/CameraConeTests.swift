@@ -138,7 +138,7 @@ struct CameraConeTests {
         #expect(abs(abs(below.x) - 1) < 1e-6)
 
         #expect(abs(above.z - 10) < 1e-6)
-        #expect(abs(simd_length(above.xy) - 3) < 1e-6)
+        #expect(abs(length(above.xy) - 3) < 1e-6)
     }
 
     @Test
@@ -151,7 +151,7 @@ struct CameraConeTests {
         )
 
         let position = params.cameraPosition(angle: .pi / 2, t: 0.5)
-        #expect(abs(simd_length(position) - 1) < 1e-6)
+        #expect(abs(length(position) - 1) < 1e-6)
     }
 
     @Test

@@ -61,7 +61,7 @@ public extension CameraConeParameters {
     }
 
     func cameraPosition(angle: Float, t: Float) -> SIMD3<Float> {
-        let t = simd_clamp(t, 0, 1)
+        let t = max(0, min(1, t))
 
         // Position along cone axis
         let cameraDistance = distance * t

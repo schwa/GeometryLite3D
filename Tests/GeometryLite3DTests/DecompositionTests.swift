@@ -302,6 +302,6 @@ struct DecompositionTests {
 
         var diagonal = SIMD3<Float>(1, 1, 1)
         diagonal.scale(to: 5)
-        #expect(abs(simd_length(diagonal) - 5) < 1e-5)
+        #expect(abs(length(diagonal) - 5) < 1e-5)
     }
 }

@@ -85,7 +85,7 @@ public extension SIMD3<Float> {
     static let unit = SIMD3<Float>(1, 1, 1)
 
     var normalized: SIMD3<Float> {
-        simd_normalize(self)
+        normalize(self)
     }
 }
 

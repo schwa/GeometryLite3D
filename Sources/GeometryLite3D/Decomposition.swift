@@ -150,7 +150,7 @@ public extension float4x4 {
             SIMD4<Float>(0, 0, 0, 1)
         )
 
-        if !simd_determinant(perspectiveMatrix).isNormal {
+        if !perspectiveMatrix.determinant.isNormal {
             return nil
         }
 
@@ -200,27 +200,27 @@ public extension float4x4 {
         )
 
         // Compute X scale factor and normalize the first column.
-        result.scale.x = simd_length(column[0])
+        result.scale.x = length(column[0])
 
         column[0].scale(to: 1.0)
 
         // Compute XY shear factor and make 2nd column orthogonal to 1st.
-        result.skew.xy = simd_dot(column[0], column[1])
+        result.skew.xy = dot(column[0], column[1])
         column[1] = column[1] * 1.0 + column[0] * -result.skew.xy
 
         // Now, compute Y scale and normalize 2nd column.
-        result.scale.y = simd_length(column[1])
+        result.scale.y = length(column[1])
         column[1].scale(to: 1.0)
         result.skew.xy /= result.scale.y
 
         // Compute XZ and YZ shears, orthogonalize 3rd column.
-        result.skew.xz = simd_dot(column[0], column[2])
+        result.skew.xz = dot(column[0], column[2])
         column[2] = column[2] * 1.0 + column[0] * -result.skew.xz
-        result.skew.yz = simd_dot(column[1], column[2])
+        result.skew.yz = dot(column[1], column[2])
         column[2] = column[2] * 1.0 + column[1] * -result.skew.yz
 
         // Next, get Z scale and normalize 3rd column.
-        result.scale.z = simd_length(column[2])
+        result.scale.z = length(column[2])
         column[2].scale(to: 1.0)
         result.skew.xz /= result.scale.z
         result.skew.yz /= result.scale.z
@@ -231,9 +231,9 @@ public extension float4x4 {
         // This handles cases where there's an odd number of negative scales,
         // but note that the original negative scale values are not preserved -
         // they are normalized to positive values with adjusted rotation.
-        let pdum3 = simd_cross(column[1], column[2])
+        let pdum3 = cross(column[1], column[2])
 
-        if simd_dot(column[0], pdum3) < 0 {
+        if dot(column[0], pdum3) < 0 {
             result.scale *= -1
             column *= -1
         }
@@ -325,9 +325,9 @@ public extension float4x4 {
 
 extension SIMD3<Float> {
     mutating func scale(to desiredLength: Float) {
-        let length = simd_length(self)
-        if length != 0 {
-            self *= desiredLength / length
+        let currentLength = length(self)
+        if currentLength != 0 {
+            self *= desiredLength / currentLength
         }
     }
 }

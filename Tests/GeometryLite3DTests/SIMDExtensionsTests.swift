@@ -124,7 +124,7 @@ struct SIMDExtensionsTests {
     func simd3Normalized() {
         let vector = SIMD3<Float>(3, 0, 4)
         let normalized = vector.normalized
-        #expect(abs(simd_length(normalized) - 1) < 1e-6)
+        #expect(abs(length(normalized) - 1) < 1e-6)
         #expect(abs(normalized.x - 0.6) < 1e-6)
         #expect(abs(normalized.z - 0.8) < 1e-6)
     }

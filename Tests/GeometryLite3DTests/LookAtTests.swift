@@ -8,9 +8,9 @@ struct LookAtTests {
         let lookAt = LookAt(position: [1, 2, 3], target: [4, 6, 5], up: [0, 1, 0])
         let matrix = lookAt.cameraMatrix
 
-        let forward = simd_normalize(lookAt.target - lookAt.position)
-        let right = simd_normalize(simd_cross(forward, lookAt.up))
-        let up = simd_normalize(simd_cross(right, forward))
+        let forward = normalize(lookAt.target - lookAt.position)
+        let right = normalize(cross(forward, lookAt.up))
+        let up = normalize(cross(right, forward))
 
         let column0 = matrix.columns.0.xyz
         let column1 = matrix.columns.1.xyz
