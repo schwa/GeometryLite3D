@@ -129,8 +129,8 @@ only_rules:
   - no_empty_block
 #  - no_extension_access_modifier
   - no_fallthrough_only
-#  - no_grouping_extension # 11 violations
-#  - no_magic_numbers # 94 violations
+#  - no_grouping_extension
+  - no_magic_numbers # 94 violations
   - no_space_in_method_call
   - non_optional_string_data_conversion
   - non_overridable_class_declaration
