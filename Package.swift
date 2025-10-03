@@ -15,10 +15,16 @@ name: "GeometryLite3D",
     products: [
         .library(name: "GeometryLite3D", targets: ["GeometryLite3D"]),
     ],
-
-
+    dependencies: [
+        .package(url: "https://github.com/apple/swift-numerics.git", from: "1.1.0"),
+    ],
     targets: [
-        .target(name: "GeometryLite3D"),
+        .target(
+            name: "GeometryLite3D",
+            dependencies: [
+                .product(name: "Numerics", package: "swift-numerics")
+            ]
+        ),
         .testTarget(name: "GeometryLite3DTests", dependencies: ["GeometryLite3D"]),
     ]
 )

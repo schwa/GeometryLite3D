@@ -89,6 +89,7 @@ public struct NewPerspectiveProjection: ProjectionProtocol {
     }
 }
 
+
 // MARK: -
 
 public extension float4x4 {

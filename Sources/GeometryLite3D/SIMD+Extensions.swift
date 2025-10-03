@@ -133,3 +133,28 @@ public extension SIMD4 {
 public extension simd_quatf {
     static let identity = simd_quatf(ix: 0, iy: 0, iz: 0, r: 1)
 }
+
+// MARK: -
+
+public extension float4x4 {
+    var scalars: [Float] {
+        withUnsafeBytes(of: self) { buffer in
+            Array(buffer.bindMemory(to: Float.self))
+        }
+    }
+}
+
+public extension float4x4 {
+    func dump() {
+        let s = (0..<4).map { row in
+            (0..<4).map { column in
+                let value = self[column, row]
+                return value.formatted(.number.precision(.fractionLength(4)))
+            }
+            .joined(separator: ", ")
+        }
+        .joined(separator: "\n")
+        print(s)
+    }
+}
+

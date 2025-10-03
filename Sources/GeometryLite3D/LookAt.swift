@@ -29,26 +29,3 @@ public extension LookAt {
         cameraMatrix.inverse
     }
 }
-
-@available(*, deprecated, message: "Use LookAt struct instead")
-public extension float4x4 {
-    static func look(at target: SIMD3<Float>, from eye: SIMD3<Float>, up: SIMD3<Float>) -> simd_float4x4 {
-        let forward: SIMD3<Float> = (target - eye).normalized
-
-        // Side = forward x up
-        let side = simd_cross(forward, up).normalized
-
-        // Recompute up as: up = side x forward
-        let up_ = simd_cross(side, forward).normalized
-
-        var matrix2: simd_float4x4 = .identity
-
-        matrix2[0] = SIMD4<Float>(side, 0)
-        matrix2[1] = SIMD4<Float>(up_, 0)
-        matrix2[2] = SIMD4<Float>(-forward, 0)
-        matrix2[3] = [0, 0, 0, 1]
-
-        return simd_float4x4(translation: eye) * matrix2
-    }
-}
-
