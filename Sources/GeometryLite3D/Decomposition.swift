@@ -1,3 +1,4 @@
+// swiftlint:disable indentation_width
 /*
  * Copyright (C) 2005-2025 Apple Inc. All rights reserved.
  * Copyright (C) 2016-2020 Google Inc. All rights reserved.
@@ -25,6 +26,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+// swiftlint:enable indentation_width
 
 import Foundation
 import simd

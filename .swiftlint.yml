@@ -64,12 +64,12 @@ only_rules:
   - explicit_enum_raw_value
   - explicit_init
   - explicit_self
-#  - explicit_top_level_acl # 15 violations
+  - explicit_top_level_acl
 #  - explicit_type_interface # 316 violations
   - extension_access_modifier
   - fallthrough
   - fatal_error_message
-#  - file_header # 1 violations
+#  - file_header
   - file_length
 #  - file_name # 6 violations
   - file_name_no_space
@@ -83,7 +83,7 @@ only_rules:
   - force_unwrapping
   - function_body_length
   - function_default_parameter_at_end
-  - function_name_whitespace # 1 violations (fixable)
+  - function_name_whitespace
   - function_parameter_count
   - generic_type_name
   - ibinspectable_in_extension
@@ -94,13 +94,13 @@ only_rules:
   - implicit_return
   - implicitly_unwrapped_optional
   - inclusive_language
-#  - indentation_width # 1 violations
+  - indentation_width
   - invalid_swiftlint_command
   - is_disjoint
   - joined_default_parameter
   - large_tuple
   - last_where
-  - leading_whitespace # 1 violations (fixable)
+  - leading_whitespace
   - legacy_cggeometry_functions
   - legacy_constant
   - legacy_constructor
@@ -127,7 +127,7 @@ only_rules:
   - nesting
   - nimble_operator
   - no_empty_block
-#  - no_extension_access_modifier # 29 violations
+#  - no_extension_access_modifier
   - no_fallthrough_only
 #  - no_grouping_extension # 11 violations
 #  - no_magic_numbers # 94 violations
@@ -151,7 +151,7 @@ only_rules:
   - override_in_extension
   - pattern_matching_keywords
   - period_spacing
-  - prefer_condition_list # 1 violations (fixable)
+  - prefer_condition_list
   - prefer_key_path
   - prefer_nimble
   - prefer_self_in_static_references
@@ -191,18 +191,18 @@ only_rules:
   - self_in_property_initialization
   - shorthand_argument
   - shorthand_operator
-  - shorthand_optional_binding # 11 violations (fixable)
+  - shorthand_optional_binding
   - single_test_class
   - sorted_enum_cases
   - sorted_first_last
-  - sorted_imports # 27 violations (fixable)
+  - sorted_imports
   - statement_position
   - static_operator
   - static_over_final_class
   - strict_fileprivate
   - strong_iboutlet
   - superfluous_disable_command
-  - superfluous_else # 1 violations (fixable)
+  - superfluous_else
   - switch_case_alignment
   - switch_case_on_newline
   - syntactic_sugar
@@ -210,8 +210,8 @@ only_rules:
 #  - todo # 2 violations
   - toggle_bool
   - trailing_closure
-  - trailing_comma # 3 violations (fixable)
-  - trailing_newline # 1 violations (fixable)
+  - trailing_comma
+  - trailing_newline
   - trailing_semicolon
   - trailing_whitespace
 #  - type_body_length # 1 violations
@@ -237,10 +237,10 @@ only_rules:
   - unused_setter_value
   - valid_ibinspectable
   - vertical_parameter_alignment
-#  - vertical_parameter_alignment_on_call # 1 violations
-  - vertical_whitespace # 2 violations (fixable)
-  - vertical_whitespace_between_cases # 6 violations (fixable)
-  - vertical_whitespace_closing_braces # 2 violations (fixable)
+  - vertical_parameter_alignment_on_call
+  - vertical_whitespace
+  - vertical_whitespace_between_cases
+  - vertical_whitespace_closing_braces
   - vertical_whitespace_opening_braces
   - void_function_in_ternary
   - void_return
