@@ -192,6 +192,15 @@ struct DecompositionTests {
     }
 
     @Test
+    func eulerFromQuaternionSmallAngleUsesAsinBranch() {
+        let angle: Float = 0.3
+        let quat = simd_quatf(angle: angle, axis: [0, 1, 0])
+        let euler = Euler(quat)
+
+        #expect(abs(euler.pitch - angle) < 1e-5)
+    }
+
+    @Test
     func decomposeMatrixWithSkew() {
         let matrix = float4x4(
             [1, 0, 0, 0],
