@@ -26,5 +26,84 @@ struct ProjectionTests {
 
         #expect(newLookAtCameraMatrix == sceneKitCameraMatrix)
     }
-}
 
+    @Test
+    func perspectiveProjectionConvenienceOverloadsMatch() {
+        let projection = PerspectiveProjection(verticalAngleOfView: .degrees(45), zClip: 0.5...150)
+        let aspect: Float = 16 / 9
+
+        let matrixDirect = projection.projectionMatrix(aspectRatio: aspect)
+        let matrixVector = projection.projectionMatrix(for: SIMD2<Float>(16, 9))
+        let matrixCGSize = projection.projectionMatrix(for: CGSize(width: 16, height: 9))
+        let matrixWidthHeight = projection.projectionMatrix(width: 16, height: 9)
+
+        #expect(matrixVector.isApproximatelyEqual(to: matrixDirect, absoluteTolerance: 1e-6))
+        #expect(matrixCGSize.isApproximatelyEqual(to: matrixDirect, absoluteTolerance: 1e-6))
+        #expect(matrixWidthHeight.isApproximatelyEqual(to: matrixDirect, absoluteTolerance: 1e-6))
+    }
+
+    @Test
+    func standardPerspectiveMatchesManualComputation() {
+        let near: Float = 1
+        let far: Float = 10
+        let aspect: Float = 4 / 3
+        let projection = PerspectiveProjection(verticalAngleOfView: .degrees(90), zClip: near...far)
+
+        let matrix = projection.projectionMatrix(aspectRatio: aspect)
+
+        let f: Float = 1 / tan(Float.pi / 4)
+        let rangeInv: Float = 1 / (near - far)
+        let expected = float4x4(
+            SIMD4<Float>(f / aspect, 0, 0, 0),
+            SIMD4<Float>(0, f, 0, 0),
+            SIMD4<Float>(0, 0, (far + near) * rangeInv, -1),
+            SIMD4<Float>(0, 0, 2 * far * near * rangeInv, 0)
+        )
+
+        #expect(matrix.isApproximatelyEqual(to: expected, absoluteTolerance: 1e-6))
+    }
+
+    @Test
+    func reverseZPerspectiveMatchesClosedForm() {
+        let projection = PerspectiveProjection(verticalAngleOfView: .degrees(60), zClip: 0.5...100, reverseZ: true)
+        let aspect: Float = 21 / 9
+
+        let matrix = projection.projectionMatrix(aspectRatio: aspect)
+
+        let f: Float = 1 / tan(projection.verticalAngleOfView.radians * 0.5)
+        let near = projection.zClip.lowerBound
+        let expected = float4x4(
+            SIMD4<Float>(f / aspect, 0, 0, 0),
+            SIMD4<Float>(0, f, 0, 0),
+            SIMD4<Float>(0, 0, 0, -1),
+            SIMD4<Float>(0, 0, near, 0)
+        )
+
+        #expect(matrix.isApproximatelyEqual(to: expected, absoluteTolerance: 1e-6))
+    }
+
+    @Test
+    func legacyFloat4x4PerspectiveFormulaMatchesManual() {
+        let aspect: Float = 2
+        let fovy: Float = Float.pi / 3
+        let near: Float = 0.25
+        let far: Float = 400
+
+        let matrix = float4x4.perspective(aspectRatio: aspect, fovy: fovy, near: near, far: far)
+
+        let yScale = 1 / tan(fovy * 0.5)
+        let xScale = yScale / aspect
+        let zRange = far - near
+        let zScale = -(far + near) / zRange
+        let wzScale = -2 * far * near / zRange
+
+        let expected = simd_float4x4([
+            SIMD4<Float>(xScale, 0, 0, 0),
+            SIMD4<Float>(0, yScale, 0, 0),
+            SIMD4<Float>(0, 0, zScale, -1),
+            SIMD4<Float>(0, 0, wzScale, 0)
+        ])
+
+        #expect(matrix.isApproximatelyEqual(to: expected, absoluteTolerance: 1e-6))
+    }
+}
