@@ -111,5 +111,17 @@ struct Packed3Tests {
         #expect(backToFloat.y == 2.5)
         #expect(backToFloat.z == 3.5)
     }
+
+    @Test
+    func float16InitializerFromSIMD() {
+        let simd = SIMD3<Float>(-0.25, 0.5, 1.75)
+        let float16Packed = Packed3<Float16>(simd)
+        #expect(float16Packed.x == -0.25)
+        #expect(float16Packed.y == 0.5)
+        #expect(float16Packed.z == 1.75)
+
+        let roundTrip = SIMD3<Float>(Packed3<Float>(float16Packed))
+        #expect(roundTrip.isApproximatelyEqual(to: simd, absoluteTolerance: 1e-3))
+    }
     #endif
 }

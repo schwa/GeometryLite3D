@@ -1,5 +1,6 @@
 import Testing
 import simd
+import ModelIO
 @testable import GeometryLite3D
 
 struct BoundingBoxTests {
@@ -67,5 +68,16 @@ struct BoundingBoxTests {
         #expect(abs(transformed.max.x - 1) < 1e-6)
         #expect(abs(transformed.max.y - 0) < 1e-6)
         #expect(abs(transformed.max.z - 1) < 1e-6)
+    }
+
+    @Test
+    func initializationFromMDLBounds() {
+        var mdlBounds = MDLAxisAlignedBoundingBox()
+        mdlBounds.minBounds = [-1, -2, -3]
+        mdlBounds.maxBounds = [4, 5, 6]
+
+        let bbox = BoundingBox(from: mdlBounds)
+        #expect(bbox.min == [-1, -2, -3])
+        #expect(bbox.max == [4, 5, 6])
     }
 }

@@ -81,4 +81,32 @@ struct AngleFTests {
         angle /= 0.25
         #expect(abs(angle.radians - ((.pi / 2 - .pi / 6) * 0.5 / 0.25)) < 1e-6)
     }
+
+    @Test
+    func binaryOperatorsReturnNewAngles() {
+        let left = AngleF.degrees(10)
+        let right = AngleF.degrees(20)
+
+        let product = left * right
+        #expect(abs(product.radians - (left.radians * right.radians)) < 1e-6)
+
+        let quotient = product / right
+        #expect(abs(quotient.radians - left.radians) < 1e-6)
+    }
+
+    @Test
+    func scalarBinaryOperatorsUseRadians() {
+        let base = AngleF.radians(0.3)
+        let added = base + 0.2
+        #expect(abs(added.radians - 0.5) < 1e-6)
+
+        let subtracted = added - 0.1
+        #expect(abs(subtracted.radians - 0.4) < 1e-6)
+
+        let scaled = base * 2.5
+        #expect(abs(scaled.radians - 0.75) < 1e-6)
+
+        let divided = scaled / 2.5
+        #expect(abs(divided.radians - base.radians) < 1e-6)
+    }
 }

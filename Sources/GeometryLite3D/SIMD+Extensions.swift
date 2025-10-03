@@ -145,8 +145,8 @@ public extension float4x4 {
 }
 
 public extension float4x4 {
-    func dump() {
-        let s = (0..<4).map { row in
+    var formattedDescription: String {
+        (0..<4).map { row in
             (0..<4).map { column in
                 let value = self[column, row]
                 return value.formatted(.number.precision(.fractionLength(4)))
@@ -154,7 +154,6 @@ public extension float4x4 {
             .joined(separator: ", ")
         }
         .joined(separator: "\n")
-        print(s)
     }
 }
 
