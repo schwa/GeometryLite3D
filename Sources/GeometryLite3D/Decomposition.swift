@@ -55,15 +55,15 @@ public struct TransformComponents: Sendable, Equatable {
     )
 }
 
-struct Euler {
-    enum Order {
+public struct Euler {
+    public enum Order {
         case zyx
     }
 
-    var order: Order = .zyx
-    var roll: Float
-    var pitch: Float
-    var yaw: Float
+    public var order: Order = .zyx
+    public var roll: Float
+    public var pitch: Float
+    public var yaw: Float
 }
 
 extension Euler {
