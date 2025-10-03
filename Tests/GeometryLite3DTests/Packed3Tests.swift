@@ -35,6 +35,19 @@ struct Packed3Tests {
     }
 
     @Test
+    func subscriptInvalidAccess() async {
+        await #expect(processExitsWith: .failure) {
+            let packed = Packed3<Float>(x: 10, y: 20, z: 30)
+            print(packed[3] == 30)
+        }
+        await #expect(processExitsWith: .failure) {
+            var packed = Packed3<Float>(x: 10, y: 20, z: 30)
+            packed[3] = 30
+        }
+    }
+
+
+    @Test
     func subscriptReadWriteCoversAllIndices() {
         var packed = Packed3<Double>(x: 0, y: 0, z: 0)
         let expected: [Double] = [3.5, -7.25, 11.0]
