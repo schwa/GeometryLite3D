@@ -173,6 +173,17 @@ struct DecompositionTests {
     }
 
     @Test
+    func decomposeMatrixWithSingularUpper3x3ReturnsNil() {
+        let matrix = float4x4(
+            [1, 0, 0, 0],
+            [0, 1, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 1]
+        )
+        #expect(matrix.decompose == nil)
+    }
+
+    @Test
     func eulerFromQuaternion() {
         let quat = simd_quatf(angle: Float.pi / 2, axis: [0, 1, 0])
         let euler = Euler(quat)

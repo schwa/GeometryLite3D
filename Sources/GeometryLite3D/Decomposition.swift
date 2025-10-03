@@ -64,20 +64,6 @@ struct Euler {
     var yaw: Float
 }
 
-extension Euler: CustomStringConvertible {
-    var description: String {
-        let style = FloatingPointFormatStyle<Float>.number.precision(.fractionLength(0...3))
-
-        let components: [String ] = [
-            "order: .\(order)",
-            roll != 0 ? "roll: \((roll / .pi * 180).formatted(style))°" : nil,
-            pitch != 0 ? "pitch: \((pitch / .pi * 180).formatted(style))°" : nil,
-            yaw != 0 ? "yaw: \((yaw / .pi * 180).formatted(style))°" : nil
-        ].compactMap(\.self)
-        return "Euler(\(components.joined(separator: ", ")))"
-    }
-}
-
 extension Euler {
     init(_ q: simd_quatf) {
         /// Converts a quaternion to Euler angles in radians (yaw, pitch, roll)
@@ -119,12 +105,6 @@ public struct Skew: Sendable, Equatable {
     }
 
     public static let zero = Self(xy: 0, xz: 0, yz: 0)
-}
-
-extension Skew: CustomStringConvertible {
-    public var description: String {
-        "Skew(xy: \(xy), xz: \(xz), yz: \(yz))"
-    }
 }
 
 public extension float4x4 {
