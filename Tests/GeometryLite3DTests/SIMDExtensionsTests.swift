@@ -98,6 +98,24 @@ struct SIMDExtensionsTests {
     }
 
     @Test
+    func float4x4FormattedDescription() {
+        let matrix = float4x4(
+            [1.0, 3.14159, 1.2345, 9],
+            [0.5, -0.125, 2.5, 8],
+            [-2.25, 0.0, -3.75, 7],
+            [0.0, 10.0, 4.125, 6]
+        )
+
+        let description = matrix.formattedDescription
+        let lines = description.split(separator: "\n")
+        #expect(lines.count == 4)
+        #expect(lines[0] == "1.0000, 0.5000, -2.2500, 0.0000")
+        #expect(lines[1] == "3.1416, -0.1250, 0.0000, 10.0000")
+        #expect(lines[2] == "1.2345, 2.5000, -3.7500, 4.1250")
+        #expect(lines[3] == "9.0000, 8.0000, 7.0000, 6.0000")
+    }
+
+    @Test
     func simd3Unit() {
         #expect(SIMD3<Float>.unit == [1, 1, 1])
     }

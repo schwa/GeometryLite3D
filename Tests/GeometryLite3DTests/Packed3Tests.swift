@@ -35,6 +35,20 @@ struct Packed3Tests {
     }
 
     @Test
+    func subscriptReadWriteCoversAllIndices() {
+        var packed = Packed3<Double>(x: 0, y: 0, z: 0)
+        let expected: [Double] = [3.5, -7.25, 11.0]
+
+        for (index, value) in expected.enumerated() {
+            packed[index] = value
+        }
+
+        for (index, value) in expected.enumerated() {
+            #expect(packed[index] == value)
+        }
+    }
+
+    @Test
     func multiplicationWithScalar() {
         let packed = Packed3<Float>(x: 2, y: 3, z: 4)
         let result = packed * 2

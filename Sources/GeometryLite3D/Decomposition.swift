@@ -53,34 +53,6 @@ public struct TransformComponents: Sendable, Equatable {
     )
 }
 
-extension TransformComponents: CustomStringConvertible {
-    public var description: String {
-        let components: [String] = [
-            perspective != [0, 0, 0, 1] ? "perspective: \(perspective)" : nil,
-            translate != .zero ? "translate: \(translate.shortDescription)" : nil,
-            scale != .one ? "scale: \(scale.shortDescription)" : nil,
-            skew != Skew.zero ? "skew: \(skew)" : nil,
-            rotation != .identity ? "rotation: \(rotation)" : nil
-        ].compactMap(\.self)
-
-        return "Skew(\(components.joined(separator: ", ")))"
-    }
-}
-
-extension SIMD3<Float> {
-    public var shortDescription: String {
-        let style = FloatingPointFormatStyle<Float>.number
-        return "[\(x.formatted(style)), \(y.formatted(style)), \(z.formatted(style))]"
-    }
-}
-
-extension simd_quatf: @retroactive CustomStringConvertible {
-    public var description: String {
-        //        return "Quaternion(x: \(vector.x), y: \(vector.y), z: \(vector.z), w: \(vector.w))"
-        "\(Euler(self))"
-    }
-}
-
 struct Euler {
     enum Order {
         case zyx

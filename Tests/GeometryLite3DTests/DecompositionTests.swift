@@ -221,32 +221,6 @@ struct DecompositionTests {
     }
 
     @Test
-    func transformComponentDescriptionsIncludeNonDefaultValues() {
-        let components = TransformComponents(
-            perspective: [1, 2, 3, 4],
-            translate: [5, 6, 7],
-            scale: [2, 3, 4],
-            skew: Skew(xy: 0.1, xz: 0.2, yz: 0.3),
-            rotation: simd_quatf(angle: Float.pi / 3, axis: [0, 0, 1])
-        )
-        let description = components.description
-        #expect(description.contains("perspective"))
-        #expect(description.contains("translate"))
-        #expect(description.contains("scale"))
-        #expect(description.contains("skew"))
-        #expect(description.contains("rotation"))
-
-        let skewDescription = components.skew.description
-        #expect(skewDescription.contains("Skew"))
-
-        let shortDescription = components.translate.shortDescription
-        #expect(shortDescription.contains("5"))
-
-        let eulerDescription = Euler(components.rotation).description
-        #expect(eulerDescription.contains("Euler"))
-    }
-
-    @Test
     func scalingVectorToDesiredLength() {
         var vector = SIMD3<Float>(3, 0, 0)
         vector.scale(to: 6)
