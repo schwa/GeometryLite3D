@@ -167,9 +167,6 @@ public extension float4x4 {
             // Solve the equation by inverting perspectiveMatrix and multiplying
             // rightHandSide by the inverse. (This is the easiest way, not
             // necessarily the best.)
-            if !perspectiveMatrix.canInvert {
-                return nil
-            }
             let inversePerspectiveMatrix = perspectiveMatrix.inverse
             let transposedInversePerspectiveMatrix = inversePerspectiveMatrix.transpose
 
