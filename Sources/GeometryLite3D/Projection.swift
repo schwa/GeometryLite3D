@@ -30,7 +30,7 @@ public struct PerspectiveProjection: ProjectionProtocol {
     public var reverseZ: Bool
 
     // TODO: Make reverseZ optional and default to false later.
-    public init(verticalAngleOfView: AngleF = .degrees(90), zClip: ClosedRange<Float> = 0.01 ... .infinity, reverseZ: Bool = false) {
+    public init(verticalAngleOfView: AngleF = .degrees(90), zClip: ClosedRange<Float> = 0.01 ... 100, reverseZ: Bool = false) {
         self.verticalAngleOfView = verticalAngleOfView
         self.zClip = zClip
         self.reverseZ = reverseZ
