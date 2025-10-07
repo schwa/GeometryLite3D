@@ -25,43 +25,43 @@ public extension ProjectionProtocol {
 // MARK: -
 
 public struct PerspectiveProjection: ProjectionProtocol {
-    public var verticalAngleOfView: AngleF
-    public var zClip: ClosedRange<Float>
-    public var reverseZ: Bool
+    public enum DepthMode: Equatable, Sendable {
+        case standard(zClip: ClosedRange<Float>)
+        case reversed(zMin: Float)
+    }
 
-    // TODO: Make reverseZ optional and default to false later.
-    public init(verticalAngleOfView: AngleF = .degrees(90), zClip: ClosedRange<Float> = 0.01 ... 100, reverseZ: Bool = false) {
+    public var verticalAngleOfView: AngleF
+    public var depthMode: DepthMode
+
+    public init(verticalAngleOfView: AngleF = .degrees(90), depthMode: DepthMode = .standard(zClip: 0.01 ... 100)) {
         self.verticalAngleOfView = verticalAngleOfView
-        self.zClip = zClip
-        self.reverseZ = reverseZ
+        self.depthMode = depthMode
     }
 
     public func projectionMatrix(aspectRatio: Float) -> float4x4 {
         let fovy = verticalAngleOfView.radians
-        let nearZ = zClip.lowerBound
-        let farZ = zClip.upperBound
         let aspect = aspectRatio
-
         let f = 1.0 / tan(fovy * 0.5)
 
-        if reverseZ {
-            // Reverse-Z with infinite far plane projection matrix
-            // Maps: near plane to 1.0, infinity to 0.0
+        switch depthMode {
+        case .reversed(let zMin):
             return float4x4(
                 SIMD4<Float>(f / aspect, 0, 0, 0),
                 SIMD4<Float>(0, f, 0, 0),
                 SIMD4<Float>(0, 0, 0, -1),
-                SIMD4<Float>(0, 0, nearZ, 0)
+                SIMD4<Float>(0, 0, zMin, 0)
+            )
+        case .standard(let zClip):
+            let nearZ = zClip.lowerBound
+            let farZ = zClip.upperBound
+            let rangeInv = 1.0 / (nearZ - farZ)
+            return float4x4(
+                SIMD4<Float>(f / aspect, 0, 0, 0),
+                SIMD4<Float>(0, f, 0, 0),
+                SIMD4<Float>(0, 0, (farZ + nearZ) * rangeInv, -1),
+                SIMD4<Float>(0, 0, 2.0 * farZ * nearZ * rangeInv, 0)
             )
         }
-        // Standard projection matrix
-        let rangeInv = 1.0 / (nearZ - farZ)
-        return float4x4(
-            SIMD4<Float>(f / aspect, 0, 0, 0),
-            SIMD4<Float>(0, f, 0, 0),
-            SIMD4<Float>(0, 0, (farZ + nearZ) * rangeInv, -1),
-            SIMD4<Float>(0, 0, 2.0 * farZ * nearZ * rangeInv, 0)
-        )
     }
 }
 

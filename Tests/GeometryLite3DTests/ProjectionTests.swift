@@ -16,7 +16,7 @@ struct ProjectionTests {
         cameraNode.camera = camera
         scene.rootNode.addChildNode(cameraNode)
         let sceneKitProjection = float4x4(camera.projectionTransform(withViewportSize: CGSize(width: 2, height: 1)))
-        let newProjection = PerspectiveProjection(verticalAngleOfView: .degrees(Float(camera.fieldOfView)), zClip: 1...100).projectionMatrix(width: 2, height: 1)
+        let newProjection = PerspectiveProjection(verticalAngleOfView: .degrees(Float(camera.fieldOfView)), depthMode: .standard(zClip: 1...100)).projectionMatrix(width: 2, height: 1)
         #expect(newProjection.isApproximatelyEqual(to: sceneKitProjection, absoluteTolerance: 1e-6))
 
         cameraNode.simdPosition = [0, 0, 10]
@@ -29,7 +29,7 @@ struct ProjectionTests {
 
     @Test
     func perspectiveProjectionConvenienceOverloadsMatch() {
-        let projection = PerspectiveProjection(verticalAngleOfView: .degrees(45), zClip: 0.5...150)
+        let projection = PerspectiveProjection(verticalAngleOfView: .degrees(45), depthMode: .standard(zClip: 0.5...150))
         let aspect: Float = 16 / 9
 
         let matrixDirect = projection.projectionMatrix(aspectRatio: aspect)
@@ -47,7 +47,7 @@ struct ProjectionTests {
         let near: Float = 1
         let far: Float = 10
         let aspect: Float = 4 / 3
-        let projection = PerspectiveProjection(verticalAngleOfView: .degrees(90), zClip: near...far)
+        let projection = PerspectiveProjection(verticalAngleOfView: .degrees(90), depthMode: .standard(zClip: near...far))
 
         let matrix = projection.projectionMatrix(aspectRatio: aspect)
 
@@ -65,13 +65,13 @@ struct ProjectionTests {
 
     @Test
     func reverseZPerspectiveMatchesClosedForm() {
-        let projection = PerspectiveProjection(verticalAngleOfView: .degrees(60), zClip: 0.5...100, reverseZ: true)
+        let projection = PerspectiveProjection(verticalAngleOfView: .degrees(60), depthMode: .reversed(zMin: 0.5))
         let aspect: Float = 21 / 9
 
         let matrix = projection.projectionMatrix(aspectRatio: aspect)
 
         let f: Float = 1 / tan(projection.verticalAngleOfView.radians * 0.5)
-        let near = projection.zClip.lowerBound
+        let near: Float = 0.5
         let expected = float4x4(
             SIMD4<Float>(f / aspect, 0, 0, 0),
             SIMD4<Float>(0, f, 0, 0),
