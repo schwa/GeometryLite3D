@@ -51,6 +51,7 @@ public struct PerspectiveProjection: ProjectionProtocol {
                 SIMD4<Float>(0, 0, 0, -1),
                 SIMD4<Float>(0, 0, zMin, 0)
             )
+
         case .standard(let zClip):
             let nearZ = zClip.lowerBound
             let farZ = zClip.upperBound
