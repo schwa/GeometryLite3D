@@ -59,12 +59,13 @@ MetalSprocketsSceneGraph has its own BoundingBox.union and computes centers and 
 ## 4: Ray and ray intersection tests
 
 +++
-status: open
+status: closed
 priority: medium
 kind: feature
 labels: effort:m
 created: 2026-10-15T13:26:32Z
-updated: 2026-10-15T13:33:49Z
+updated: 2026-10-15T13:40:12Z
+closed: 2026-10-15T13:40:12Z
 +++
 
 A `Ray` (origin, normalized direction, init from a view point and view/projection matrices for Metal clip space, standard or reversed depth) plus ray/triangle (Möller–Trumbore, returning t and barycentrics, optional back-face culling) and ray/box (slab test returning entry t and face normal). Currently private in MetalSprocketsSceneGraph's HitTest.swift. Filed from MetalSprocketsSceneGraph #97.
