@@ -42,12 +42,13 @@ Add `var translation: SIMD3<Float>` (get/set, columns.3.xyz), `var upperLeft3x3:
 ## 3: BoundingBox helpers: union, center, size, contains
 
 +++
-status: open
+status: closed
 priority: low
 kind: enhancement
 labels: effort:s
 created: 2026-10-15T13:26:32Z
-updated: 2026-10-15T13:35:53Z
+updated: 2026-10-15T13:40:59Z
+closed: 2026-10-15T13:40:59Z
 +++
 
 MetalSprocketsSceneGraph has its own BoundingBox.union and computes centers and sizes inline. Add `union(_:)`, `center`, `size`, `contains(_ point:)`, and an init from a sequence of points. Filed from MetalSprocketsSceneGraph #97.

@@ -38,6 +38,39 @@ public struct BoundingBox3D: Equatable, Sendable {
     }
 }
 
+public extension BoundingBox3D {
+    /// Returns nil for an empty sequence.
+    init?<S: Sequence>(points: S) where S.Element == SIMD3<Float> {
+        var iterator = points.makeIterator()
+        guard let first = iterator.next() else {
+            return nil
+        }
+        var minimum = first
+        var maximum = first
+        while let point = iterator.next() {
+            minimum = simd.min(minimum, point)
+            maximum = simd.max(maximum, point)
+        }
+        self.init(min: minimum, max: maximum)
+    }
+
+    var center: SIMD3<Float> {
+        (min + max) * 0.5
+    }
+
+    var size: SIMD3<Float> {
+        max - min
+    }
+
+    func union(_ other: Self) -> Self {
+        Self(min: simd.min(min, other.min), max: simd.max(max, other.max))
+    }
+
+    func contains(_ point: SIMD3<Float>) -> Bool {
+        all(point .>= min) && all(point .<= max)
+    }
+}
+
 @available(*, deprecated, renamed: "BoundingBox3D")
 public typealias BoundingBox = BoundingBox3D
 

@@ -80,4 +80,34 @@ struct BoundingBox3DTests {
         #expect(bbox.min == [-1, -2, -3])
         #expect(bbox.max == [4, 5, 6])
     }
+
+    @Test
+    func initFromPoints() throws {
+        let bbox = try #require(BoundingBox3D(points: [[1, -2, 3], [-1, 4, 0], [0, 0, 5]]))
+        #expect(bbox.min == [-1, -2, 0])
+        #expect(bbox.max == [1, 4, 5])
+        #expect(BoundingBox3D(points: [SIMD3<Float>]()) == nil)
+    }
+
+    @Test
+    func centerAndSize() {
+        let bbox = BoundingBox3D(min: [-1, 0, 2], max: [3, 4, 4])
+        #expect(bbox.center == [1, 2, 3])
+        #expect(bbox.size == [4, 4, 2])
+    }
+
+    @Test
+    func union() {
+        let first = BoundingBox3D(min: [0, 0, 0], max: [1, 1, 1])
+        let second = BoundingBox3D(min: [-1, 0.5, 0.5], max: [0.5, 2, 0.75])
+        #expect(first.union(second) == BoundingBox3D(min: [-1, 0, 0], max: [1, 2, 1]))
+    }
+
+    @Test
+    func contains() {
+        let bbox = BoundingBox3D(min: [0, 0, 0], max: [1, 1, 1])
+        #expect(bbox.contains([0.5, 0.5, 0.5]))
+        #expect(bbox.contains([1, 0, 1]))
+        #expect(!bbox.contains([1.01, 0.5, 0.5]))
+    }
 }
