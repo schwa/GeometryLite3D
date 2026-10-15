@@ -133,12 +133,13 @@ A TRS struct (translation, simd_quatf rotation, scale) with `matrix` and `init(m
 ## 8: Quaternion look rotation
 
 +++
-status: open
+status: closed
 priority: low
 kind: feature
 labels: effort:s
 created: 2026-10-15T13:26:33Z
-updated: 2026-10-15T13:33:49Z
+updated: 2026-10-15T13:41:48Z
+closed: 2026-10-15T13:41:48Z
 +++
 
 simd_quatf that turns a local front axis towards a target from a position, keeping a world up vector up (with a fallback when looking along up). MetalSprocketsSceneGraph's look-at constraint has this privately (Constraint.swift lookRotation); LookAt only builds a camera matrix. Filed from MetalSprocketsSceneGraph #97.
