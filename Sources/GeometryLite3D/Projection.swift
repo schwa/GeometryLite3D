@@ -27,7 +27,10 @@ public extension ProjectionProtocol {
 public struct PerspectiveProjection: ProjectionProtocol {
     public enum DepthMode: Equatable, Sendable {
         case standard(zClip: ClosedRange<Float>)
+        /// Metal clip z in 0...1 with an infinite far plane. Near maps to 1.
         case reversed(zMin: Float)
+        /// Metal clip z in 0...1 with a finite far plane. Near maps to 1, far maps to 0.
+        case reversedFinite(zClip: ClosedRange<Float>)
     }
 
     public var verticalAngleOfView: AngleF
@@ -50,6 +53,17 @@ public struct PerspectiveProjection: ProjectionProtocol {
                 SIMD4<Float>(0, f, 0, 0),
                 SIMD4<Float>(0, 0, 0, -1),
                 SIMD4<Float>(0, 0, zMin, 0)
+            )
+
+        case .reversedFinite(let zClip):
+            let nearZ = zClip.lowerBound
+            let farZ = zClip.upperBound
+            let rangeInv = 1.0 / (farZ - nearZ)
+            return float4x4(
+                SIMD4<Float>(f / aspect, 0, 0, 0),
+                SIMD4<Float>(0, f, 0, 0),
+                SIMD4<Float>(0, 0, nearZ * rangeInv, -1),
+                SIMD4<Float>(0, 0, farZ * nearZ * rangeInv, 0)
             )
 
         case .standard(let zClip):
@@ -115,6 +129,26 @@ public struct OrthographicProjection: ProjectionProtocol {
 }
 
 // MARK: -
+
+public extension float4x4 {
+    /// Maps Metal clip z to w - z, turning standard 0...1 depth into reversed depth and back.
+    static let reversedDepth = float4x4(
+        SIMD4<Float>(1, 0, 0, 0),
+        SIMD4<Float>(0, 1, 0, 0),
+        SIMD4<Float>(0, 0, -1, 0),
+        SIMD4<Float>(0, 0, 1, 1)
+    )
+
+    /// View matrix for a camera at `eye` looking along `forward`. Picks another up vector when `forward` is parallel to `up`.
+    static func viewMatrix(eye: SIMD3<Float>, forward: SIMD3<Float>, up: SIMD3<Float> = [0, 1, 0]) -> float4x4 {
+        let direction = normalize(forward)
+        var safeUp = up
+        if length(cross(direction, normalize(up))) < 1e-4 {
+            safeUp = abs(direction.z) < 0.9 ? [0, 0, 1] : [1, 0, 0]
+        }
+        return LookAt(position: eye, target: eye + direction, up: safeUp).viewMatrix
+    }
+}
 
 public extension float4x4 {
     // TODO: OLD

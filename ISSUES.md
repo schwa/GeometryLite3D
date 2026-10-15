@@ -89,18 +89,20 @@ A conservative box-in-frustum test for a view-projection matrix in Metal clip sp
 ## 6: Projection and view matrix helpers
 
 +++
-status: open
+status: closed
 priority: medium
 kind: enhancement
 labels: effort:m
 created: 2026-10-15T13:26:33Z
-updated: 2026-10-15T13:33:49Z
+updated: 2026-10-15T13:39:31Z
+closed: 2026-10-15T13:39:31Z
 +++
 
 Matrix builders MetalSprocketsSceneGraph keeps privately in Shadows.swift and SceneGraphRenderer.swift: viewMatrix(eye:forward:) (with an up fallback), perspective(fieldOfView:near:far:) and orthographic(halfSize:near:far:) with reversed depth, and the reversed-depth remap matrix (clip z to w - z). Ideally expressed through PerspectiveProjection/OrthographicProjection depth modes. Filed from MetalSprocketsSceneGraph #97.
 
 - `2026-10-15T13:32:17Z`: MetalSprocketsPBR needs the same: finite near/far reversed-depth perspective (PerspectiveProjection.reversed is infinite-far only) and a reversed-depth orthographic(halfWidth:halfHeight:near:far:). See PBRCamera.swift.
 - `2026-10-15T13:33:49Z`: Related: #1 (OrthographicProjection type).
+- `2026-10-15T13:39:31Z`: Added PerspectiveProjection.DepthMode.reversedFinite(zClip:), float4x4.reversedDepth, float4x4.viewMatrix(eye:forward:up:). Reversed orthographic is OrthographicProjection(.reversed) from #1. Note: the new enum case breaks exhaustive switches on PerspectiveProjection.DepthMode in dependents.
 
 ---
 
