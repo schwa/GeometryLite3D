@@ -52,6 +52,18 @@ public extension BoundingBox3D {
         self.init(min: minimum, max: maximum)
     }
 
+    /// Identity for `union`: inverted infinite bounds.
+    static let empty = Self(min: SIMD3<Float>(repeating: .infinity), max: SIMD3<Float>(repeating: -.infinity))
+
+    var isEmpty: Bool {
+        any(min .> max)
+    }
+
+    /// Radius of the bounding sphere centered at `center`. Zero when empty.
+    var radius: Float {
+        isEmpty ? 0 : simd.length(size) * 0.5
+    }
+
     var center: SIMD3<Float> {
         (min + max) * 0.5
     }

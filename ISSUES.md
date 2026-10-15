@@ -378,10 +378,13 @@ Spatial now has Rect3D, AffineTransform3D, Rotation3D, ProjectiveTransform3D and
 ## 22: BoundingBox3D has no empty state, emptiness check, or radius
 
 +++
-status: new
+status: closed
 priority: medium
-kind: none
+kind: enhancement
+labels: effort:s
 created: 2026-10-15T14:35:18Z
+updated: 2026-10-15T14:37:05Z
+closed: 2026-10-15T14:37:05Z
 +++
 
 BoundingBox3D has no way to represent an empty box (e.g. a starting value for union folds), no isEmpty check, and no bounding-sphere radius. Clients like MetalSprocketsPBR keep their own PBRBounds type because of this (it has .empty, isEmpty, and radius).

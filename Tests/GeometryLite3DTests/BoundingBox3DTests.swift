@@ -12,6 +12,24 @@ struct BoundingBox3DTests {
     }
 
     @Test
+    func emptyBox() {
+        let empty = BoundingBox3D.empty
+        #expect(empty.isEmpty)
+        #expect(empty.radius == 0)
+        #expect(!empty.contains([0, 0, 0]))
+        let box = BoundingBox3D(min: [-1, -2, -3], max: [1, 2, 3])
+        #expect(empty.union(box) == box)
+        #expect(!box.isEmpty)
+        #expect(!BoundingBox3D(min: [1, 1, 1], max: [1, 1, 1]).isEmpty)
+    }
+
+    @Test
+    func radius() {
+        let box = BoundingBox3D(min: [0, 0, 0], max: [2, 2, 2])
+        #expect(abs(box.radius - sqrt(3)) < 1e-6)
+    }
+
+    @Test
     func transformIdentity() {
         let bbox = BoundingBox3D(min: [-1, -1, -1], max: [1, 1, 1])
         let identity = matrix_identity_float4x4
