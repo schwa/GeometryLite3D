@@ -123,7 +123,7 @@ struct Packed3Tests {
         #expect(packed1 != packed3)
     }
 
-    #if os(iOS) || (os(macOS) && !arch(x86_64))
+    #if !((os(macOS) || targetEnvironment(macCatalyst)) && arch(x86_64))
     @Test
     func float16Conversion() {
         let floatPacked = Packed3<Float>(x: 1.5, y: 2.5, z: 3.5)

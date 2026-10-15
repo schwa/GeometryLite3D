@@ -339,12 +339,13 @@ Every other public value type is Equatable and Sendable. Euler is neither.
 ## 20: Packed3 Float16 conversions excluded on tvOS and visionOS
 
 +++
-status: open
+status: closed
 priority: low
 kind: bug
 labels: effort:xs
 created: 2026-10-15T14:13:10Z
-updated: 2026-10-15T14:14:57Z
+updated: 2026-10-15T14:15:23Z
+closed: 2026-10-15T14:15:23Z
 +++
 
 The Float16 initializers use #if os(iOS) || (os(macOS) && !arch(x86_64)). Float16 is available on tvOS, watchOS and visionOS too. Use a condition based on Float16 availability (for example !(os(macOS) && arch(x86_64))).

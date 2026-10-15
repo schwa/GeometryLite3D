@@ -70,7 +70,8 @@ public extension Packed3 where Scalar: Numeric {
     }
 }
 
-#if os(iOS) || (os(macOS) && !arch(x86_64))
+// Float16 is unavailable on Intel macOS and Intel Mac Catalyst.
+#if !((os(macOS) || targetEnvironment(macCatalyst)) && arch(x86_64))
 public extension Packed3 where Scalar == Float {
     init(_ other: Packed3<Float16>) {
         self.init(x: Float(other.x), y: Float(other.y), z: Float(other.z))
@@ -85,7 +86,7 @@ public extension Packed3 where Scalar == Float16 {
         self.init(x: Float16(other.x), y: Float16(other.y), z: Float16(other.z))
     }
 }
-#endif // os(iOS) || (os(macOS) && !arch(x86_64))
+#endif
 
 public extension SIMD3<Float> {
     init(_ other: Packed3<Float>) {
