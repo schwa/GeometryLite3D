@@ -22,6 +22,7 @@ public extension Packed3 {
 public extension Packed3 {
     subscript(i: Int) -> Scalar {
         get {
+            precondition((0..<3).contains(i))
             switch i {
             case 0:
                 return x
@@ -29,14 +30,12 @@ public extension Packed3 {
             case 1:
                 return y
 
-            case 2:
-                return z
-
             default:
-                fatalError("Index out of bounds.")
+                return z
             }
         }
         set {
+            precondition((0..<3).contains(i))
             switch i {
             case 0:
                 x = newValue
@@ -44,11 +43,8 @@ public extension Packed3 {
             case 1:
                 y = newValue
 
-            case 2:
-                z = newValue
-
             default:
-                fatalError("Index out of bounds.")
+                z = newValue
             }
         }
     }
