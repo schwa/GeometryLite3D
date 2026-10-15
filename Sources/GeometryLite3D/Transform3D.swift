@@ -14,6 +14,29 @@ public struct Transform3D: Equatable, Sendable {
     public static let identity = Self()
 }
 
+extension Transform3D: Codable {
+    private enum CodingKeys: CodingKey {
+        case translation
+        case rotation
+        case scale
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        translation = try container.decode(SIMD3<Float>.self, forKey: .translation)
+        rotation = simd_quatf(vector: try container.decode(SIMD4<Float>.self, forKey: .rotation))
+        scale = try container.decode(SIMD3<Float>.self, forKey: .scale)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(translation, forKey: .translation)
+        // simd_quatf is not Codable. Store the vector as [ix, iy, iz, r].
+        try container.encode(rotation.vector, forKey: .rotation)
+        try container.encode(scale, forKey: .scale)
+    }
+}
+
 public extension Transform3D {
     /// If the matrix does not decompose, the result is identity. Perspective and skew are not kept.
     init(matrix: float4x4) {

@@ -1,7 +1,7 @@
 import ModelIO
 import simd
 
-public struct BoundingBox3D: Equatable, Sendable {
+public struct BoundingBox3D: Equatable, Sendable, Codable {
     public var min: SIMD3<Float>
     public var max: SIMD3<Float>
 

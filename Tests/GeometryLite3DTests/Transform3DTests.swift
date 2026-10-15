@@ -1,8 +1,23 @@
+import Foundation
 import GeometryLite3D
 import simd
 import Testing
 
 struct Transform3DTests {
+    @Test
+    func codableRoundTrip() throws {
+        let transform = Transform3D(translation: [1, 2, 3], rotation: simd_quatf(angle: 0.5, axis: [0, 1, 0]), scale: [2, 3, 4])
+        let data = try JSONEncoder().encode(transform)
+        #expect(try JSONDecoder().decode(Transform3D.self, from: data) == transform)
+    }
+
+    @Test
+    func boundingBoxCodableRoundTrip() throws {
+        let box = BoundingBox3D(min: [-1, -2, -3], max: [4, 5, 6])
+        let data = try JSONEncoder().encode(box)
+        #expect(try JSONDecoder().decode(BoundingBox3D.self, from: data) == box)
+    }
+
     @Test
     func identityMatrix() {
         #expect(Transform3D.identity.matrix == .identity)

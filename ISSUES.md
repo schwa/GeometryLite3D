@@ -295,12 +295,13 @@ PerspectiveProjection.DepthMode has .reversed(zMin:) next to .reversedFinite(zCl
 ## 17: Add Codable to Transform3D and BoundingBox3D
 
 +++
-status: open
+status: closed
 priority: low
 kind: enhancement
 labels: effort:xs
 created: 2026-10-15T14:13:10Z
-updated: 2026-10-15T14:14:57Z
+updated: 2026-10-15T14:19:12Z
+closed: 2026-10-15T14:19:12Z
 +++
 
 Scene graphs need to save transforms and bounds. CameraConeParameters is already Codable. simd_quatf is not Codable, so Transform3D needs a custom encode/decode (store the quaternion vector).
