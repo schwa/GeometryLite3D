@@ -68,6 +68,54 @@ public struct PerspectiveProjection: ProjectionProtocol {
 
 // MARK: -
 
+public struct OrthographicProjection: ProjectionProtocol {
+    public enum DepthMode: Equatable, Sendable {
+        /// OpenGL-style clip z in -1...1, matching SceneKit.
+        case standard(zClip: ClosedRange<Float>)
+        /// Metal clip z in 0...1, with near at 1 and far at 0.
+        case reversed(zClip: ClosedRange<Float>)
+    }
+
+    public var halfHeight: Float
+    public var depthMode: DepthMode
+
+    public init(halfHeight: Float = 1, depthMode: DepthMode = .standard(zClip: 0.01 ... 100)) {
+        self.halfHeight = halfHeight
+        self.depthMode = depthMode
+    }
+
+    public func projectionMatrix(aspectRatio: Float) -> float4x4 {
+        let xScale = 1 / (halfHeight * aspectRatio)
+        let yScale = 1 / halfHeight
+
+        switch depthMode {
+        case .standard(let zClip):
+            let near = zClip.lowerBound
+            let far = zClip.upperBound
+            let rangeInv = 1 / (far - near)
+            return float4x4(
+                SIMD4<Float>(xScale, 0, 0, 0),
+                SIMD4<Float>(0, yScale, 0, 0),
+                SIMD4<Float>(0, 0, -2 * rangeInv, 0),
+                SIMD4<Float>(0, 0, -(far + near) * rangeInv, 1)
+            )
+
+        case .reversed(let zClip):
+            let near = zClip.lowerBound
+            let far = zClip.upperBound
+            let rangeInv = 1 / (far - near)
+            return float4x4(
+                SIMD4<Float>(xScale, 0, 0, 0),
+                SIMD4<Float>(0, yScale, 0, 0),
+                SIMD4<Float>(0, 0, rangeInv, 0),
+                SIMD4<Float>(0, 0, far * rangeInv, 1)
+            )
+        }
+    }
+}
+
+// MARK: -
+
 public extension float4x4 {
     // TODO: OLD
     static func perspective(aspectRatio: Float, fovy: Float, near: Float, far: Float) -> Self {

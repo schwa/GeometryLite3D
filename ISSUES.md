@@ -5,12 +5,13 @@
 ## 1: OrthographicProjection
 
 +++
-status: open
+status: closed
 priority: medium
 kind: feature
 labels: effort:m
 created: 2026-10-15T13:26:32Z
-updated: 2026-10-15T13:33:49Z
+updated: 2026-10-15T13:38:52Z
+closed: 2026-10-15T13:38:52Z
 +++
 
 A ProjectionProtocol type for orthographic cameras, alongside PerspectiveProjection: a vertical size (or half-height), near/far, and the same DepthMode choices (standard zClip, reversed). MetalSprocketsSceneGraph needs it for orthographic camera nodes (its #87) and to load orthographic cameras from glTF and Model I/O. Filed from MetalSprocketsSceneGraph #97.
