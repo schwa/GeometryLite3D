@@ -1,20 +1,18 @@
-import Foundation
 import simd
-import SwiftUI
 
 public struct CameraCone: Sendable, Equatable {
     public var parameters: CameraConeParameters
-    public var rotation: Angle
+    public var rotation: AngleF
     public var height: Float
 
-    public init(parameters: CameraConeParameters, rotation: Angle, height: Float) {
+    public init(parameters: CameraConeParameters, rotation: AngleF, height: Float) {
         self.parameters = parameters
         self.rotation = rotation
         self.height = height
     }
 
     public var cameraTransform: float4x4 {
-        parameters.cameraMatrix(angle: Float(rotation.radians), t: height)
+        parameters.cameraMatrix(angle: rotation.radians, t: height)
     }
 }
 
@@ -70,13 +68,12 @@ public extension CameraConeParameters {
         return coneCenterAtPosition + offset
     }
 
-    func eyePosition(angle _: Float, t _: Float) -> SIMD3<Float> {
+    /// The point the camera looks at.
+    var target: SIMD3<Float> {
         centerA
     }
 
     func cameraMatrix(angle: Float, t: Float, up: SIMD3<Float> = [0, 1, 0]) -> float4x4 {
-        let cameraPosition = self.cameraPosition(angle: angle, t: t)
-        let eyePosition = self.eyePosition(angle: angle, t: t)
-        return LookAt(position: cameraPosition, target: eyePosition, up: up).cameraMatrix
+        LookAt(position: cameraPosition(angle: angle, t: t), target: target, up: up).cameraMatrix
     }
 }

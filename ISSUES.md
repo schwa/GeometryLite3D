@@ -455,12 +455,13 @@ Idea: make the matrix <-> components conversion one boundary with explicit failu
 ## 26: CameraCone is a thin wrapper and the only SwiftUI import
 
 +++
-status: open
+status: closed
 priority: low
 kind: enhancement
 labels: architecture, effort:xs
 created: 2026-10-15T14:40:02Z
-updated: 2026-10-15T14:44:35Z
+updated: 2026-10-15T14:47:07Z
+closed: 2026-10-15T14:47:07Z
 +++
 
 CameraCone only stores parameters + rotation + height and forwards to CameraConeParameters.cameraMatrix. It uses SwiftUI.Angle while the rest of the library uses AngleF, so CameraCone.swift is the only file importing SwiftUI. CameraConeParameters.eyePosition(angle:t:) ignores both arguments.

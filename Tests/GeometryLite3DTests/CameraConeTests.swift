@@ -1,6 +1,6 @@
+import Foundation
 @testable import GeometryLite3D
 import simd
-import SwiftUI
 import Testing
 
 struct CameraConeTests {
@@ -112,12 +112,12 @@ struct CameraConeTests {
 
         let cone = CameraCone(
             parameters: params,
-            rotation: Angle(degrees: 45),
+            rotation: .degrees(45),
             height: 0.5
         )
 
         #expect(cone.parameters == params)
-        #expect(cone.rotation == Angle(degrees: 45))
+        #expect(cone.rotation == .degrees(45))
         #expect(cone.height == 0.5)
     }
 
@@ -169,8 +169,8 @@ struct CameraConeTests {
         let cameraMatrix = params.cameraMatrix(angle: angle, t: t, up: [0, 0, 1])
 
         let position = params.cameraPosition(angle: angle, t: t)
-        let eyePosition = params.eyePosition(angle: angle, t: t)
-        let expected = LookAt(position: position, target: eyePosition, up: [0, 0, 1]).cameraMatrix
+        #expect(params.target == params.centerA)
+        let expected = LookAt(position: position, target: params.target, up: [0, 0, 1]).cameraMatrix
 
         #expect(cameraMatrix.isApproximatelyEqual(to: expected, absoluteTolerance: 1e-6))
     }
@@ -184,11 +184,11 @@ struct CameraConeTests {
             axis: [0, 1, 0],
             distance: 5
         )
-        let rotation = Angle(degrees: 30)
+        let rotation = AngleF.degrees(30)
         let height: Float = 0.6
         let cone = CameraCone(parameters: params, rotation: rotation, height: height)
 
-        let expected = params.cameraMatrix(angle: Float(rotation.radians), t: height)
+        let expected = params.cameraMatrix(angle: rotation.radians, t: height)
         #expect(cone.cameraTransform.isApproximatelyEqual(to: expected, absoluteTolerance: 1e-6))
     }
 
