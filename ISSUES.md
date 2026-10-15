@@ -355,14 +355,17 @@ The Float16 initializers use #if os(iOS) || (os(macOS) && !arch(x86_64)). Float1
 ## 21: Define scope relative to Apple's Spatial framework
 
 +++
-status: open
+status: closed
 priority: low
 kind: documentation
 labels: effort:s
 created: 2026-10-15T14:13:10Z
-updated: 2026-10-15T14:14:57Z
+updated: 2026-10-15T14:16:06Z
+closed: 2026-10-15T14:16:06Z
 +++
 
 Spatial now has Rect3D, AffineTransform3D, Rotation3D, ProjectiveTransform3D and Ray3D. Write down in the README what GeometryLite3D is for (Float/SIMD convenience for Metal, orthographic projection, frustum culling, ray-triangle tests) and what callers should take from Spatial. Consider conversion helpers between the types.
+
+- `2026-10-15T14:16:06Z`: Won't do: Spatial is Double-based (Float types need macOS 26), so it doesn't fit Metal/SIMD Float use. GeometryLite3D stays independent.
 
 ---
