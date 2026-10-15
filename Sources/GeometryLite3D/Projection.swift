@@ -3,6 +3,8 @@ import simd
 
 public protocol ProjectionProtocol: Equatable, Sendable {
     func projectionMatrix(aspectRatio: Float) -> float4x4
+    /// True when the near plane maps to depth 1.
+    var isReversedDepth: Bool { get }
 }
 
 public extension ProjectionProtocol {
@@ -38,6 +40,15 @@ public struct PerspectiveProjection: ProjectionProtocol {
     public init(verticalAngleOfView: AngleF = .degrees(90), depthMode: DepthMode = .standard(zClip: 0.01 ... 100)) {
         self.verticalAngleOfView = verticalAngleOfView
         self.depthMode = depthMode
+    }
+
+    public var isReversedDepth: Bool {
+        switch depthMode {
+        case .standard:
+            false
+        case .reversed, .reversedInfinite:
+            true
+        }
     }
 
     public func projectionMatrix(aspectRatio: Float) -> float4x4 {
@@ -95,6 +106,15 @@ public struct OrthographicProjection: ProjectionProtocol {
     public init(halfHeight: Float = 1, depthMode: DepthMode = .standard(zClip: 0.01 ... 100)) {
         self.halfHeight = halfHeight
         self.depthMode = depthMode
+    }
+
+    public var isReversedDepth: Bool {
+        switch depthMode {
+        case .standard:
+            false
+        case .reversed:
+            true
+        }
     }
 
     public func projectionMatrix(aspectRatio: Float) -> float4x4 {

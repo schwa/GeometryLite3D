@@ -394,12 +394,13 @@ BoundingBox3D has no way to represent an empty box (e.g. a starting value for un
 ## 23: Depth convention is restated across Projection, Ray3D, and Frustum
 
 +++
-status: open
+status: closed
 priority: medium
 kind: enhancement
 labels: architecture, effort:m
 created: 2026-10-15T14:40:01Z
-updated: 2026-10-15T14:44:35Z
+updated: 2026-10-15T14:46:26Z
+closed: 2026-10-15T14:46:26Z
 +++
 
 The depth convention (standard / reversed / reversed-infinite) is encoded separately in PerspectiveProjection.DepthMode, OrthographicProjection.DepthMode, Ray3D(clipPoint:viewMatrix:projectionMatrix:reversedDepth: Bool), and float4x4.reversedDepth. Frustum assumes clip z in 0...w. Callers must keep these in sync by hand: a .reversedInfinite projection used with Ray3D(reversedDepth: false) gives wrong picking rays with no error.

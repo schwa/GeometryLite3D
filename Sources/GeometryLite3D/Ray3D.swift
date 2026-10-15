@@ -26,13 +26,9 @@ public extension Ray3D {
         self.init(origin: nearPoint, direction: otherPoint - nearPoint)
     }
 
-    /// Ray through a point in view coordinates (origin top-left, y down).
+    /// Ray through a point in view coordinates (origin top-left, y down). Prefer `ViewProjection.ray(through:)`, which gets the depth direction from the projection.
     init(viewPoint: SIMD2<Float>, viewSize: SIMD2<Float>, viewMatrix: float4x4, projectionMatrix: float4x4, reversedDepth: Bool = false) {
-        let clipPoint = SIMD2<Float>(
-            viewPoint.x / viewSize.x * 2 - 1,
-            1 - viewPoint.y / viewSize.y * 2
-        )
-        self.init(clipPoint: clipPoint, viewMatrix: viewMatrix, projectionMatrix: projectionMatrix, reversedDepth: reversedDepth)
+        self = ViewProjection(viewMatrix: viewMatrix, projectionMatrix: projectionMatrix, isReversedDepth: reversedDepth, viewSize: viewSize).ray(through: viewPoint)
     }
 }
 

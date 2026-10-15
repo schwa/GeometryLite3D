@@ -25,6 +25,7 @@ Then add it as a dependency to your target:
 - **BoundingBox3D**: Axis-aligned bounding box with union, center, size, contains, and transformation
 - **Projection**: Perspective and orthographic projections with standard or reversed 0...1 depth
 - **LookAt**: Camera and view matrices, plus `simd_quatf.lookRotation` and `float4x4.viewMatrix(eye:forward:up:)`
+- **ViewProjection**: View matrix, projection, and viewport in one value. Gets the depth direction from the projection and provides `project`, `unproject`, `ray(through:)`, and `frustum`
 - **Ray3D**: Rays from view or clip points, with triangle and box intersection
 - **Frustum**: Conservative bounding box culling
 - **SIMD Extensions**: Rotation, translation, and scale matrices; `translation`, `upperLeft3x3`, `normalMatrix`, `isMirroring`
