@@ -220,3 +220,148 @@ Projection.swift marks float4x4.perspective with '// TODO: OLD'. It gives the sa
 - `2026-10-15T13:58:47Z`: Deprecated, not removed. Remaining callers: MetalSprocketsAddOns TransformsTests.swift:17 and MetalSprocketsExamples MeshDissolveDemoView.swift:46. Remove after those move to PerspectiveProjection.
 
 ---
+
+## 13: Verify builds on all declared platforms (ModelIO on watchOS?)
+
++++
+status: closed
+priority: high
+kind: task
+labels: effort:s
+created: 2026-10-15T14:13:10Z
+updated: 2026-10-15T14:14:31Z
+closed: 2026-10-15T14:14:31Z
++++
+
+Package.swift declares macOS, iOS, tvOS, watchOS and visionOS, but only macOS has been built and tested. BoundingBox3D.swift imports ModelIO for init(from: MDLAxisAlignedBoundingBox); ModelIO is likely not available on watchOS. Build every platform with xcb (--destination ios/tvos/watch/vision). If ModelIO is missing, wrap the ModelIO init in #if canImport(ModelIO).
+
+- `2026-10-15T14:14:31Z`: Won't fix: not a concern.
+
+---
+
+## 14: Release 0.2.0 with notes for breaking changes
+
++++
+status: closed
+priority: high
+kind: task
+labels: effort:s
+depends: 16
+created: 2026-10-15T14:13:10Z
+updated: 2026-10-15T14:14:49Z
+closed: 2026-10-15T14:14:49Z
++++
+
+Unreleased breaking changes since 0.1.1: .standard depth modes now give 0...1 clip z (#11); BoundingBox renamed to BoundingBox3D (#10, deprecated typealias kept); releativeTolerance renamed to relativeTolerance; new PerspectiveProjection.DepthMode.reversedFinite case (#6); float4x4.perspective deprecated (#12). Write release notes and update dependents (MetalSprocketsSceneGraph, MetalSprocketsPBR, MetalSprocketsAddOns, MetalSprocketsExamples). Do after the API-naming issues if they land first.
+
+- `2026-10-15T14:14:49Z`: Won't do: not a task for this tracker.
+
+---
+
+## 15: Ray3D clashes with Spatial.Ray3D
+
++++
+status: closed
+priority: medium
+kind: enhancement
+labels: effort:xs
+created: 2026-10-15T14:13:10Z
+updated: 2026-10-15T14:14:31Z
+closed: 2026-10-15T14:14:31Z
++++
+
+Files that import both GeometryLite3D and Spatial must write GeometryLite3D.Ray3D. Pick a name that does not clash (for example Ray), or accept the clash. Decide before the next release.
+
+- `2026-10-15T14:14:31Z`: Won't fix: not a concern.
+
+---
+
+## 16: Make depth mode and translation naming consistent
+
++++
+status: open
+priority: medium
+kind: enhancement
+labels: effort:s
+created: 2026-10-15T14:13:10Z
+updated: 2026-10-15T14:14:57Z
++++
+
+PerspectiveProjection.DepthMode has .reversed(zMin:) next to .reversedFinite(zClip:). TransformComponents uses 'translate' while everything else uses 'translation'. Both LookAt.viewMatrix and float4x4.viewMatrix(eye:forward:up:) exist. Choose names, add deprecated aliases where needed. Decide before the next release.
+
+---
+
+## 17: Add Codable to Transform3D and BoundingBox3D
+
++++
+status: open
+priority: low
+kind: enhancement
+labels: effort:xs
+created: 2026-10-15T14:13:10Z
+updated: 2026-10-15T14:14:57Z
++++
+
+Scene graphs need to save transforms and bounds. CameraConeParameters is already Codable. simd_quatf is not Codable, so Transform3D needs a custom encode/decode (store the quaternion vector).
+
+---
+
+## 18: Frustum: replace mutable planes array with fixed planes
+
++++
+status: open
+priority: low
+kind: enhancement
+labels: effort:xs
+created: 2026-10-15T14:13:10Z
+updated: 2026-10-15T14:14:57Z
++++
+
+Frustum.planes is a public var [SIMD4<Float>], so callers can set a wrong count, and it allocates. Use six named stored properties (left, right, bottom, top, near, far) or a fixed-size storage.
+
+---
+
+## 19: Make Euler Equatable and Sendable
+
++++
+status: open
+priority: low
+kind: enhancement
+labels: effort:xs
+created: 2026-10-15T14:13:10Z
+updated: 2026-10-15T14:14:57Z
++++
+
+Every other public value type is Equatable and Sendable. Euler is neither.
+
+---
+
+## 20: Packed3 Float16 conversions excluded on tvOS and visionOS
+
++++
+status: open
+priority: low
+kind: bug
+labels: effort:xs
+created: 2026-10-15T14:13:10Z
+updated: 2026-10-15T14:14:57Z
++++
+
+The Float16 initializers use #if os(iOS) || (os(macOS) && !arch(x86_64)). Float16 is available on tvOS, watchOS and visionOS too. Use a condition based on Float16 availability (for example !(os(macOS) && arch(x86_64))).
+
+---
+
+## 21: Define scope relative to Apple's Spatial framework
+
++++
+status: open
+priority: low
+kind: documentation
+labels: effort:s
+created: 2026-10-15T14:13:10Z
+updated: 2026-10-15T14:14:57Z
++++
+
+Spatial now has Rect3D, AffineTransform3D, Rotation3D, ProjectiveTransform3D and Ray3D. Write down in the README what GeometryLite3D is for (Float/SIMD convenience for Metal, orthographic projection, frustum culling, ray-triangle tests) and what callers should take from Spatial. Consider conversion helpers between the types.
+
+---
