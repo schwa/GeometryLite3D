@@ -312,12 +312,13 @@ Scene graphs need to save transforms and bounds. CameraConeParameters is already
 ## 18: Frustum: replace mutable planes array with fixed planes
 
 +++
-status: open
+status: closed
 priority: low
 kind: enhancement
 labels: effort:xs
 created: 2026-10-15T14:13:10Z
-updated: 2026-10-15T14:14:57Z
+updated: 2026-10-15T14:20:23Z
+closed: 2026-10-15T14:20:23Z
 +++
 
 Frustum.planes is a public var [SIMD4<Float>], so callers can set a wrong count, and it allocates. Use six named stored properties (left, right, bottom, top, near, far) or a fixed-size storage.

@@ -38,6 +38,18 @@ struct FrustumTests {
     }
 
     @Test
+    func namedPlanesMatchClipPlanes() {
+        let frustum = Frustum(viewProjection: .identity)
+        #expect(frustum.left == [1, 0, 0, 1])
+        #expect(frustum.right == [-1, 0, 0, 1])
+        #expect(frustum.bottom == [0, 1, 0, 1])
+        #expect(frustum.top == [0, -1, 0, 1])
+        #expect(frustum.near == [0, 0, 1, 0])
+        #expect(frustum.far == [0, 0, -1, 1])
+        #expect(frustum.planes == [frustum.left, frustum.right, frustum.bottom, frustum.top, frustum.near, frustum.far])
+    }
+
+    @Test
     func orthographic() {
         let projection = OrthographicProjection(halfHeight: 2, depthMode: .reversed(zClip: 0.1...10)).projectionMatrix(aspectRatio: 1)
         let frustum = Frustum(viewProjection: projection)
