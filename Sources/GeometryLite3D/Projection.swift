@@ -26,6 +26,7 @@ public extension ProjectionProtocol {
 
 public struct PerspectiveProjection: ProjectionProtocol {
     public enum DepthMode: Equatable, Sendable {
+        /// Metal clip z in 0...1, with near at 0 and far at 1.
         case standard(zClip: ClosedRange<Float>)
         /// Metal clip z in 0...1 with an infinite far plane. Near maps to 1.
         case reversed(zMin: Float)
@@ -73,8 +74,8 @@ public struct PerspectiveProjection: ProjectionProtocol {
             return float4x4(
                 SIMD4<Float>(f / aspect, 0, 0, 0),
                 SIMD4<Float>(0, f, 0, 0),
-                SIMD4<Float>(0, 0, (farZ + nearZ) * rangeInv, -1),
-                SIMD4<Float>(0, 0, 2.0 * farZ * nearZ * rangeInv, 0)
+                SIMD4<Float>(0, 0, farZ * rangeInv, -1),
+                SIMD4<Float>(0, 0, farZ * nearZ * rangeInv, 0)
             )
         }
     }
@@ -84,7 +85,7 @@ public struct PerspectiveProjection: ProjectionProtocol {
 
 public struct OrthographicProjection: ProjectionProtocol {
     public enum DepthMode: Equatable, Sendable {
-        /// OpenGL-style clip z in -1...1, matching SceneKit.
+        /// Metal clip z in 0...1, with near at 0 and far at 1.
         case standard(zClip: ClosedRange<Float>)
         /// Metal clip z in 0...1, with near at 1 and far at 0.
         case reversed(zClip: ClosedRange<Float>)
@@ -110,8 +111,8 @@ public struct OrthographicProjection: ProjectionProtocol {
             return float4x4(
                 SIMD4<Float>(xScale, 0, 0, 0),
                 SIMD4<Float>(0, yScale, 0, 0),
-                SIMD4<Float>(0, 0, -2 * rangeInv, 0),
-                SIMD4<Float>(0, 0, -(far + near) * rangeInv, 1)
+                SIMD4<Float>(0, 0, -rangeInv, 0),
+                SIMD4<Float>(0, 0, -near * rangeInv, 1)
             )
 
         case .reversed(let zClip):

@@ -183,12 +183,13 @@ Rename BoundingBox to BoundingBox3D, to match the planned Transform3D naming (#7
 ## 11: Standard depth modes use OpenGL clip z (-1...1), not Metal (0...1)
 
 +++
-status: open
+status: closed
 priority: medium
 kind: bug
 labels: effort:s
 created: 2026-10-15T13:42:15Z
-updated: 2026-10-15T13:55:43Z
+updated: 2026-10-15T13:58:26Z
+closed: 2026-10-15T13:58:26Z
 +++
 
 PerspectiveProjection.DepthMode.standard, OrthographicProjection.DepthMode.standard and float4x4.perspective produce OpenGL-style clip z (-w...w), matching SceneKit. The reversed modes, Frustum and Ray assume Metal clip z (0...w).

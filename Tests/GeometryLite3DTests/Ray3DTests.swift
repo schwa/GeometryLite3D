@@ -75,7 +75,7 @@ struct Ray3DTests {
         let projection = PerspectiveProjection(verticalAngleOfView: .degrees(60), depthMode: depthMode).projectionMatrix(aspectRatio: 1)
         let ray = Ray3D(viewPoint: [50, 50], viewSize: [100, 100], viewMatrix: view, projectionMatrix: projection, reversedDepth: reversedDepth)
         #expect(ray.direction.isApproximatelyEqual(to: [0, 0, -1], absoluteTolerance: 1e-5))
-        #expect(abs(ray.origin.x) < 1e-5 && abs(ray.origin.y) < 1e-5)
+        #expect(ray.origin.isApproximatelyEqual(to: [0, 0, 9], absoluteTolerance: 1e-4))
     }
 
     @Test

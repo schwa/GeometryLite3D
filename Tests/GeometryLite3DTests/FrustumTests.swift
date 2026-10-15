@@ -23,6 +23,14 @@ struct FrustumTests {
     }
 
     @Test
+    func standardDepthKeepsBoxesJustPastNear() {
+        let frustum = frustum(depthMode: .standard(zClip: 1...50))
+        #expect(frustum.intersects(BoundingBox3D(min: [-0.1, -0.1, 8.5], max: [0.1, 0.1, 8.8])))
+        #expect(!frustum.intersects(BoundingBox3D(min: [-0.1, -0.1, 9.2], max: [0.1, 0.1, 9.5])))
+        #expect(!frustum.intersects(cube(at: [0, 0, -100])))
+    }
+
+    @Test
     func farPlaneCullsWithFiniteDepth() {
         let frustum = frustum(depthMode: .reversedFinite(zClip: 1...50))
         #expect(!frustum.intersects(cube(at: [0, 0, -100])))

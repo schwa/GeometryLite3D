@@ -1,30 +1,45 @@
 import GeometryLite3D
-import SceneKit
+import CoreGraphics
+import Spatial
 import simd
 import Testing
 
+private func spatialPerspective(fovY: Double, aspectRatio: Double, nearZ: Double, farZ: Double, reverseZ: Bool) -> float4x4 {
+    let matrix = ProjectiveTransform3D(fovY: .degrees(fovY), aspectRatio: aspectRatio, nearZ: nearZ, farZ: farZ, reverseZ: reverseZ).matrix
+    return float4x4(SIMD4<Float>(matrix.columns.0), SIMD4<Float>(matrix.columns.1), SIMD4<Float>(matrix.columns.2), SIMD4<Float>(matrix.columns.3))
+}
+
 struct ProjectionTests {
     @Test
-    func testSceneKitGroundTruth() {
-        let scene = SCNScene()
-        let cameraNode = SCNNode()
-        let camera = SCNCamera()
-        camera.zNear = 1
-        camera.zFar = 100
-        camera.fieldOfView = 60
-        camera.projectionDirection = .vertical
-        cameraNode.camera = camera
-        scene.rootNode.addChildNode(cameraNode)
-        let sceneKitProjection = float4x4(camera.projectionTransform(withViewportSize: CGSize(width: 2, height: 1)))
-        let newProjection = PerspectiveProjection(verticalAngleOfView: .degrees(Float(camera.fieldOfView)), depthMode: .standard(zClip: 1...100)).projectionMatrix(width: 2, height: 1)
-        #expect(newProjection.isApproximatelyEqual(to: sceneKitProjection, absoluteTolerance: 1e-6))
+    func standardPerspectiveMatchesSpatial() {
+        let spatial = spatialPerspective(fovY: 60, aspectRatio: 2, nearZ: 1, farZ: 100, reverseZ: false)
+        let projection = PerspectiveProjection(verticalAngleOfView: .degrees(60), depthMode: .standard(zClip: 1...100)).projectionMatrix(width: 2, height: 1)
+        #expect(projection.isApproximatelyEqual(to: spatial, absoluteTolerance: 1e-6))
+    }
 
-        cameraNode.simdPosition = [0, 0, 10]
-        cameraNode.simdLook(at: [0, 0, 0], up: [0, 1, 0], localFront: [0, 0, -1])
-        let sceneKitCameraMatrix = cameraNode.simdTransform
-        let newLookAtCameraMatrix = LookAt(position: [0, 0, 10], target: [0, 0, 0], up: [0, 1, 0]).cameraMatrix
+    @Test
+    func reversedFinitePerspectiveMatchesSpatial() {
+        let spatial = spatialPerspective(fovY: 45, aspectRatio: 1.5, nearZ: 0.5, farZ: 50, reverseZ: true)
+        let projection = PerspectiveProjection(verticalAngleOfView: .degrees(45), depthMode: .reversedFinite(zClip: 0.5...50)).projectionMatrix(aspectRatio: 1.5)
+        #expect(projection.isApproximatelyEqual(to: spatial, absoluteTolerance: 1e-6))
+    }
 
-        #expect(newLookAtCameraMatrix == sceneKitCameraMatrix)
+    @Test
+    func reversedInfinitePerspectiveMatchesSpatial() {
+        let spatial = spatialPerspective(fovY: 70, aspectRatio: 0.75, nearZ: 0.1, farZ: .infinity, reverseZ: true)
+        let projection = PerspectiveProjection(verticalAngleOfView: .degrees(70), depthMode: .reversed(zMin: 0.1)).projectionMatrix(aspectRatio: 0.75)
+        #expect(projection.isApproximatelyEqual(to: spatial, absoluteTolerance: 1e-6))
+    }
+
+    @Test(arguments: [
+        (SIMD3<Float>(0, 0, 10), SIMD3<Float>(0, 0, 0)),
+        (SIMD3<Float>(3, 4, 5), SIMD3<Float>(-1, 0, 2))
+    ])
+    func lookAtMatchesSpatial(position: SIMD3<Float>, target: SIMD3<Float>) {
+        let rotation = simd_quatf(Rotation3D(forward: Vector3D(vector: SIMD3<Double>(position - target)), up: Vector3D(x: 0, y: 1, z: 0)))
+        let expected = float4x4(translation: position) * float4x4(rotation)
+        let cameraMatrix = LookAt(position: position, target: target, up: [0, 1, 0]).cameraMatrix
+        #expect(cameraMatrix.isApproximatelyEqual(to: expected, absoluteTolerance: 1e-5))
     }
 
     @Test
@@ -56,8 +71,8 @@ struct ProjectionTests {
         let expected = float4x4(
             SIMD4<Float>(f / aspect, 0, 0, 0),
             SIMD4<Float>(0, f, 0, 0),
-            SIMD4<Float>(0, 0, (far + near) * rangeInv, -1),
-            SIMD4<Float>(0, 0, 2 * far * near * rangeInv, 0)
+            SIMD4<Float>(0, 0, far * rangeInv, -1),
+            SIMD4<Float>(0, 0, far * near * rangeInv, 0)
         )
 
         #expect(matrix.isApproximatelyEqual(to: expected, absoluteTolerance: 1e-6))
