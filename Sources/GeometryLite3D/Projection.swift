@@ -152,7 +152,7 @@ public extension float4x4 {
 }
 
 public extension float4x4 {
-    // TODO: OLD
+    @available(*, deprecated, message: "Use PerspectiveProjection. Note this uses OpenGL clip z (-1...1), not Metal (0...1).")
     static func perspective(aspectRatio: Float, fovy: Float, near: Float, far: Float) -> Self {
         let yScale = 1 / tan(fovy * 0.5)
         let xScale = yScale / aspectRatio

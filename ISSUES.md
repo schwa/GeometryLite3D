@@ -206,14 +206,17 @@ Decide: change .standard to Metal 0...1 (breaking; update the SceneKit ground-tr
 ## 12: Deprecate float4x4.perspective(aspectRatio:fovy:near:far:)
 
 +++
-status: open
+status: closed
 priority: low
 kind: task
 labels: effort:xs
 created: 2026-10-15T13:46:30Z
-updated: 2026-10-15T13:55:43Z
+updated: 2026-10-15T13:58:47Z
+closed: 2026-10-15T13:58:47Z
 +++
 
 Projection.swift marks float4x4.perspective with '// TODO: OLD'. It gives the same matrix as PerspectiveProjection(verticalAngleOfView:depthMode: .standard(zClip:)), and also uses OpenGL clip z (see #11). Mark it @available(*, deprecated) pointing at PerspectiveProjection, then remove it in a later release. Check dependents (MetalSprocketsSceneGraph, MetalSprocketsPBR) for callers first.
+
+- `2026-10-15T13:58:47Z`: Deprecated, not removed. Remaining callers: MetalSprocketsAddOns TransformsTests.swift:17 and MetalSprocketsExamples MeshDissolveDemoView.swift:46. Remove after those move to PerspectiveProjection.
 
 ---

@@ -98,6 +98,7 @@ struct ProjectionTests {
     }
 
     @Test
+    @available(*, deprecated)
     func legacyFloat4x4PerspectiveFormulaMatchesManual() {
         let aspect: Float = 2
         let fovy: Float = Float.pi / 3
