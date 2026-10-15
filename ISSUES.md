@@ -179,3 +179,40 @@ closed: 2026-10-15T13:40:43Z
 Rename BoundingBox to BoundingBox3D, to match the planned Transform3D naming (#7). This is a breaking API change for dependents (MetalSprocketsSceneGraph, etc.). Consider a deprecated typealias BoundingBox = BoundingBox3D. Do before or with #3 (BoundingBox helpers) to avoid churn.
 
 ---
+
+## 11: Standard depth modes use OpenGL clip z (-1...1), not Metal (0...1)
+
++++
+status: open
+priority: medium
+kind: bug
+labels: effort:s
+created: 2026-10-15T13:42:15Z
+updated: 2026-10-15T13:55:43Z
++++
+
+PerspectiveProjection.DepthMode.standard, OrthographicProjection.DepthMode.standard and float4x4.perspective produce OpenGL-style clip z (-w...w), matching SceneKit. The reversed modes, Frustum and Ray assume Metal clip z (0...w).
+
+Effects:
+- Frustum(viewProjection:) with a .standard matrix has a near plane that is too tight (it culls the half of the depth range where z < 0).
+- Ray(clipPoint:...) with reversedDepth: false starts at clip z 0, which is inside the frustum, not on the near plane.
+- Depth precision is wasted if these matrices feed Metal directly.
+
+Decide: change .standard to Metal 0...1 (breaking; update the SceneKit ground-truth tests), or add explicit Metal standard modes and document .standard as OpenGL. Related: #1, #5, #6, #4.
+
+---
+
+## 12: Deprecate float4x4.perspective(aspectRatio:fovy:near:far:)
+
++++
+status: open
+priority: low
+kind: task
+labels: effort:xs
+created: 2026-10-15T13:46:30Z
+updated: 2026-10-15T13:55:43Z
++++
+
+Projection.swift marks float4x4.perspective with '// TODO: OLD'. It gives the same matrix as PerspectiveProjection(verticalAngleOfView:depthMode: .standard(zClip:)), and also uses OpenGL clip z (see #11). Mark it @available(*, deprecated) pointing at PerspectiveProjection, then remove it in a later release. Check dependents (MetalSprocketsSceneGraph, MetalSprocketsPBR) for callers first.
+
+---
