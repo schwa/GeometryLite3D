@@ -610,3 +610,16 @@ Out of scope unless needed: Projection, ViewProjection, Frustum, CameraCone (GPU
 Cross-cutting: keep Float typealiases (AngleF, BoundingBox3DF, ...) so clients keep compiling; mark generic API @inlinable and benchmark Float hot paths before and after.
 
 ---
+
+## 33: Ray3D.intersect(box:) returns nil when the ray starts inside the box
+
++++
+status: new
+priority: medium
+kind: bug
+created: 2026-10-15T19:03:34Z
++++
+
+Ray3D.intersect(box:) returns nil when the origin is inside the box (entry < 0). Callers cannot use it as a ray-vs-box overlap test, for example to cull meshes when the camera is inside their bounds. MetalSprocketsSceneGraph's hit test needs a hit at distance 0 in that case (with the normal opposite to the ray direction), and keeps its own slab test until then.
+
+---
