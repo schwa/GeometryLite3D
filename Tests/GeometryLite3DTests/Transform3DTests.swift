@@ -31,15 +31,34 @@ struct Transform3DTests {
     }
 
     @Test
-    func roundTripsThroughMatrix() {
+    func roundTripsThroughMatrix() throws {
         let transform = Transform3D(translation: [1, -2, 3], rotation: simd_quatf(angle: 0.7, axis: normalize(SIMD3<Float>(1, 1, 0))), scale: [1, 2, 3])
-        let roundTripped = Transform3D(matrix: transform.matrix)
+        let roundTripped = try #require(Transform3D(matrix: transform.matrix))
         #expect(roundTripped.matrix.isApproximatelyEqual(to: transform.matrix, absoluteTolerance: 1e-5))
     }
 
     @Test
-    func nonDecomposableMatrixGivesIdentity() {
-        #expect(Transform3D(matrix: float4x4()) == .identity)
+    func roundTripsMirroringMatrix() throws {
+        let matrix = float4x4(scale: [-2, 3, 4])
+        let transform = try #require(Transform3D(matrix: matrix))
+        #expect(transform.matrix.isApproximatelyEqual(to: matrix, absoluteTolerance: 1e-5))
+    }
+
+    @Test
+    func nonDecomposableMatrixIsNil() {
+        #expect(Transform3D(matrix: float4x4()) == nil)
+    }
+
+    @Test
+    func skewMatrixIsNil() {
+        let skew = float4x4([1, 0, 0, 0], [0.5, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1])
+        #expect(Transform3D(matrix: skew) == nil)
+    }
+
+    @Test
+    func perspectiveMatrixIsNil() {
+        let projection = PerspectiveProjection().projectionMatrix(aspectRatio: 1)
+        #expect(Transform3D(matrix: projection) == nil)
     }
 
     @Test

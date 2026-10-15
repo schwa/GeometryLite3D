@@ -200,6 +200,17 @@ struct DecompositionTests {
         #expect(abs(euler.pitch - angle) < 1e-5)
     }
 
+    @Test(arguments: [
+        simd_quatf(angle: 0.3, axis: [1, 0, 0]),
+        simd_quatf(angle: -1.2, axis: normalize(SIMD3<Float>(1, 2, 3))),
+        simd_quatf(angle: 2.5, axis: normalize(SIMD3<Float>(-1, 0.5, 0.25)))
+    ])
+    func eulerRoundTripsToQuaternion(quaternion: simd_quatf) {
+        let roundTripped = simd_quatf(Euler(quaternion))
+        // q and -q are the same rotation.
+        #expect(abs(dot(roundTripped.vector, quaternion.vector)) > 1 - 1e-5)
+    }
+
     @Test
     func eulerIsEquatableAndSendable() async {
         let euler = Euler(.identity)

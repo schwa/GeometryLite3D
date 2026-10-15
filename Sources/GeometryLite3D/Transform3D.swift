@@ -38,13 +38,16 @@ extension Transform3D: Codable {
 }
 
 public extension Transform3D {
-    /// If the matrix does not decompose, the result is identity. Perspective and skew are not kept.
-    init(matrix: float4x4) {
+    /// Returns nil if the matrix does not decompose, or if it has skew or perspective (the result would not rebuild the matrix).
+    init?(matrix: float4x4, tolerance: Float = 1e-4) {
         guard let components = matrix.decompose else {
-            self = .identity
-            return
+            return nil
         }
         self.init(translation: components.translation, rotation: components.rotation, scale: components.scale)
+        let magnitude = max(1, matrix.scalars.map(abs).max() ?? 1)
+        guard self.matrix.isApproximatelyEqual(to: matrix, absoluteTolerance: tolerance * magnitude) else {
+            return nil
+        }
     }
 
     var matrix: float4x4 {

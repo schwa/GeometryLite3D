@@ -438,12 +438,13 @@ Idea: one shared basis helper with a single fallback rule, used by all four. Edg
 ## 25: Transform3D and TransformComponents overlap; Transform3D(matrix:) silently loses data
 
 +++
-status: open
+status: closed
 priority: low
 kind: enhancement
 labels: architecture, effort:m
 created: 2026-10-15T14:40:02Z
-updated: 2026-10-15T14:44:35Z
+updated: 2026-10-15T14:47:59Z
+closed: 2026-10-15T14:47:59Z
 +++
 
 Transform3D and TransformComponents (Decomposition.swift) both model a decomposed matrix. Transform3D(matrix:) drops skew and perspective without warning, and returns .identity when decomposition fails (instead of nil/throwing). Euler supports only .zyx and has no conversion back to a quaternion.

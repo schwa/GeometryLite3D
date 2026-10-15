@@ -40,3 +40,14 @@ public extension Euler {
         yaw = atan2(sinyCosp, cosyCosp)
     }
 }
+
+public extension simd_quatf {
+    init(_ euler: Euler) {
+        switch euler.order {
+        case .zyx:
+            self = simd_quatf(angle: euler.yaw, axis: [0, 0, 1])
+                * simd_quatf(angle: euler.pitch, axis: [0, 1, 0])
+                * simd_quatf(angle: euler.roll, axis: [1, 0, 0])
+        }
+    }
+}
