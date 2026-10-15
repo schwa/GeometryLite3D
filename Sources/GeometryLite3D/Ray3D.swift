@@ -77,7 +77,7 @@ public extension Ray3D {
         return TriangleHit(distance: distance, barycentrics: [1 - u - v, u, v])
     }
 
-    /// Uses the slab test. Returns nil if the box is behind the ray or if the ray origin is inside the box.
+    /// Uses the slab test. Returns nil if the box is behind the ray. If the ray origin is inside the box, the hit is at distance 0 with the normal opposite to the ray direction.
     func intersect(box: BoundingBox3D) -> BoxHit? {
         let inverseDirection = 1 / direction
         let t1 = (box.min - origin) * inverseDirection
@@ -92,8 +92,11 @@ public extension Ray3D {
         tFar.replace(with: (-infinity).replacing(with: infinity, where: insideSlab), where: parallel)
         let entry = tNear.max()
         let exit = tFar.min()
-        guard entry <= exit, entry >= 0 else {
+        guard entry <= exit, exit >= 0 else {
             return nil
+        }
+        if entry < 0 {
+            return BoxHit(distance: 0, normal: -direction)
         }
         var normal = SIMD3<Float>.zero
         let axis = entry == tNear.x ? 0 : (entry == tNear.y ? 1 : 2)

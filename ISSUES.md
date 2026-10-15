@@ -614,12 +614,13 @@ Cross-cutting: keep Float typealiases (AngleF, BoundingBox3DF, ...) so clients k
 ## 33: Ray3D.intersect(box:) returns nil when the ray starts inside the box
 
 +++
-status: open
+status: closed
 priority: medium
 kind: bug
 labels: effort:s, area:ray
 created: 2026-10-15T19:03:34Z
-updated: 2026-10-15T19:05:27Z
+updated: 2026-10-15T19:06:57Z
+closed: 2026-10-15T19:06:57Z
 +++
 
 Ray3D.intersect(box:) returns nil when the origin is inside the box (entry < 0). Callers cannot use it as a ray-vs-box overlap test, for example to cull meshes when the camera is inside their bounds. MetalSprocketsSceneGraph's hit test needs a hit at distance 0 in that case (with the normal opposite to the ray direction), and keeps its own slab test until then.

@@ -81,6 +81,14 @@ struct Ray3DTests {
     }
 
     @Test
+    func hitsBoxFromInside() throws {
+        let box = BoundingBox3D(min: [-1, -1, -1], max: [1, 1, 1])
+        let hit = try #require(Ray3D(origin: .zero, direction: [0, 0, -1]).intersect(box: box))
+        #expect(hit.distance == 0)
+        #expect(hit.normal == [0, 0, 1])
+    }
+
+    @Test
     func missesBox() {
         let box = BoundingBox3D(min: [-1, -1, -1], max: [1, 1, 1])
         #expect(Ray3D(origin: [0, 5, 5], direction: [0, 0, -1]).intersect(box: box) == nil)
