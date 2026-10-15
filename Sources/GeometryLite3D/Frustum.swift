@@ -1,6 +1,6 @@
 import simd
 
-/// Six inward-facing planes (xyz normal, w distance) from a view-projection matrix in Metal clip space (0 <= z <= w).
+/// Six inward-facing planes (xyz normal, w distance) from a view-projection matrix with clip z in 0...w (standard or reversed depth).
 public struct Frustum: Equatable, Sendable {
     public var planes: [SIMD4<Float>]
 

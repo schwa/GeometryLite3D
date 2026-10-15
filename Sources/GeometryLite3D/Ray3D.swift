@@ -15,7 +15,7 @@ public struct Ray3D: Equatable, Sendable {
 }
 
 public extension Ray3D {
-    /// Ray through a point in clip-space x/y (-1...1, y up). `reversedDepth` selects which clip z is the near plane (Metal 0...1 depth).
+    /// Ray through a point in clip-space x/y (-1...1, y up). Assumes 0...1 depth; `reversedDepth` puts the near plane at 1 instead of 0.
     init(clipPoint: SIMD2<Float>, viewMatrix: float4x4, projectionMatrix: float4x4, reversedDepth: Bool = false) {
         let inverse = (projectionMatrix * viewMatrix).inverse
         let nearZ: Float = reversedDepth ? 1 : 0

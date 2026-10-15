@@ -26,11 +26,11 @@ public extension ProjectionProtocol {
 
 public struct PerspectiveProjection: ProjectionProtocol {
     public enum DepthMode: Equatable, Sendable {
-        /// Metal clip z in 0...1, with near at 0 and far at 1.
+        /// Depth 0...1, with near at 0 and far at 1.
         case standard(zClip: ClosedRange<Float>)
-        /// Metal clip z in 0...1 with an infinite far plane. Near maps to 1.
+        /// Reversed depth with an infinite far plane. Near maps to 1. Needs a `.greater` depth test and a depth clear value of 0.
         case reversed(zMin: Float)
-        /// Metal clip z in 0...1 with a finite far plane. Near maps to 1, far maps to 0.
+        /// Reversed depth with a finite far plane. Near maps to 1, far maps to 0. Needs a `.greater` depth test and a depth clear value of 0.
         case reversedFinite(zClip: ClosedRange<Float>)
     }
 
@@ -85,9 +85,9 @@ public struct PerspectiveProjection: ProjectionProtocol {
 
 public struct OrthographicProjection: ProjectionProtocol {
     public enum DepthMode: Equatable, Sendable {
-        /// Metal clip z in 0...1, with near at 0 and far at 1.
+        /// Depth 0...1, with near at 0 and far at 1.
         case standard(zClip: ClosedRange<Float>)
-        /// Metal clip z in 0...1, with near at 1 and far at 0.
+        /// Reversed depth, with near at 1 and far at 0. Needs a `.greater` depth test and a depth clear value of 0.
         case reversed(zClip: ClosedRange<Float>)
     }
 
@@ -132,7 +132,7 @@ public struct OrthographicProjection: ProjectionProtocol {
 // MARK: -
 
 public extension float4x4 {
-    /// Maps Metal clip z to w - z, turning standard 0...1 depth into reversed depth and back.
+    /// Maps clip z to w - z, which swaps standard and reversed 0...1 depth.
     static let reversedDepth = float4x4(
         SIMD4<Float>(1, 0, 0, 0),
         SIMD4<Float>(0, 1, 0, 0),
