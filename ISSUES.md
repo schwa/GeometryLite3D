@@ -614,10 +614,12 @@ Cross-cutting: keep Float typealiases (AngleF, BoundingBox3DF, ...) so clients k
 ## 33: Ray3D.intersect(box:) returns nil when the ray starts inside the box
 
 +++
-status: new
+status: open
 priority: medium
 kind: bug
+labels: effort:s, area:ray
 created: 2026-10-15T19:03:34Z
+updated: 2026-10-15T19:05:27Z
 +++
 
 Ray3D.intersect(box:) returns nil when the origin is inside the box (entry < 0). Callers cannot use it as a ray-vs-box overlap test, for example to cull meshes when the camera is inside their bounds. MetalSprocketsSceneGraph's hit test needs a hit at distance 0 in that case (with the normal opposite to the ray direction), and keeps its own slab test until then.
@@ -627,10 +629,12 @@ Ray3D.intersect(box:) returns nil when the origin is inside the box (entry < 0).
 ## 34: Ray3D.intersect(box:) gives NaN for an axis-parallel ray on a box face plane
 
 +++
-status: new
+status: open
 priority: medium
 kind: bug
+labels: effort:s, area:ray
 created: 2026-10-15T19:03:34Z
+updated: 2026-10-15T19:05:27Z
 +++
 
 intersect(box:) computes 1 / direction. When a direction component is 0 and the origin is exactly on the min or max plane of that axis, (box.min - origin) * inverseDirection is 0 * inf = NaN, and the result depends on how min/max handle NaN. Axis-aligned rays (such as straight down -Z) on a face plane are common in hit tests.
@@ -640,10 +644,12 @@ intersect(box:) computes 1 / direction. When a direction component is 0 and the 
 ## 35: Ray3D.intersect(triangle:) misses small triangles
 
 +++
-status: new
+status: open
 priority: medium
 kind: bug
+labels: effort:s, area:ray
 created: 2026-10-15T19:03:34Z
+updated: 2026-10-15T19:05:27Z
 +++
 
 intersect(triangle:) rejects a hit when the determinant is less than 1e-7. Direction is normalized, so the determinant scales with the triangle's edge lengths squared. Triangles with edges near 1e-4 (millimetre-sized in metres) give a determinant near 1e-8 and are missed. MetalSprocketsSceneGraph uses 1e-12.
