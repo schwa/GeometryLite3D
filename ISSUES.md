@@ -413,12 +413,13 @@ Idea: one camera / view-projection type (view matrix + projection + viewport) th
 ## 24: Look-at basis construction is duplicated with inconsistent degenerate handling
 
 +++
-status: open
+status: closed
 priority: medium
 kind: enhancement
 labels: architecture, effort:s
 created: 2026-10-15T14:40:02Z
-updated: 2026-10-15T14:44:35Z
+updated: 2026-10-15T14:45:21Z
+closed: 2026-10-15T14:45:21Z
 +++
 
 Four places build a right/up/forward frame:

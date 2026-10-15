@@ -62,9 +62,7 @@ public extension CameraConeParameters {
         let centerA = self.centerA
         let coneCenterAtPosition = centerA + axis * cameraDistance
 
-        // Choose an arbitrary vector perpendicular to axis
-        let arbitrary = abs(axis.y) == 1 ? SIMD3<Float>(0, 0, 1) : SIMD3<Float>(0, 1, 0)
-        let baseVector = normalize(cross(axis, arbitrary)) * currentRadius
+        let baseVector = perpendicular(to: axis) * currentRadius
 
         let rotation = simd_quatf(angle: angle, axis: -axis)
         let offset = rotation.act(baseVector)

@@ -140,11 +140,6 @@ public extension float4x4 {
 
     /// View matrix for a camera at `eye` that looks along `forward`. If `forward` is parallel to `up`, a different up vector is used.
     static func viewMatrix(eye: SIMD3<Float>, forward: SIMD3<Float>, up: SIMD3<Float> = [0, 1, 0]) -> float4x4 {
-        let direction = normalize(forward)
-        var safeUp = up
-        if length(cross(direction, normalize(up))) < 1e-4 {
-            safeUp = abs(direction.z) < 0.9 ? [0, 0, 1] : [1, 0, 0]
-        }
-        return LookAt(position: eye, target: eye + direction, up: safeUp).viewMatrix
+        LookAt(position: eye, target: eye + normalize(forward), up: up).viewMatrix
     }
 }

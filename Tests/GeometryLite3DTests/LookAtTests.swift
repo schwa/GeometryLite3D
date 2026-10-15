@@ -23,6 +23,14 @@ struct LookAtTests {
         #expect(translation.isApproximatelyEqual(to: lookAt.position, absoluteTolerance: 1e-6))
     }
 
+    @Test(arguments: [SIMD3<Float>(0, 10, 0), SIMD3<Float>(0, -10, 0)])
+    func cameraMatrixHandlesUpParallelToForward(target: SIMD3<Float>) {
+        let matrix = LookAt(position: .zero, target: target, up: [0, 1, 0]).cameraMatrix
+        #expect(matrix.scalars.allSatisfy { $0.isFinite })
+        #expect(abs(matrix.determinant - 1) < 1e-5)
+        #expect(matrix.columns.2.xyz.isApproximatelyEqual(to: -normalize(target), absoluteTolerance: 1e-6))
+    }
+
     @Test
     func viewMatrixIsInverseOfCameraMatrix() {
         let lookAt = LookAt(position: [-3, 1, 2], target: [0, 4, -1], up: [0, 0, 1])

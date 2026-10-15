@@ -14,13 +14,11 @@ public struct LookAt: Equatable, Sendable {
 
 public extension LookAt {
     var cameraMatrix: float4x4 {
-        let f = normalize(target - position)
-        let r = normalize(cross(f, up))
-        let u = normalize(cross(r, f))
+        let basis = orthonormalBasis(forward: target - position, up: up)
         return float4x4(
-            SIMD4<Float>(r, 0),
-            SIMD4<Float>(u, 0),
-            SIMD4<Float>(-f, 0),
+            SIMD4<Float>(basis.right, 0),
+            SIMD4<Float>(basis.up, 0),
+            SIMD4<Float>(-basis.forward, 0),
             SIMD4<Float>(position, 1)
         )
     }
