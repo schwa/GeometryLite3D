@@ -106,12 +106,13 @@ Matrix builders MetalSprocketsSceneGraph keeps privately in Shadows.swift and Sc
 ## 7: Transform3D (translation, rotation, scale) value type
 
 +++
-status: open
+status: closed
 priority: medium
 kind: feature
 labels: effort:s
 created: 2026-10-15T13:26:33Z
-updated: 2026-10-15T13:35:06Z
+updated: 2026-10-15T13:38:20Z
+closed: 2026-10-15T13:38:20Z
 +++
 
 A TRS struct (translation, simd_quatf rotation, scale) with `matrix` and `init(matrix:)` (via the existing decomposition, falling back to identity when not decomposable), identity, and interpolation (mix translation/scale, slerp rotation). MetalSprocketsSceneGraph's SceneGraph.TRS would become a typealias. Filed from MetalSprocketsSceneGraph #97.

@@ -1,0 +1,38 @@
+import simd
+
+public struct Transform3D: Equatable, Sendable {
+    public var translation: SIMD3<Float>
+    public var rotation: simd_quatf
+    public var scale: SIMD3<Float>
+
+    public init(translation: SIMD3<Float> = .zero, rotation: simd_quatf = .identity, scale: SIMD3<Float> = .one) {
+        self.translation = translation
+        self.rotation = rotation
+        self.scale = scale
+    }
+
+    public static let identity = Self()
+}
+
+public extension Transform3D {
+    /// Falls back to identity when the matrix can't be decomposed. Perspective and skew are dropped.
+    init(matrix: float4x4) {
+        guard let components = matrix.decompose else {
+            self = .identity
+            return
+        }
+        self.init(translation: components.translate, rotation: components.rotation, scale: components.scale)
+    }
+
+    var matrix: float4x4 {
+        float4x4(translation: translation) * float4x4(rotation) * float4x4(scale: scale)
+    }
+
+    func interpolated(to other: Self, amount: Float) -> Self {
+        Self(
+            translation: mix(translation, other.translation, t: amount),
+            rotation: simd_slerp(rotation, other.rotation, amount),
+            scale: mix(scale, other.scale, t: amount)
+        )
+    }
+}
