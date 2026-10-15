@@ -44,7 +44,7 @@ public extension Transform3D {
             return nil
         }
         self.init(translation: components.translation, rotation: components.rotation, scale: components.scale)
-        let magnitude = max(1, matrix.scalars.map(abs).max() ?? 1)
+        let magnitude = matrix.scalars.reduce(1) { max($0, abs($1)) }
         guard self.matrix.isApproximatelyEqual(to: matrix, absoluteTolerance: tolerance * magnitude) else {
             return nil
         }

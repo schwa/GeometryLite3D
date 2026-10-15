@@ -27,6 +27,12 @@ struct ViewProjectionTests {
     }
 
     @Test(arguments: depthModes)
+    func nearDepthMatchesDepthDirection(depthMode: PerspectiveProjection.DepthMode) {
+        let viewProjection = makeViewProjection(depthMode)
+        #expect(viewProjection.nearDepth == (viewProjection.isReversedDepth ? 1 : 0))
+    }
+
+    @Test(arguments: depthModes)
     func rayFromCenterStartsAtNearPlane(depthMode: PerspectiveProjection.DepthMode) {
         let ray = makeViewProjection(depthMode).ray(through: [100, 50])
         #expect(ray.direction.isApproximatelyEqual(to: [0, 0, -1], absoluteTolerance: 1e-5))
