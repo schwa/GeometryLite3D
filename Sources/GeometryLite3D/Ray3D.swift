@@ -1,6 +1,6 @@
 import simd
 
-public struct Ray: Equatable, Sendable {
+public struct Ray3D: Equatable, Sendable {
     public var origin: SIMD3<Float>
     public private(set) var direction: SIMD3<Float>
 
@@ -14,7 +14,7 @@ public struct Ray: Equatable, Sendable {
     }
 }
 
-public extension Ray {
+public extension Ray3D {
     /// Ray through a point in clip-space x/y (-1...1, y up). `reversedDepth` selects which clip z is the near plane (Metal 0...1 depth).
     init(clipPoint: SIMD2<Float>, viewMatrix: float4x4, projectionMatrix: float4x4, reversedDepth: Bool = false) {
         let inverse = (projectionMatrix * viewMatrix).inverse
@@ -36,7 +36,7 @@ public extension Ray {
     }
 }
 
-public extension Ray {
+public extension Ray3D {
     struct TriangleHit: Equatable, Sendable {
         public var distance: Float
         /// Weights for the triangle's vertices (a, b, c).
