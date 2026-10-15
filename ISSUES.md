@@ -623,3 +623,16 @@ created: 2026-10-15T19:03:34Z
 Ray3D.intersect(box:) returns nil when the origin is inside the box (entry < 0). Callers cannot use it as a ray-vs-box overlap test, for example to cull meshes when the camera is inside their bounds. MetalSprocketsSceneGraph's hit test needs a hit at distance 0 in that case (with the normal opposite to the ray direction), and keeps its own slab test until then.
 
 ---
+
+## 34: Ray3D.intersect(box:) gives NaN for an axis-parallel ray on a box face plane
+
++++
+status: new
+priority: medium
+kind: bug
+created: 2026-10-15T19:03:34Z
++++
+
+intersect(box:) computes 1 / direction. When a direction component is 0 and the origin is exactly on the min or max plane of that axis, (box.min - origin) * inverseDirection is 0 * inf = NaN, and the result depends on how min/max handle NaN. Axis-aligned rays (such as straight down -Z) on a face plane are common in hit tests.
+
+---
