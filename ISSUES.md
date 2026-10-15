@@ -374,3 +374,16 @@ Spatial now has Rect3D, AffineTransform3D, Rotation3D, ProjectiveTransform3D and
 - `2026-10-15T14:16:06Z`: Won't do: Spatial is Double-based (Float types need macOS 26), so it doesn't fit Metal/SIMD Float use. GeometryLite3D stays independent.
 
 ---
+
+## 22: BoundingBox3D has no empty state, emptiness check, or radius
+
++++
+status: new
+priority: medium
+kind: none
+created: 2026-10-15T14:35:18Z
++++
+
+BoundingBox3D has no way to represent an empty box (e.g. a starting value for union folds), no isEmpty check, and no bounding-sphere radius. Clients like MetalSprocketsPBR keep their own PBRBounds type because of this (it has .empty, isEmpty, and radius).
+
+---
