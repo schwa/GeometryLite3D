@@ -201,6 +201,14 @@ struct DecompositionTests {
     }
 
     @Test
+    func eulerIsEquatableAndSendable() async {
+        let euler = Euler(.identity)
+        let copy = await Task.detached { euler }.value
+        #expect(copy == euler)
+        #expect(Euler(simd_quatf(angle: 0.3, axis: [1, 0, 0])) != euler)
+    }
+
+    @Test
     func decomposeMatrixWithSkew() {
         let matrix = float4x4(
             [1, 0, 0, 0],

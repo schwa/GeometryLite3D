@@ -328,12 +328,13 @@ Frustum.planes is a public var [SIMD4<Float>], so callers can set a wrong count,
 ## 19: Make Euler Equatable and Sendable
 
 +++
-status: open
+status: closed
 priority: low
 kind: enhancement
 labels: effort:xs
 created: 2026-10-15T14:13:10Z
-updated: 2026-10-15T14:14:57Z
+updated: 2026-10-15T14:20:42Z
+closed: 2026-10-15T14:20:42Z
 +++
 
 Every other public value type is Equatable and Sendable. Euler is neither.

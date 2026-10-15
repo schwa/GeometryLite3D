@@ -1,8 +1,8 @@
 import Foundation
 import simd
 
-public struct Euler {
-    public enum Order {
+public struct Euler: Equatable, Sendable {
+    public enum Order: Equatable, Sendable {
         case zyx
     }
 
