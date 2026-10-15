@@ -76,15 +76,18 @@ A `Ray` (origin, normalized direction, init from a view point and view/projectio
 ## 5: Frustum test for bounding boxes
 
 +++
-status: open
+status: closed
 priority: low
 kind: feature
 labels: effort:s
 created: 2026-10-15T13:26:32Z
-updated: 2026-10-15T13:33:49Z
+updated: 2026-10-15T13:41:20Z
+closed: 2026-10-15T13:41:20Z
 +++
 
 A conservative box-in-frustum test for a view-projection matrix in Metal clip space (z in 0...w), as in MetalSprocketsSceneGraph's Culling.swift isInFrustum. Optionally a Frustum type with the six planes. Filed from MetalSprocketsSceneGraph #97.
+
+- `2026-10-15T13:41:19Z`: Frustum assumes Metal clip z (0...w): works with reversed/reversedFinite perspective and OrthographicProjection. The .standard modes use OpenGL z (-w...w), so the near plane is too tight there.
 
 ---
 
