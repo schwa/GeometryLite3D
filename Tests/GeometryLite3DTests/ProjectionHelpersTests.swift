@@ -45,7 +45,8 @@ struct ProjectionHelpersTests {
     @Test
     func viewMatrixHandlesForwardParallelToUp() {
         let matrix = float4x4.viewMatrix(eye: [0, 5, 0], forward: [0, -1, 0])
-        #expect(!matrix.scalars.contains { $0.isNaN })
+        let hasNaN = matrix.scalars.contains(where: \.isNaN)
+        #expect(!hasNaN)
         let eyeInView = matrix * SIMD4<Float>(0, 5, 0, 1)
         #expect(eyeInView.isApproximatelyEqual(to: [0, 0, 0, 1], absoluteTolerance: 1e-6))
         let below = matrix * SIMD4<Float>(0, 0, 0, 1)

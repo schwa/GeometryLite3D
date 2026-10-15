@@ -1,6 +1,6 @@
 import GeometryLite3D
-import Spatial
 import simd
+import Spatial
 import Testing
 
 // Compares GeometryLite3D types with Apple's Spatial framework.
@@ -63,11 +63,13 @@ struct SpatialGroundTruthTests {
     }
 
     @Test
-    func transformInterpolationRotationMatchesSlerp() {
+    func transformInterpolationRotationMatchesSlerp() throws {
         let start = Transform3D(rotation: simd_quatf(angle: 0.2, axis: [0, 1, 0]))
         let end = Transform3D(rotation: simd_quatf(angle: 2.5, axis: normalize(SIMD3<Float>(1, 1, 1))))
         let ours = start.interpolated(to: end, amount: 0.3).rotation
-        let spatial = Rotation3D.slerp(from: affine(start).rotation!, to: affine(end).rotation!, t: 0.3)
+        let startRotation = try #require(affine(start).rotation)
+        let endRotation = try #require(affine(end).rotation)
+        let spatial = Rotation3D.slerp(from: startRotation, to: endRotation, t: 0.3)
         #expect(ours.isApproximatelyEqual(to: simd_quatf(spatial), absoluteTolerance: 1e-5))
     }
 }

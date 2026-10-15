@@ -1,6 +1,6 @@
 import GeometryLite3D
-import Spatial
 import simd
+import Spatial
 import Testing
 
 struct LookRotationTests {
