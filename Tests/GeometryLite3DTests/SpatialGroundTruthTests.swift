@@ -3,7 +3,6 @@ import simd
 import Spatial
 import Testing
 
-// Compares GeometryLite3D types with Apple's Spatial framework.
 struct SpatialGroundTruthTests {
     private func rect(_ box: BoundingBox3D) -> Rect3D {
         let min = SIMD3<Double>(box.min)

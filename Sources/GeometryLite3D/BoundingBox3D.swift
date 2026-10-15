@@ -1,7 +1,6 @@
 import ModelIO
 import simd
 
-/// Bounding box information for 3D objects
 public struct BoundingBox3D: Equatable, Sendable {
     public var min: SIMD3<Float>
     public var max: SIMD3<Float>
@@ -12,7 +11,6 @@ public struct BoundingBox3D: Equatable, Sendable {
     }
 
     public func transformed(by transform: float4x4) -> Self {
-        // Transform all 8 corners of the bounding box
         let corners = [
             SIMD3<Float>(min.x, min.y, min.z),
             SIMD3<Float>(max.x, min.y, min.z),

@@ -1,6 +1,6 @@
 import simd
 
-/// Six inward-facing planes (xyz normal, w distance) from a view-projection matrix with clip z in 0...w (standard or reversed depth).
+/// Six planes from a view-projection matrix. Each normal points into the frustum. Clip z must be in 0...w (standard or reversed depth).
 public struct Frustum: Equatable, Sendable {
     public var planes: [SIMD4<Float>]
 
@@ -20,7 +20,7 @@ public struct Frustum: Equatable, Sendable {
         ]
     }
 
-    /// Conservative: may return true for some boxes just outside the corners.
+    /// Can return true for a box that is near a corner but outside the frustum.
     public func intersects(_ box: BoundingBox3D) -> Bool {
         for plane in planes {
             let normal = plane.xyz

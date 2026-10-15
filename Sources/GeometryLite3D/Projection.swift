@@ -22,15 +22,13 @@ public extension ProjectionProtocol {
 
 // MARK: -
 
-// MARK: -
-
 public struct PerspectiveProjection: ProjectionProtocol {
     public enum DepthMode: Equatable, Sendable {
         /// Depth 0...1, with near at 0 and far at 1.
         case standard(zClip: ClosedRange<Float>)
-        /// Reversed depth with an infinite far plane. Near maps to 1. Needs a `.greater` depth test and a depth clear value of 0.
+        /// Reversed depth with no far plane. The near plane maps to 1. Use a `.greater` depth test and clear depth to 0.
         case reversed(zMin: Float)
-        /// Reversed depth with a finite far plane. Near maps to 1, far maps to 0. Needs a `.greater` depth test and a depth clear value of 0.
+        /// Reversed depth with a far plane. Near maps to 1 and far maps to 0. Use a `.greater` depth test and clear depth to 0.
         case reversedFinite(zClip: ClosedRange<Float>)
     }
 
@@ -87,7 +85,7 @@ public struct OrthographicProjection: ProjectionProtocol {
     public enum DepthMode: Equatable, Sendable {
         /// Depth 0...1, with near at 0 and far at 1.
         case standard(zClip: ClosedRange<Float>)
-        /// Reversed depth, with near at 1 and far at 0. Needs a `.greater` depth test and a depth clear value of 0.
+        /// Reversed depth. Near maps to 1 and far maps to 0. Use a `.greater` depth test and clear depth to 0.
         case reversed(zClip: ClosedRange<Float>)
     }
 
@@ -132,7 +130,7 @@ public struct OrthographicProjection: ProjectionProtocol {
 // MARK: -
 
 public extension float4x4 {
-    /// Maps clip z to w - z, which swaps standard and reversed 0...1 depth.
+    /// Changes clip z to w - z. This swaps standard and reversed depth.
     static let reversedDepth = float4x4(
         SIMD4<Float>(1, 0, 0, 0),
         SIMD4<Float>(0, 1, 0, 0),
@@ -140,7 +138,7 @@ public extension float4x4 {
         SIMD4<Float>(0, 0, 1, 1)
     )
 
-    /// View matrix for a camera at `eye` looking along `forward`. Picks another up vector when `forward` is parallel to `up`.
+    /// View matrix for a camera at `eye` that looks along `forward`. If `forward` is parallel to `up`, a different up vector is used.
     static func viewMatrix(eye: SIMD3<Float>, forward: SIMD3<Float>, up: SIMD3<Float> = [0, 1, 0]) -> float4x4 {
         let direction = normalize(forward)
         var safeUp = up

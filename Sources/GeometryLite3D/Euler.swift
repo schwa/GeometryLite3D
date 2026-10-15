@@ -14,8 +14,7 @@ public struct Euler {
 
 public extension Euler {
     init(_ q: simd_quatf) {
-        // Converts a quaternion to Euler angles in radians (yaw, pitch, roll)
-        // Order: ZYX = Yaw (Z), Pitch (Y), Roll (X)
+        // ZYX order: yaw (Z), pitch (Y), roll (X), in radians.
         let x = q.imag.x
         let y = q.imag.y
         let z = q.imag.z
@@ -29,7 +28,8 @@ public extension Euler {
         // Pitch (y-axis rotation)
         let sinp = 2 * (w * y - z * x)
         if abs(sinp) >= 1 {
-            pitch = copysign(.pi / 2, sinp) // use 90 degrees if out of range
+            // If sinp is out of range, clamp pitch to 90 degrees.
+            pitch = copysign(.pi / 2, sinp)
         } else {
             pitch = asin(sinp)
         }

@@ -2,7 +2,7 @@ import Numerics
 import simd
 
 public extension SIMD where Scalar: BinaryFloatingPoint {
-    // Note: This is a per-scalar comparison and does not consider vector as a whole.
+    // Compares each scalar, not the distance between the vectors.
     func isApproximatelyEqual(to other: Self, absoluteTolerance: Scalar, relativeTolerance: Scalar = 0, norm: (Scalar) -> Scalar = \.magnitude) -> Bool {
         (0..<Self.scalarCount).allSatisfy { index in
             let a = self[index]

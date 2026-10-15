@@ -193,7 +193,7 @@ public extension float4x4 {
         // (Q) approaches -1. In the Wikipedia article, Q_ij is indexing on row then
         // column. Thus, Q_ij = column[j][i].
 
-        // The following are equivalent represnetations of the rotation matrix:
+        // The following are equivalent representations of the rotation matrix:
         //
         // Axis-angle form:
         //
@@ -212,7 +212,7 @@ public extension float4x4 {
         // Quaternion form:
         //
         //       [ 1-2(y^2+z^2)    2(xy-zw)      2(xz+yw)   ]
-        //  r =  [   2(xy+zw)    1-2(x^2+z^2)    2(yz-xw)   ]    q = (x,y,y,w)
+        //  r =  [   2(xy+zw)    1-2(x^2+z^2)    2(yz-xw)   ]    q = (x,y,z,w)
         //       [   2(xz-yw)      2(yz+xw)    1-2(x^2+y^2) ]
         //
         // Different linear combinations of the diagonal elements isolates x, y or z.

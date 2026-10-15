@@ -15,7 +15,7 @@ public struct Ray3D: Equatable, Sendable {
 }
 
 public extension Ray3D {
-    /// Ray through a point in clip-space x/y (-1...1, y up). Assumes 0...1 depth; `reversedDepth` puts the near plane at 1 instead of 0.
+    /// Ray through a clip-space point. x and y are in -1...1, with y up. Depth is 0...1. If `reversedDepth` is true, the near plane is at 1.
     init(clipPoint: SIMD2<Float>, viewMatrix: float4x4, projectionMatrix: float4x4, reversedDepth: Bool = false) {
         let inverse = (projectionMatrix * viewMatrix).inverse
         let nearZ: Float = reversedDepth ? 1 : 0
@@ -48,7 +48,7 @@ public extension Ray3D {
         public var normal: SIMD3<Float>
     }
 
-    /// Möller–Trumbore. Front faces wind counter-clockwise when seen from the ray.
+    /// Uses the Möller–Trumbore algorithm. Front faces are counter-clockwise when seen from the ray origin.
     func intersect(triangle a: SIMD3<Float>, _ b: SIMD3<Float>, _ c: SIMD3<Float>, cullBackFaces: Bool = false) -> TriangleHit? {
         let epsilon: Float = 1e-7
         let edge1 = b - a
@@ -80,7 +80,7 @@ public extension Ray3D {
         return TriangleHit(distance: distance, barycentrics: [1 - u - v, u, v])
     }
 
-    /// Slab test. Returns nil when the box is behind the ray or the origin is inside the box.
+    /// Uses the slab test. Returns nil if the box is behind the ray or if the ray origin is inside the box.
     func intersect(box: BoundingBox3D) -> BoxHit? {
         let inverseDirection = 1 / direction
         let t1 = (box.min - origin) * inverseDirection

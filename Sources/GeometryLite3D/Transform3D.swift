@@ -15,7 +15,7 @@ public struct Transform3D: Equatable, Sendable {
 }
 
 public extension Transform3D {
-    /// Falls back to identity when the matrix can't be decomposed. Perspective and skew are dropped.
+    /// If the matrix does not decompose, the result is identity. Perspective and skew are not kept.
     init(matrix: float4x4) {
         guard let components = matrix.decompose else {
             self = .identity

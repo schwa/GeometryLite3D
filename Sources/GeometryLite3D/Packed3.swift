@@ -1,6 +1,6 @@
-/// A packed 3-component vector type for binary compatibility
 import simd
 
+/// Three packed scalars without the padding of SIMD3, for buffer layouts.
 public struct Packed3<Scalar> where Scalar: SIMDScalar {
     public var x: Scalar
     public var y: Scalar
