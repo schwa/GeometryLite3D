@@ -636,3 +636,16 @@ created: 2026-10-15T19:03:34Z
 intersect(box:) computes 1 / direction. When a direction component is 0 and the origin is exactly on the min or max plane of that axis, (box.min - origin) * inverseDirection is 0 * inf = NaN, and the result depends on how min/max handle NaN. Axis-aligned rays (such as straight down -Z) on a face plane are common in hit tests.
 
 ---
+
+## 35: Ray3D.intersect(triangle:) misses small triangles
+
++++
+status: new
+priority: medium
+kind: bug
+created: 2026-10-15T19:03:34Z
++++
+
+intersect(triangle:) rejects a hit when the determinant is less than 1e-7. Direction is normalized, so the determinant scales with the triangle's edge lengths squared. Triangles with edges near 1e-4 (millimetre-sized in metres) give a determinant near 1e-8 and are missed. MetalSprocketsSceneGraph uses 1e-12.
+
+---
