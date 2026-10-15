@@ -644,12 +644,13 @@ intersect(box:) computes 1 / direction. When a direction component is 0 and the 
 ## 35: Ray3D.intersect(triangle:) misses small triangles
 
 +++
-status: open
+status: closed
 priority: medium
 kind: bug
 labels: effort:s, area:ray
 created: 2026-10-15T19:03:34Z
-updated: 2026-10-15T19:05:27Z
+updated: 2026-10-15T19:06:14Z
+closed: 2026-10-15T19:06:14Z
 +++
 
 intersect(triangle:) rejects a hit when the determinant is less than 1e-7. Direction is normalized, so the determinant scales with the triangle's edge lengths squared. Triangles with edges near 1e-4 (millimetre-sized in metres) give a determinant near 1e-8 and are missed. MetalSprocketsSceneGraph uses 1e-12.

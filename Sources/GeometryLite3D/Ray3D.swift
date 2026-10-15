@@ -46,7 +46,8 @@ public extension Ray3D {
 
     /// Uses the Möller–Trumbore algorithm. Front faces are counter-clockwise when seen from the ray origin.
     func intersect(triangle a: SIMD3<Float>, _ b: SIMD3<Float>, _ c: SIMD3<Float>, cullBackFaces: Bool = false) -> TriangleHit? {
-        let epsilon: Float = 1e-7
+        // The determinant scales with edge length squared, so keep this small enough for millimetre triangles.
+        let epsilon: Float = 1e-12
         let edge1 = b - a
         let edge2 = c - a
         let p = cross(direction, edge2)

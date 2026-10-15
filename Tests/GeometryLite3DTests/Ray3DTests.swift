@@ -52,6 +52,14 @@ struct Ray3DTests {
     }
 
     @Test
+    func hitsSmallTriangle() {
+        let a: SIMD3<Float> = [-1e-4, -1e-4, 0]
+        let b: SIMD3<Float> = [1e-4, -1e-4, 0]
+        let c: SIMD3<Float> = [0, 1e-4, 0]
+        #expect(Ray3D(origin: [0, 0, 1], direction: [0, 0, -1]).intersect(triangle: a, b, c) != nil)
+    }
+
+    @Test
     func hitsBoxWithFaceNormal() throws {
         let box = BoundingBox3D(min: [-1, -1, -1], max: [1, 1, 1])
         let hit = try #require(Ray3D(origin: [0, 0, 5], direction: [0, 0, -1]).intersect(box: box))
