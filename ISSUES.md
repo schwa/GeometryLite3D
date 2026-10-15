@@ -146,12 +146,13 @@ simd_quatf that turns a local front axis towards a target from a position, keepi
 ## 9: float4x4.isMirroring
 
 +++
-status: open
+status: closed
 priority: low
 kind: enhancement
 labels: effort:xs
 created: 2026-10-15T13:32:17Z
-updated: 2026-10-15T13:33:49Z
+updated: 2026-10-15T13:40:21Z
+closed: 2026-10-15T13:40:21Z
 +++
 
 Add `var isMirroring: Bool { determinant < 0 }` on float4x4: true when the transform flips winding. MetalSprocketsPBR (PBRFrameRules.swift) and likely MetalSprocketsSceneGraph use it to pick front-face winding for mirrored instances.

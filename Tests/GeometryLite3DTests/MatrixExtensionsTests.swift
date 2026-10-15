@@ -14,6 +14,14 @@ struct MatrixExtensionsTests {
     }
 
     @Test
+    func isMirroring() {
+        #expect(!float4x4.identity.isMirroring)
+        #expect(!float4x4(scale: [-1, -1, 1]).isMirroring)
+        #expect(float4x4(scale: [-1, 1, 1]).isMirroring)
+        #expect((float4x4(yRotation: .degrees(45)) * float4x4(scale: [1, 1, -2])).isMirroring)
+    }
+
+    @Test
     func normalMatrixKeepsNormalsPerpendicularUnderNonUniformScale() {
         let matrix = float4x4(scale: [2, 1, 1])
         let tangent = normalize(SIMD3<Float>(1, 1, 0))

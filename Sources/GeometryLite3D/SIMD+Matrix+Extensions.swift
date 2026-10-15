@@ -78,6 +78,11 @@ public extension float4x4 {
         ))
     }
 
+    /// True when the transform flips triangle winding.
+    var isMirroring: Bool {
+        determinant < 0
+    }
+
     var normalMatrix: float3x3 {
         upperLeft3x3.inverse.transpose
     }
