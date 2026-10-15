@@ -54,13 +54,9 @@ public extension simd_quatf {
         guard simd.length(offset) > 1e-6 else {
             return .identity
         }
-        let worldBasis = basisMatrix(orthonormalBasis(forward: offset, up: worldUp))
-        let localBasis = basisMatrix(orthonormalBasis(forward: localFront, up: [0, 1, 0]))
+        let worldBasis = OrthonormalBasis(forward: offset, up: worldUp).matrix
+        let localBasis = OrthonormalBasis(forward: localFront, up: [0, 1, 0]).matrix
         return simd_quatf(worldBasis * localBasis.transpose).normalized
-    }
-
-    private static func basisMatrix(_ basis: (right: SIMD3<Float>, up: SIMD3<Float>, forward: SIMD3<Float>)) -> float3x3 {
-        float3x3(columns: (basis.right, basis.up, basis.forward))
     }
 }
 

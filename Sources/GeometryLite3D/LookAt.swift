@@ -14,7 +14,7 @@ public struct LookAt: Equatable, Sendable {
 
 public extension LookAt {
     var cameraMatrix: float4x4 {
-        let basis = orthonormalBasis(forward: target - position, up: up)
+        let basis = OrthonormalBasis(forward: target - position, up: up)
         return float4x4(
             SIMD4<Float>(basis.right, 0),
             SIMD4<Float>(basis.up, 0),

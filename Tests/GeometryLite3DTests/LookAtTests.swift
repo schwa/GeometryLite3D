@@ -26,7 +26,8 @@ struct LookAtTests {
     @Test(arguments: [SIMD3<Float>(0, 10, 0), SIMD3<Float>(0, -10, 0)])
     func cameraMatrixHandlesUpParallelToForward(target: SIMD3<Float>) {
         let matrix = LookAt(position: .zero, target: target, up: [0, 1, 0]).cameraMatrix
-        #expect(matrix.scalars.allSatisfy { $0.isFinite })
+        let isFinite = matrix.scalars.allSatisfy(\.isFinite)
+        #expect(isFinite)
         #expect(abs(matrix.determinant - 1) < 1e-5)
         #expect(matrix.columns.2.xyz.isApproximatelyEqual(to: -normalize(target), absoluteTolerance: 1e-6))
     }

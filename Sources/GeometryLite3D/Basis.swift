@@ -1,10 +1,21 @@
 import simd
 
 /// Right-handed frame with `forward` exactly along the input direction. If `up` is parallel to `forward`, a fallback up vector is used.
-internal func orthonormalBasis(forward: SIMD3<Float>, up: SIMD3<Float>) -> (right: SIMD3<Float>, up: SIMD3<Float>, forward: SIMD3<Float>) {
-    let forward = normalize(forward)
-    let right = perpendicular(to: forward, preferring: up)
-    return (right, cross(right, forward), forward)
+internal struct OrthonormalBasis {
+    internal var right: SIMD3<Float>
+    internal var up: SIMD3<Float>
+    internal var forward: SIMD3<Float>
+
+    internal init(forward: SIMD3<Float>, up: SIMD3<Float>) {
+        self.forward = normalize(forward)
+        self.right = perpendicular(to: self.forward, preferring: up)
+        self.up = cross(right, self.forward)
+    }
+
+    /// Columns are right, up, forward.
+    internal var matrix: float3x3 {
+        float3x3(columns: (right, up, forward))
+    }
 }
 
 /// Unit vector perpendicular to `direction`, equal to normalize(cross(direction, preferredUp)) unless they are parallel.

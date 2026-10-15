@@ -46,6 +46,7 @@ public struct PerspectiveProjection: ProjectionProtocol {
         switch depthMode {
         case .standard:
             false
+
         case .reversed, .reversedInfinite:
             true
         }
@@ -112,6 +113,7 @@ public struct OrthographicProjection: ProjectionProtocol {
         switch depthMode {
         case .standard:
             false
+
         case .reversed:
             true
         }
