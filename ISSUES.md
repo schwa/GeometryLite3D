@@ -23,12 +23,13 @@ A ProjectionProtocol type for orthographic cameras, alongside PerspectiveProject
 ## 2: float4x4 normalMatrix
 
 +++
-status: open
+status: closed
 priority: medium
 kind: enhancement
 labels: effort:xs
 created: 2026-10-15T13:26:32Z
-updated: 2026-10-15T13:34:05Z
+updated: 2026-10-15T13:37:51Z
+closed: 2026-10-15T13:37:51Z
 +++
 
 Add `var translation: SIMD3<Float>` (get/set, columns.3.xyz), `var upperLeft3x3: simd_float3x3`, and a `normalMatrix` (inverse transpose of the upper 3x3). MetalSprocketsSceneGraph spells `SIMD3(m.columns.3.x, m.columns.3.y, m.columns.3.z)` in many places and has its own normal matrix helper. Filed from MetalSprocketsSceneGraph #97.

@@ -78,6 +78,10 @@ public extension float4x4 {
         ))
     }
 
+    var normalMatrix: float3x3 {
+        upperLeft3x3.inverse.transpose
+    }
+
     var scalars: [Float] {
         withUnsafeBytes(of: self) { buffer in
             Array(buffer.bindMemory(to: Float.self))
