@@ -496,11 +496,13 @@ Notes:
 ## 28: Add double4x4 overloads for matrix helpers
 
 +++
-status: new
+status: closed
 priority: low
 kind: enhancement
 labels: effort:s
 created: 2026-10-15T14:46:48Z
+updated: 2026-10-15T14:50:12Z
+closed: 2026-10-15T14:50:12Z
 +++
 
 float4x4 helpers such as upperLeft3x3, normalMatrix, translation, init(translation:), init(scale:) exist only for Float. SwiftMesh's generic Mesh (SwiftMesh #57) needs upperLeft3x3 for Double. Add double4x4 equivalents, at least upperLeft3x3 and normalMatrix. SIMD4.xyz is already generic.

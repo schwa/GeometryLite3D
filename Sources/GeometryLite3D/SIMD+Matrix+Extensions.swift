@@ -1,5 +1,48 @@
 import simd
 
+public extension double4x4 {
+    static let identity = double4x4(diagonal: [1, 1, 1, 1])
+
+    init(translation: SIMD3<Double>) {
+        self.init(
+            SIMD4<Double>(1, 0, 0, 0),
+            SIMD4<Double>(0, 1, 0, 0),
+            SIMD4<Double>(0, 0, 1, 0),
+            SIMD4<Double>(translation.x, translation.y, translation.z, 1)
+        )
+    }
+
+    init(scale: SIMD3<Double>) {
+        self.init(diagonal: SIMD4<Double>(scale, 1))
+    }
+
+    var canInvert: Bool {
+        determinant != 0
+    }
+
+    var translation: SIMD3<Double> {
+        get {
+            self[3].xyz
+        }
+        set {
+            self[3].xyz = newValue
+        }
+    }
+
+    var upperLeft3x3: double3x3 {
+        double3x3(columns: (columns.0.xyz, columns.1.xyz, columns.2.xyz))
+    }
+
+    /// True when the transform flips triangle winding.
+    var isMirroring: Bool {
+        determinant < 0
+    }
+
+    var normalMatrix: double3x3 {
+        upperLeft3x3.inverse.transpose
+    }
+}
+
 public extension float4x4 {
     static let identity = float4x4(diagonal: [1, 1, 1, 1])
 
