@@ -629,12 +629,13 @@ Ray3D.intersect(box:) returns nil when the origin is inside the box (entry < 0).
 ## 34: Ray3D.intersect(box:) gives NaN for an axis-parallel ray on a box face plane
 
 +++
-status: open
+status: closed
 priority: medium
 kind: bug
 labels: effort:s, area:ray
 created: 2026-10-15T19:03:34Z
-updated: 2026-10-15T19:05:27Z
+updated: 2026-10-15T19:06:39Z
+closed: 2026-10-15T19:06:39Z
 +++
 
 intersect(box:) computes 1 / direction. When a direction component is 0 and the origin is exactly on the min or max plane of that axis, (box.min - origin) * inverseDirection is 0 * inf = NaN, and the result depends on how min/max handle NaN. Axis-aligned rays (such as straight down -Z) on a face plane are common in hit tests.

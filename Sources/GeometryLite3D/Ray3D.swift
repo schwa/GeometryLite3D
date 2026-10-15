@@ -82,8 +82,14 @@ public extension Ray3D {
         let inverseDirection = 1 / direction
         let t1 = (box.min - origin) * inverseDirection
         let t2 = (box.max - origin) * inverseDirection
-        let tNear = simd.min(t1, t2)
-        let tFar = simd.max(t1, t2)
+        var tNear = simd.min(t1, t2)
+        var tFar = simd.max(t1, t2)
+        // A zero direction component gives 0 * inf = NaN on a face plane. Decide those slabs from the origin alone.
+        let parallel = direction .== 0
+        let insideSlab = (origin .>= box.min) .& (origin .<= box.max)
+        let infinity = SIMD3<Float>(repeating: .infinity)
+        tNear.replace(with: infinity.replacing(with: -infinity, where: insideSlab), where: parallel)
+        tFar.replace(with: (-infinity).replacing(with: infinity, where: insideSlab), where: parallel)
         let entry = tNear.max()
         let exit = tFar.min()
         guard entry <= exit, entry >= 0 else {

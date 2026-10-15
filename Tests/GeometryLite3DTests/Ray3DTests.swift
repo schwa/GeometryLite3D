@@ -70,6 +70,17 @@ struct Ray3DTests {
     }
 
     @Test
+    func hitsBoxWithAxisParallelRayOnFacePlane() throws {
+        let box = BoundingBox3D(min: [-1, -1, -1], max: [1, 1, 1])
+        for origin: SIMD3<Float> in [[1, 0, 5], [-1, 0, 5], [1, -1, 5]] {
+            let hit = try #require(Ray3D(origin: origin, direction: [0, 0, -1]).intersect(box: box))
+            #expect(hit.distance == 4)
+            #expect(hit.normal == [0, 0, 1])
+        }
+        #expect(Ray3D(origin: [1.001, 0, 5], direction: [0, 0, -1]).intersect(box: box) == nil)
+    }
+
+    @Test
     func missesBox() {
         let box = BoundingBox3D(min: [-1, -1, -1], max: [1, 1, 1])
         #expect(Ray3D(origin: [0, 5, 5], direction: [0, 0, -1]).intersect(box: box) == nil)
