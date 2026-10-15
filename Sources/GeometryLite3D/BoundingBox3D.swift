@@ -2,7 +2,7 @@ import ModelIO
 import simd
 
 /// Bounding box information for 3D objects
-public struct BoundingBox: Equatable, Sendable {
+public struct BoundingBox3D: Equatable, Sendable {
     public var min: SIMD3<Float>
     public var max: SIMD3<Float>
 
@@ -38,7 +38,10 @@ public struct BoundingBox: Equatable, Sendable {
     }
 }
 
-public extension BoundingBox {
+@available(*, deprecated, renamed: "BoundingBox3D")
+public typealias BoundingBox = BoundingBox3D
+
+public extension BoundingBox3D {
     init(from mdlBounds: MDLAxisAlignedBoundingBox) {
         self.min = mdlBounds.minBounds
         self.max = mdlBounds.maxBounds

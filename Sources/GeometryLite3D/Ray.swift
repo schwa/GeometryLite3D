@@ -81,7 +81,7 @@ public extension Ray {
     }
 
     /// Slab test. Returns nil when the box is behind the ray or the origin is inside the box.
-    func intersect(box: BoundingBox) -> BoxHit? {
+    func intersect(box: BoundingBox3D) -> BoxHit? {
         let inverseDirection = 1 / direction
         let t1 = (box.min - origin) * inverseDirection
         let t2 = (box.max - origin) * inverseDirection

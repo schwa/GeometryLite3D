@@ -21,7 +21,7 @@ Then add it as a dependency to your target:
 ## Features
 
 - **AngleF**: Type-safe angle representation with degree/radian conversion
-- **BoundingBox**: Axis-aligned bounding box with transformation support
+- **BoundingBox3D**: Axis-aligned bounding box with transformation support
 - **Projection**: Perspective and orthographic projection matrices
 - **LookAt**: Camera view matrix generation
 - **SIMD Extensions**: Convenience initializers for transformation matrices
@@ -68,7 +68,7 @@ let projectionMatrix = projection.projectionMatrix(aspectRatio: 16.0/9.0)
 ### Bounding Boxes
 
 ```swift
-let box = BoundingBox(min: [-1, -1, -1], max: [1, 1, 1])
+let box = BoundingBox3D(min: [-1, -1, -1], max: [1, 1, 1])
 let transformedBox = box.transformed(by: transform)
 ```
 

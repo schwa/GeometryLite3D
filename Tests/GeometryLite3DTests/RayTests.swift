@@ -37,7 +37,7 @@ struct RayTests {
 
     @Test
     func hitsBoxWithFaceNormal() throws {
-        let box = BoundingBox(min: [-1, -1, -1], max: [1, 1, 1])
+        let box = BoundingBox3D(min: [-1, -1, -1], max: [1, 1, 1])
         let hit = try #require(Ray(origin: [0, 0, 5], direction: [0, 0, -1]).intersect(box: box))
         #expect(abs(hit.distance - 4) < 1e-6)
         #expect(hit.normal == [0, 0, 1])
@@ -47,7 +47,7 @@ struct RayTests {
 
     @Test
     func missesBox() {
-        let box = BoundingBox(min: [-1, -1, -1], max: [1, 1, 1])
+        let box = BoundingBox3D(min: [-1, -1, -1], max: [1, 1, 1])
         #expect(Ray(origin: [0, 5, 5], direction: [0, 0, -1]).intersect(box: box) == nil)
         #expect(Ray(origin: [0, 0, 5], direction: [0, 0, 1]).intersect(box: box) == nil)
     }

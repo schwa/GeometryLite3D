@@ -3,17 +3,17 @@ import ModelIO
 import simd
 import Testing
 
-struct BoundingBoxTests {
+struct BoundingBox3DTests {
     @Test
     func initialization() {
-        let bbox = BoundingBox(min: [-1, -2, -3], max: [1, 2, 3])
+        let bbox = BoundingBox3D(min: [-1, -2, -3], max: [1, 2, 3])
         #expect(bbox.min == [-1, -2, -3])
         #expect(bbox.max == [1, 2, 3])
     }
 
     @Test
     func transformIdentity() {
-        let bbox = BoundingBox(min: [-1, -1, -1], max: [1, 1, 1])
+        let bbox = BoundingBox3D(min: [-1, -1, -1], max: [1, 1, 1])
         let identity = matrix_identity_float4x4
         let transformed = bbox.transformed(by: identity)
 
@@ -23,7 +23,7 @@ struct BoundingBoxTests {
 
     @Test
     func transformTranslation() {
-        let bbox = BoundingBox(min: [0, 0, 0], max: [2, 2, 2])
+        let bbox = BoundingBox3D(min: [0, 0, 0], max: [2, 2, 2])
         let translation = float4x4(
             [1, 0, 0, 0],
             [0, 1, 0, 0],
@@ -38,7 +38,7 @@ struct BoundingBoxTests {
 
     @Test
     func transformScale() {
-        let bbox = BoundingBox(min: [-1, -1, -1], max: [1, 1, 1])
+        let bbox = BoundingBox3D(min: [-1, -1, -1], max: [1, 1, 1])
         let scale = float4x4(
             [2, 0, 0, 0],
             [0, 3, 0, 0],
@@ -53,7 +53,7 @@ struct BoundingBoxTests {
 
     @Test
     func transformRotation90Z() {
-        let bbox = BoundingBox(min: [0, 0, 0], max: [2, 1, 1])
+        let bbox = BoundingBox3D(min: [0, 0, 0], max: [2, 1, 1])
         let rotation = float4x4(
             [0, -1, 0, 0],
             [1, 0, 0, 0],
@@ -76,7 +76,7 @@ struct BoundingBoxTests {
         mdlBounds.minBounds = [-1, -2, -3]
         mdlBounds.maxBounds = [4, 5, 6]
 
-        let bbox = BoundingBox(from: mdlBounds)
+        let bbox = BoundingBox3D(from: mdlBounds)
         #expect(bbox.min == [-1, -2, -3])
         #expect(bbox.max == [4, 5, 6])
     }

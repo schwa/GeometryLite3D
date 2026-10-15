@@ -162,12 +162,13 @@ Add `var isMirroring: Bool { determinant < 0 }` on float4x4: true when the trans
 ## 10: Rename BoundingBox to BoundingBox3D
 
 +++
-status: open
+status: closed
 priority: low
 kind: task
 labels: effort:xs
 created: 2026-10-15T13:35:53Z
-updated: 2026-10-15T13:36:41Z
+updated: 2026-10-15T13:40:43Z
+closed: 2026-10-15T13:40:43Z
 +++
 
 Rename BoundingBox to BoundingBox3D, to match the planned Transform3D naming (#7). This is a breaking API change for dependents (MetalSprocketsSceneGraph, etc.). Consider a deprecated typealias BoundingBox = BoundingBox3D. Do before or with #3 (BoundingBox helpers) to avoid churn.
