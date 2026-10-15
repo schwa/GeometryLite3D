@@ -477,8 +477,9 @@ Idea: merge CameraCone into CameraConeParameters (or vice versa), use AngleF, dr
 status: new
 priority: medium
 kind: enhancement
-labels: effort:m, architecture
+labels: effort:m, architecture, deferred
 created: 2026-10-15T14:46:48Z
+updated: 2026-10-15T14:53:16Z
 +++
 
 BoundingBox3D is hard-wired to SIMD3<Float>. SwiftMesh is making Mesh generic over Float/Double (SwiftMesh #57) and uses BoundingBox3D for Mesh.bounds, so it needs a Double box too.
@@ -490,6 +491,8 @@ Notes:
 - init(from: MDLAxisAlignedBoundingBox) only makes sense for Float; keep it constrained to Scalar == Float.
 - Codable conformance should stay.
 - Breaking changes are acceptable; bump the minor version.
+
+- `2026-10-15T14:52:36Z`: Folded into #29 (generic vector-only types) under umbrella #32.
 
 ---
 
@@ -506,5 +509,104 @@ closed: 2026-10-15T14:50:12Z
 +++
 
 float4x4 helpers such as upperLeft3x3, normalMatrix, translation, init(translation:), init(scale:) exist only for Float. SwiftMesh's generic Mesh (SwiftMesh #57) needs upperLeft3x3 for Double. Add double4x4 equivalents, at least upperLeft3x3 and normalMatrix. SIMD4.xyz is already generic.
+
+---
+
+## 29: Generic: Angle, BoundingBox3D, Ray3D, Skew over Scalar (no matrix/quat work)
+
++++
+status: new
+priority: medium
+kind: enhancement
+labels: generics, effort:m, deferred
+depends: 27
+created: 2026-10-15T14:52:26Z
+updated: 2026-10-15T14:53:16Z
++++
+
+Make the vector-only parts generic over Scalar: BinaryFloatingPoint & SIMDScalar. No matrix or quaternion abstraction needed.
+
+- Angle<Scalar> with typealias AngleF = Angle<Float>.
+- BoundingBox3D<Scalar>. transformed(by: float4x4) and init(from: MDLAxisAlignedBoundingBox) stay in where Scalar == Float extensions; add transformed(by: double4x4) for Double.
+- Ray3D<Scalar>: origin, direction, point(at:), triangle and box intersection. Clip-point and view-point inits stay where Scalar == Float.
+- Skew<Scalar>.
+- Generic SIMD3 helpers (normalized, scale(to:)). Generic code cannot call simd's dot/cross/length/normalize on SIMD3<Scalar>, so add small generic versions or a helper protocol.
+- isApproximatelyEqual overloads for double4x4 and simd_quatd.
+- Typealiases (BoundingBox3DF, Ray3DF, ...) so client stored properties keep compiling.
+- Mark generic API @inlinable; check Float performance of Ray3D.intersect and Frustum.intersects did not regress.
+
+---
+
+## 30: Generic: GeometryScalar, SIMDMatrix4x4, SIMDQuaternion protocols
+
++++
+status: new
+priority: medium
+kind: enhancement
+labels: generics, effort:m, deferred
+created: 2026-10-15T14:52:26Z
+updated: 2026-10-15T14:53:16Z
++++
+
+simd's float4x4/double4x4 and simd_quatf/simd_quatd share no generic protocol. Add our own:
+
+- GeometryScalar: BinaryFloatingPoint & SIMDScalar & Sendable, with associated types Matrix4x4, Matrix3x3, Quaternion. Float and Double conform.
+- SIMDMatrix4x4 / SIMDMatrix3x3: column init, column subscript, inverse, transpose, determinant, matrix*matrix, matrix*vector.
+- SIMDQuaternion: init(angle:axis:), init(rotation matrix), vector, act(_:), *, slerp.
+
+The simd types already provide these members, so the conformances should be mostly empty. Include tests that exercise each requirement for Float and Double, and @inlinable on everything.
+
+---
+
+## 31: Generic: port Transform3D, LookAt, Decomposition, Euler, lookRotation, rotation inits
+
++++
+status: new
+priority: low
+kind: enhancement
+labels: generics, effort:l, deferred
+depends: 30
+created: 2026-10-15T14:52:26Z
+updated: 2026-10-15T14:53:16Z
++++
+
+Once the GeometryScalar/SIMDMatrix4x4/SIMDQuaternion protocols exist, make these generic over Scalar: GeometryScalar:
+
+- Transform3D (rotation: Scalar.Quaternion), init?(matrix:), matrix, interpolated.
+- LookAt, orthonormalBasis/perpendicular, lookRotation.
+- Decomposition / TransformComponents (272 lines ported from WebKit; the biggest piece).
+- Euler and simd_quatf(Euler).
+- Matrix helpers: x/y/zRotation inits (need generic Angle), translation, scale, upperLeft3x3, normalMatrix. These would replace the duplicated double4x4 helpers from #28.
+
+Keep Float typealiases. Benchmark Float before and after.
+
+Out of scope unless needed: Projection, ViewProjection, Frustum, CameraCone (GPU-facing, Float is fine).
+
+---
+
+## 32: Make GeometryLite3D generic over scalar type (umbrella)
+
++++
+status: new
+priority: medium
+kind: enhancement
+labels: generics, tracking, deferred
+depends: 27, 29, 30, 31
+created: 2026-10-15T14:52:43Z
+updated: 2026-10-15T14:53:16Z
++++
+
+Tracking issue for making the library work with Double as well as Float (needed by SwiftMesh's generic Mesh).
+
+Easy (no matrix/quaternion abstraction):
+- #29 Angle, BoundingBox3D, Ray3D, Skew over Scalar. #27 (BoundingBox3D generic) is part of this.
+
+Hard (needs our own protocols, because simd matrix and quaternion types are not generic):
+- #30 GeometryScalar, SIMDMatrix4x4, SIMDQuaternion protocols.
+- #31 port Transform3D, LookAt, Decomposition, Euler, lookRotation, rotation inits (depends on #30).
+
+Out of scope unless needed: Projection, ViewProjection, Frustum, CameraCone (GPU-facing, Float is fine).
+
+Cross-cutting: keep Float typealiases (AngleF, BoundingBox3DF, ...) so clients keep compiling; mark generic API @inlinable and benchmark Float hot paths before and after.
 
 ---
