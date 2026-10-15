@@ -390,3 +390,79 @@ closed: 2026-10-15T14:37:05Z
 BoundingBox3D has no way to represent an empty box (e.g. a starting value for union folds), no isEmpty check, and no bounding-sphere radius. Clients like MetalSprocketsPBR keep their own PBRBounds type because of this (it has .empty, isEmpty, and radius).
 
 ---
+
+## 23: Depth convention is restated across Projection, Ray3D, and Frustum
+
++++
+status: open
+priority: medium
+kind: enhancement
+labels: architecture, effort:m
+created: 2026-10-15T14:40:01Z
+updated: 2026-10-15T14:44:35Z
++++
+
+The depth convention (standard / reversed / reversed-infinite) is encoded separately in PerspectiveProjection.DepthMode, OrthographicProjection.DepthMode, Ray3D(clipPoint:viewMatrix:projectionMatrix:reversedDepth: Bool), and float4x4.reversedDepth. Frustum assumes clip z in 0...w. Callers must keep these in sync by hand: a .reversedInfinite projection used with Ray3D(reversedDepth: false) gives wrong picking rays with no error.
+
+Viewport-to-clip math exists only inside Ray3D(viewPoint:). There is no project/unproject for points.
+
+Idea: one camera / view-projection type (view matrix + projection + viewport) that owns the depth mode and provides ray picking, project/unproject, and the frustum. Boundary tests could replace part of ProjectionTests, Ray3DTests, FrustumTests, and SpatialGroundTruthTests.
+
+---
+
+## 24: Look-at basis construction is duplicated with inconsistent degenerate handling
+
++++
+status: open
+priority: medium
+kind: enhancement
+labels: architecture, effort:s
+created: 2026-10-15T14:40:02Z
+updated: 2026-10-15T14:44:35Z
++++
+
+Four places build a right/up/forward frame:
+- LookAt.cameraMatrix
+- float4x4.viewMatrix(eye:forward:up:)
+- simd_quatf.lookRotation (private orthonormalBasis)
+- CameraConeParameters.cameraPosition (arbitrary perpendicular vector)
+
+Only viewMatrix and lookRotation handle up parallel to forward. LookAt.cameraMatrix returns NaNs in that case; viewMatrix exists partly to work around it.
+
+Idea: one shared basis helper with a single fallback rule, used by all four. Edge-case tests at that helper could replace the overlapping checks in LookAtTests, LookRotationTests, and CameraConeTests.
+
+---
+
+## 25: Transform3D and TransformComponents overlap; Transform3D(matrix:) silently loses data
+
++++
+status: open
+priority: low
+kind: enhancement
+labels: architecture, effort:m
+created: 2026-10-15T14:40:02Z
+updated: 2026-10-15T14:44:35Z
++++
+
+Transform3D and TransformComponents (Decomposition.swift) both model a decomposed matrix. Transform3D(matrix:) drops skew and perspective without warning, and returns .identity when decomposition fails (instead of nil/throwing). Euler supports only .zyx and has no conversion back to a quaternion.
+
+Idea: make the matrix <-> components conversion one boundary with explicit failure (failable init) and round-trip tests. Decide whether Transform3D should be a lossless view or document/validate the lossy case.
+
+---
+
+## 26: CameraCone is a thin wrapper and the only SwiftUI import
+
++++
+status: open
+priority: low
+kind: enhancement
+labels: architecture, effort:xs
+created: 2026-10-15T14:40:02Z
+updated: 2026-10-15T14:44:35Z
++++
+
+CameraCone only stores parameters + rotation + height and forwards to CameraConeParameters.cameraMatrix. It uses SwiftUI.Angle while the rest of the library uses AngleF, so CameraCone.swift is the only file importing SwiftUI. CameraConeParameters.eyePosition(angle:t:) ignores both arguments.
+
+Idea: merge CameraCone into CameraConeParameters (or vice versa), use AngleF, drop the SwiftUI import, and remove or fix eyePosition's unused arguments.
+
+---
