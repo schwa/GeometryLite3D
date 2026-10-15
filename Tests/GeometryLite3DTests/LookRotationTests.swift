@@ -25,6 +25,11 @@ struct LookRotationTests {
     }
 
     @Test
+    func targetAtPositionGivesIdentity() {
+        #expect(simd_quatf.lookRotation(from: [1, 2, 3], to: [1, 2, 3]) == .identity)
+    }
+
+    @Test
     func lookingAlongUpDoesNotProduceNaN() {
         let rotation = simd_quatf.lookRotation(from: .zero, to: [0, 10, 0])
         #expect(!rotation.vector.min().isNaN)

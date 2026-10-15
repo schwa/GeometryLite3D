@@ -22,6 +22,22 @@ struct RayTests {
     }
 
     @Test
+    func pointAtDistance() {
+        #expect(Ray(origin: [1, 2, 3], direction: [0, 2, 0]).point(at: 4) == [1, 6, 3])
+    }
+
+    @Test
+    func parallelRayMissesTriangle() {
+        #expect(Ray(origin: [0, 0, 1], direction: [1, 0, 0]).intersect(triangle: a, b, c) == nil)
+    }
+
+    @Test
+    func rayOutsideSecondEdgeMissesTriangle() {
+        #expect(Ray(origin: [0, -2, 5], direction: [0, 0, -1]).intersect(triangle: a, b, c) == nil)
+        #expect(Ray(origin: [0.9, 0.9, 5], direction: [0, 0, -1]).intersect(triangle: a, b, c) == nil)
+    }
+
+    @Test
     func missesTriangle() {
         #expect(Ray(origin: [5, 0, 5], direction: [0, 0, -1]).intersect(triangle: a, b, c) == nil)
         #expect(Ray(origin: [0, 0, 5], direction: [0, 0, 1]).intersect(triangle: a, b, c) == nil)
