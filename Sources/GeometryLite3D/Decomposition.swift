@@ -33,14 +33,14 @@ import simd
 
 public struct TransformComponents: Sendable, Equatable {
     public var perspective: SIMD4<Float>
-    public var translate: SIMD3<Float>
+    public var translation: SIMD3<Float>
     public var scale: SIMD3<Float>
     public var skew: Skew
     public var rotation: simd_quatf
 
-    public init(perspective: SIMD4<Float>, translate: SIMD3<Float>, scale: SIMD3<Float>, skew: Skew, rotation: simd_quatf) {
+    public init(perspective: SIMD4<Float>, translation: SIMD3<Float>, scale: SIMD3<Float>, skew: Skew, rotation: simd_quatf) {
         self.perspective = perspective
-        self.translate = translate
+        self.translation = translation
         self.scale = scale
         self.skew = skew
         self.rotation = rotation
@@ -48,11 +48,24 @@ public struct TransformComponents: Sendable, Equatable {
 
     public static let identity = Self(
         perspective: [0, 0, 0, 1],
-        translate: .zero,
+        translation: .zero,
         scale: .one,
         skew: Skew.zero,
         rotation: .identity
     )
+}
+
+public extension TransformComponents {
+    @available(*, deprecated, renamed: "translation")
+    var translate: SIMD3<Float> {
+        get { translation }
+        set { translation = newValue }
+    }
+
+    @available(*, deprecated, renamed: "init(perspective:translation:scale:skew:rotation:)")
+    init(perspective: SIMD4<Float>, translate: SIMD3<Float>, scale: SIMD3<Float>, skew: Skew, rotation: simd_quatf) {
+        self.init(perspective: perspective, translation: translate, scale: scale, skew: skew, rotation: rotation)
+    }
 }
 
 public extension float4x4 {
@@ -131,7 +144,7 @@ public extension float4x4 {
         }
 
         // Next take care of translation (easy).
-        result.translate = localMatrix[3].xyz
+        result.translation = localMatrix[3].xyz
 
         localMatrix[3].xyz = .zero
 

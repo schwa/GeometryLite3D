@@ -7,7 +7,7 @@ struct DecompositionTests {
     func transformComponentsIdentity() {
         let identity = TransformComponents.identity
         #expect(identity.perspective == [0, 0, 0, 1])
-        #expect(identity.translate == .zero)
+        #expect(identity.translation == .zero)
         #expect(identity.scale == .one)
         #expect(identity.skew == Skew.zero)
         #expect(identity.rotation == .identity)
@@ -34,7 +34,7 @@ struct DecompositionTests {
         #expect(components != nil)
         if let components {
             #expect(components.perspective == [0, 0, 0, 1])
-            #expect(components.translate == .zero)
+            #expect(components.translation == .zero)
             #expect(components.scale == .one)
             #expect(components.skew == Skew.zero)
             #expect(abs(components.rotation.angle) < 1e-6)
@@ -53,7 +53,7 @@ struct DecompositionTests {
 
         #expect(components != nil)
         if let components {
-            #expect(components.translate == [10, 20, 30])
+            #expect(components.translation == [10, 20, 30])
             #expect(components.scale == .one)
             #expect(components.skew == Skew.zero)
         }
@@ -71,7 +71,7 @@ struct DecompositionTests {
 
         #expect(components != nil)
         if let components {
-            #expect(components.translate == .zero)
+            #expect(components.translation == .zero)
             #expect(components.scale == [2, 3, 4])
             #expect(components.skew == Skew.zero)
         }
@@ -85,7 +85,7 @@ struct DecompositionTests {
 
         #expect(components != nil)
         if let components {
-            #expect(components.translate == .zero)
+            #expect(components.translation == .zero)
             #expect(abs(components.scale.x - 1) < 1e-6)
             #expect(abs(components.scale.y - 1) < 1e-6)
             #expect(abs(components.scale.z - 1) < 1e-6)
@@ -112,7 +112,7 @@ struct DecompositionTests {
 
         #expect(components != nil)
         if let components {
-            #expect(components.translate == [5, 10, 15])
+            #expect(components.translation == [5, 10, 15])
             #expect(components.scale == [2, 2, 2])
         }
     }
@@ -133,7 +133,7 @@ struct DecompositionTests {
             #expect(abs(components.perspective.y + 0.3) < 1e-6)
             #expect(abs(components.perspective.z - 0.4) < 1e-6)
             #expect(abs(components.perspective.w - 1) < 1e-6)
-            #expect(components.translate == .zero)
+            #expect(components.translation == .zero)
             #expect(components.scale == .one)
             #expect(components.skew == Skew.zero)
         }
@@ -216,7 +216,7 @@ struct DecompositionTests {
             #expect(abs(components.skew.xz - 0.25) < 1e-6)
             #expect(abs(components.skew.yz - 0.75) < 1e-6)
             #expect(components.scale == .one)
-            #expect(components.translate == .zero)
+            #expect(components.translation == .zero)
         }
     }
 
@@ -232,7 +232,7 @@ struct DecompositionTests {
 
         #expect(components != nil)
         if let components {
-            #expect(components.translate == .zero)
+            #expect(components.translation == .zero)
             #expect(abs(components.scale.x + 2) < 1e-6)
             #expect(abs(components.scale.y + 3) < 1e-6)
             #expect(abs(components.scale.z + 4) < 1e-6)

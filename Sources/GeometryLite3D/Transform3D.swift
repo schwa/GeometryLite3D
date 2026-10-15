@@ -21,7 +21,7 @@ public extension Transform3D {
             self = .identity
             return
         }
-        self.init(translation: components.translate, rotation: components.rotation, scale: components.scale)
+        self.init(translation: components.translation, rotation: components.rotation, scale: components.scale)
     }
 
     var matrix: float4x4 {

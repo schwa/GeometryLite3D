@@ -27,9 +27,19 @@ public struct PerspectiveProjection: ProjectionProtocol {
         /// Depth 0...1, with near at 0 and far at 1.
         case standard(zClip: ClosedRange<Float>)
         /// Reversed depth with no far plane. The near plane maps to 1. Use a `.greater` depth test and clear depth to 0.
-        case reversed(zMin: Float)
+        case reversedInfinite(zNear: Float)
         /// Reversed depth with a far plane. Near maps to 1 and far maps to 0. Use a `.greater` depth test and clear depth to 0.
-        case reversedFinite(zClip: ClosedRange<Float>)
+        case reversed(zClip: ClosedRange<Float>)
+
+        @available(*, deprecated, renamed: "reversedInfinite(zNear:)")
+        public static func reversed(zMin: Float) -> Self {
+            .reversedInfinite(zNear: zMin)
+        }
+
+        @available(*, deprecated, renamed: "reversed(zClip:)")
+        public static func reversedFinite(zClip: ClosedRange<Float>) -> Self {
+            .reversed(zClip: zClip)
+        }
     }
 
     public var verticalAngleOfView: AngleF
@@ -46,15 +56,15 @@ public struct PerspectiveProjection: ProjectionProtocol {
         let f = 1.0 / tan(fovy * 0.5)
 
         switch depthMode {
-        case .reversed(let zMin):
+        case .reversedInfinite(let zNear):
             return float4x4(
                 SIMD4<Float>(f / aspect, 0, 0, 0),
                 SIMD4<Float>(0, f, 0, 0),
                 SIMD4<Float>(0, 0, 0, -1),
-                SIMD4<Float>(0, 0, zMin, 0)
+                SIMD4<Float>(0, 0, zNear, 0)
             )
 
-        case .reversedFinite(let zClip):
+        case .reversed(let zClip):
             let nearZ = zClip.lowerBound
             let farZ = zClip.upperBound
             let rangeInv = 1.0 / (farZ - nearZ)

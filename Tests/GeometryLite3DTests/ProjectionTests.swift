@@ -20,14 +20,14 @@ struct ProjectionTests {
     @Test
     func reversedFinitePerspectiveMatchesSpatial() {
         let spatial = spatialPerspective(fovY: 45, aspectRatio: 1.5, nearZ: 0.5, farZ: 50, reverseZ: true)
-        let projection = PerspectiveProjection(verticalAngleOfView: .degrees(45), depthMode: .reversedFinite(zClip: 0.5...50)).projectionMatrix(aspectRatio: 1.5)
+        let projection = PerspectiveProjection(verticalAngleOfView: .degrees(45), depthMode: .reversed(zClip: 0.5...50)).projectionMatrix(aspectRatio: 1.5)
         #expect(projection.isApproximatelyEqual(to: spatial, absoluteTolerance: 1e-6))
     }
 
     @Test
     func reversedInfinitePerspectiveMatchesSpatial() {
         let spatial = spatialPerspective(fovY: 70, aspectRatio: 0.75, nearZ: 0.1, farZ: .infinity, reverseZ: true)
-        let projection = PerspectiveProjection(verticalAngleOfView: .degrees(70), depthMode: .reversed(zMin: 0.1)).projectionMatrix(aspectRatio: 0.75)
+        let projection = PerspectiveProjection(verticalAngleOfView: .degrees(70), depthMode: .reversedInfinite(zNear: 0.1)).projectionMatrix(aspectRatio: 0.75)
         #expect(projection.isApproximatelyEqual(to: spatial, absoluteTolerance: 1e-6))
     }
 
@@ -80,7 +80,7 @@ struct ProjectionTests {
 
     @Test
     func reverseZPerspectiveMatchesClosedForm() {
-        let projection = PerspectiveProjection(verticalAngleOfView: .degrees(60), depthMode: .reversed(zMin: 0.5))
+        let projection = PerspectiveProjection(verticalAngleOfView: .degrees(60), depthMode: .reversedInfinite(zNear: 0.5))
         let aspect: Float = 21 / 9
 
         let matrix = projection.projectionMatrix(aspectRatio: aspect)

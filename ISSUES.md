@@ -279,12 +279,13 @@ Files that import both GeometryLite3D and Spatial must write GeometryLite3D.Ray3
 ## 16: Make depth mode and translation naming consistent
 
 +++
-status: open
+status: closed
 priority: medium
 kind: enhancement
 labels: effort:s
 created: 2026-10-15T14:13:10Z
-updated: 2026-10-15T14:14:57Z
+updated: 2026-10-15T14:18:48Z
+closed: 2026-10-15T14:18:48Z
 +++
 
 PerspectiveProjection.DepthMode has .reversed(zMin:) next to .reversedFinite(zClip:). TransformComponents uses 'translate' while everything else uses 'translation'. Both LookAt.viewMatrix and float4x4.viewMatrix(eye:forward:up:) exist. Choose names, add deprecated aliases where needed. Decide before the next release.

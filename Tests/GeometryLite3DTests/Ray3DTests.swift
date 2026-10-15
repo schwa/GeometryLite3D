@@ -71,7 +71,7 @@ struct Ray3DTests {
     @Test(arguments: [false, true])
     func rayFromViewCenterLooksForward(reversedDepth: Bool) {
         let view = LookAt(position: [0, 0, 10], target: .zero, up: [0, 1, 0]).viewMatrix
-        let depthMode: PerspectiveProjection.DepthMode = reversedDepth ? .reversedFinite(zClip: 1...100) : .standard(zClip: 1...100)
+        let depthMode: PerspectiveProjection.DepthMode = reversedDepth ? .reversed(zClip: 1...100) : .standard(zClip: 1...100)
         let projection = PerspectiveProjection(verticalAngleOfView: .degrees(60), depthMode: depthMode).projectionMatrix(aspectRatio: 1)
         let ray = Ray3D(viewPoint: [50, 50], viewSize: [100, 100], viewMatrix: view, projectionMatrix: projection, reversedDepth: reversedDepth)
         #expect(ray.direction.isApproximatelyEqual(to: [0, 0, -1], absoluteTolerance: 1e-5))

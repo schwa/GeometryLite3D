@@ -13,7 +13,7 @@ struct FrustumTests {
         BoundingBox3D(min: center - 0.5, max: center + 0.5)
     }
 
-    @Test(arguments: [PerspectiveProjection.DepthMode.reversedFinite(zClip: 1...50), .reversed(zMin: 1)])
+    @Test(arguments: [PerspectiveProjection.DepthMode.reversed(zClip: 1...50), .reversedInfinite(zNear: 1)])
     func reversedDepth(depthMode: PerspectiveProjection.DepthMode) {
         let frustum = frustum(depthMode: depthMode)
         #expect(frustum.intersects(cube(at: .zero)))
@@ -32,7 +32,7 @@ struct FrustumTests {
 
     @Test
     func farPlaneCullsWithFiniteDepth() {
-        let frustum = frustum(depthMode: .reversedFinite(zClip: 1...50))
+        let frustum = frustum(depthMode: .reversed(zClip: 1...50))
         #expect(!frustum.intersects(cube(at: [0, 0, -100])))
         #expect(frustum.intersects(cube(at: [0, 0, -39])))
     }

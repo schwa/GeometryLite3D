@@ -9,7 +9,7 @@ struct ProjectionHelpersTests {
 
     @Test
     func reversedFinitePerspectiveMapsNearToOneAndFarToZero() {
-        let matrix = PerspectiveProjection(verticalAngleOfView: .degrees(60), depthMode: .reversedFinite(zClip: 0.5...50)).projectionMatrix(aspectRatio: 1.5)
+        let matrix = PerspectiveProjection(verticalAngleOfView: .degrees(60), depthMode: .reversed(zClip: 0.5...50)).projectionMatrix(aspectRatio: 1.5)
         #expect(abs(depth(matrix * SIMD4<Float>(0, 0, -0.5, 1)) - 1) < 1e-6)
         #expect(abs(depth(matrix * SIMD4<Float>(0, 0, -50, 1))) < 1e-6)
     }

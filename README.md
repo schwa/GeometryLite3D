@@ -71,7 +71,7 @@ let projectionMatrix = projection.projectionMatrix(aspectRatio: 16.0 / 9.0)
 let orthographic = OrthographicProjection(halfHeight: 5, depthMode: .standard(zClip: 0.1...100))
 ```
 
-All projections give clip z in 0...1, as Metal expects. The `.reversed` and `.reversedFinite` depth modes put the near plane at 1 and the far plane at 0. To use them, set the depth compare function to `.greater` and clear depth to 0.
+All projections give clip z in 0...1, as Metal expects. The `.reversed` and `.reversedInfinite` depth modes put the near plane at 1 and the far plane at 0. To use them, set the depth compare function to `.greater` and clear depth to 0.
 
 ### Transforms
 
