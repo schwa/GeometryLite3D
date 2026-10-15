@@ -96,30 +96,4 @@ struct ProjectionTests {
 
         #expect(matrix.isApproximatelyEqual(to: expected, absoluteTolerance: 1e-6))
     }
-
-    @Test
-    @available(*, deprecated)
-    func legacyFloat4x4PerspectiveFormulaMatchesManual() {
-        let aspect: Float = 2
-        let fovy: Float = Float.pi / 3
-        let near: Float = 0.25
-        let far: Float = 400
-
-        let matrix = float4x4.perspective(aspectRatio: aspect, fovy: fovy, near: near, far: far)
-
-        let yScale = 1 / tan(fovy * 0.5)
-        let xScale = yScale / aspect
-        let zRange = far - near
-        let zScale = -(far + near) / zRange
-        let wzScale = -2 * far * near / zRange
-
-        let expected = float4x4([
-            SIMD4<Float>(xScale, 0, 0, 0),
-            SIMD4<Float>(0, yScale, 0, 0),
-            SIMD4<Float>(0, 0, zScale, -1),
-            SIMD4<Float>(0, 0, wzScale, 0)
-        ])
-
-        #expect(matrix.isApproximatelyEqual(to: expected, absoluteTolerance: 1e-6))
-    }
 }

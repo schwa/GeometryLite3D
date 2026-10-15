@@ -15,7 +15,7 @@ public struct Transform3D: Equatable, Sendable {
 }
 
 extension Transform3D: Codable {
-    private enum CodingKeys: CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case translation
         case rotation
         case scale

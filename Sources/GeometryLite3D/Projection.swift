@@ -30,16 +30,6 @@ public struct PerspectiveProjection: ProjectionProtocol {
         case reversedInfinite(zNear: Float)
         /// Reversed depth with a far plane. Near maps to 1 and far maps to 0. Use a `.greater` depth test and clear depth to 0.
         case reversed(zClip: ClosedRange<Float>)
-
-        @available(*, deprecated, renamed: "reversedInfinite(zNear:)")
-        public static func reversed(zMin: Float) -> Self {
-            .reversedInfinite(zNear: zMin)
-        }
-
-        @available(*, deprecated, renamed: "reversed(zClip:)")
-        public static func reversedFinite(zClip: ClosedRange<Float>) -> Self {
-            .reversed(zClip: zClip)
-        }
     }
 
     public var verticalAngleOfView: AngleF
@@ -156,23 +146,5 @@ public extension float4x4 {
             safeUp = abs(direction.z) < 0.9 ? [0, 0, 1] : [1, 0, 0]
         }
         return LookAt(position: eye, target: eye + direction, up: safeUp).viewMatrix
-    }
-}
-
-public extension float4x4 {
-    @available(*, deprecated, message: "Use PerspectiveProjection. Note this uses OpenGL clip z (-1...1), not Metal (0...1).")
-    static func perspective(aspectRatio: Float, fovy: Float, near: Float, far: Float) -> Self {
-        let yScale = 1 / tan(fovy * 0.5)
-        let xScale = yScale / aspectRatio
-        let zRange = far - near
-        let zScale = -(far + near) / zRange
-        let wzScale = -2 * far * near / zRange
-
-        let P: SIMD4<Float> = [xScale, 0, 0, 0]
-        let Q: SIMD4<Float> = [0, yScale, 0, 0]
-        let R: SIMD4<Float> = [0, 0, zScale, -1]
-        let S: SIMD4<Float> = [0, 0, wzScale, 0]
-
-        return float4x4([P, Q, R, S])
     }
 }

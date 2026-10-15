@@ -55,19 +55,6 @@ public struct TransformComponents: Sendable, Equatable {
     )
 }
 
-public extension TransformComponents {
-    @available(*, deprecated, renamed: "translation")
-    var translate: SIMD3<Float> {
-        get { translation }
-        set { translation = newValue }
-    }
-
-    @available(*, deprecated, renamed: "init(perspective:translation:scale:skew:rotation:)")
-    init(perspective: SIMD4<Float>, translate: SIMD3<Float>, scale: SIMD3<Float>, skew: Skew, rotation: simd_quatf) {
-        self.init(perspective: perspective, translation: translate, scale: scale, skew: skew, rotation: rotation)
-    }
-}
-
 public extension float4x4 {
     /// Decomposes a 4x4 transformation matrix into its constituent components.
     ///

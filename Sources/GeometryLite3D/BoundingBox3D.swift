@@ -69,9 +69,6 @@ public extension BoundingBox3D {
     }
 }
 
-@available(*, deprecated, renamed: "BoundingBox3D")
-public typealias BoundingBox = BoundingBox3D
-
 public extension BoundingBox3D {
     init(from mdlBounds: MDLAxisAlignedBoundingBox) {
         self.min = mdlBounds.minBounds
