@@ -9,7 +9,7 @@ only_rules:
   - array_init
   - async_without_await
   - attribute_name_spacing
-  - attributes
+  # - attributes # conflicts with @inlinable on its own line
   - balanced_xctest_lifecycle
   - blanket_disable_command
   - block_based_kvo
