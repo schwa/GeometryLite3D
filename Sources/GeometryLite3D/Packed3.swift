@@ -6,6 +6,7 @@ public struct Packed3<Scalar> where Scalar: SIMDScalar {
     public var y: Scalar
     public var z: Scalar
 
+    @inlinable
     public init(x: Scalar, y: Scalar, z: Scalar) {
         self.x = x
         self.y = y
@@ -14,12 +15,14 @@ public struct Packed3<Scalar> where Scalar: SIMDScalar {
 }
 
 public extension Packed3 {
+    @inlinable
     init(_ other: SIMD3<Scalar>) {
         self.init(x: other.x, y: other.y, z: other.z)
     }
 }
 
 public extension Packed3 {
+    @inlinable
     subscript(i: Int) -> Scalar {
         get {
             precondition((0..<3).contains(i))
@@ -51,6 +54,7 @@ public extension Packed3 {
 }
 
 extension Packed3: ExpressibleByArrayLiteral {
+    @inlinable
     public init(arrayLiteral elements: Scalar...) {
         x = elements[0]
         y = elements[1]
@@ -65,6 +69,7 @@ extension Packed3: Equatable where Scalar: Equatable {
 }
 
 public extension Packed3 where Scalar: Numeric {
+    @inlinable
     static func * (lhs: Self, rhs: Scalar) -> Self {
         Self(x: lhs.x * rhs, y: lhs.y * rhs, z: lhs.z * rhs)
     }
@@ -73,15 +78,18 @@ public extension Packed3 where Scalar: Numeric {
 // Float16 is unavailable on Intel macOS and Intel Mac Catalyst.
 #if !((os(macOS) || targetEnvironment(macCatalyst)) && arch(x86_64))
 public extension Packed3 where Scalar == Float {
+    @inlinable
     init(_ other: Packed3<Float16>) {
         self.init(x: Float(other.x), y: Float(other.y), z: Float(other.z))
     }
 }
 
 public extension Packed3 where Scalar == Float16 {
+    @inlinable
     init(_ other: Packed3<Float>) {
         self.init(x: Float16(other.x), y: Float16(other.y), z: Float16(other.z))
     }
+    @inlinable
     init(_ other: SIMD3<Float>) {
         self.init(x: Float16(other.x), y: Float16(other.y), z: Float16(other.z))
     }
@@ -89,6 +97,7 @@ public extension Packed3 where Scalar == Float16 {
 #endif
 
 public extension SIMD3<Float> {
+    @inlinable
     init(_ other: Packed3<Float>) {
         self.init(x: other.x, y: other.y, z: other.z)
     }

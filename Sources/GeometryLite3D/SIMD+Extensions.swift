@@ -3,12 +3,14 @@ import simd
 public extension SIMD3<Float> {
     static let unit = SIMD3<Float>(1, 1, 1)
 
+    @inlinable
     var normalized: SIMD3<Float> {
         normalize(self)
     }
 }
 
 public extension SIMD3 {
+    @inlinable
     var xy: SIMD2<Scalar> {
         get {
             .init(x, y)
@@ -19,15 +21,17 @@ public extension SIMD3 {
         }
     }
 
+    @inlinable
     func map<T>(_ transform: (Scalar) -> T) -> SIMD3<T> where T: SIMDScalar {
         .init(transform(x), transform(y), transform(z))
     }
 }
 
 public extension SIMD4 {
+    @inlinable
     var xyz: SIMD3<Scalar> {
         get {
-            [x, y, z]
+            .init(x, y, z)
         }
         set {
             x = newValue.x
@@ -36,10 +40,12 @@ public extension SIMD4 {
         }
     }
 
+    @inlinable
     func map<T>(_ transform: (Scalar) -> T) -> SIMD4<T> where T: SIMDScalar {
         .init(transform(x), transform(y), transform(z), transform(w))
     }
 
+    @inlinable
     var scalars: [Scalar] {
         [x, y, z, w]
     }

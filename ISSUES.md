@@ -662,10 +662,12 @@ intersect(triangle:) rejects a hit when the determinant is less than 1e-7. Direc
 ## 36: SIMD4.xyz and other SIMD helpers are slow when called from other modules
 
 +++
-status: new
+status: closed
 priority: medium
 kind: bug
 created: 2026-10-17T12:22:15Z
+updated: 2026-10-17T12:23:42Z
+closed: 2026-10-17T12:23:42Z
 +++
 
 The generic SIMD helpers in SIMD+Extensions.swift (SIMD4.xyz, SIMD3.xy, map, scalars) are not @inlinable. Other modules cannot specialize them, so every call goes through generic SIMD code and Swift metadata lookups. SIMD4.xyz also builds its result with an array literal (SIMD.init(arrayLiteral:)), which is slow in the unspecialized path.
@@ -677,10 +679,12 @@ Measured in MetalSprocketsSceneGraph (Release build, 1,600-entry scene): SIMD4.x
 ## 37: No public API is @inlinable
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 created: 2026-10-17T12:22:15Z
+updated: 2026-10-17T12:23:42Z
+closed: 2026-10-17T12:23:42Z
 +++
 
 No declaration in GeometryLite3D is marked @inlinable. Small hot helpers (SIMD extensions, Transform3D.matrix, Frustum.intersects, bounds transforms, Packed3 conversions) cannot be inlined or specialized by client modules, so they cost a full cross-module call, and generic ones also run unspecialized code.

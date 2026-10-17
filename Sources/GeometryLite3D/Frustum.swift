@@ -9,6 +9,7 @@ public struct Frustum: Equatable, Sendable {
     public var near: SIMD4<Float>
     public var far: SIMD4<Float>
 
+    @inlinable
     public init(viewProjection matrix: float4x4) {
         let transposed = matrix.transpose
         let row0 = transposed.columns.0
@@ -23,11 +24,13 @@ public struct Frustum: Equatable, Sendable {
         far = row3 - row2
     }
 
+    @inlinable
     public var planes: [SIMD4<Float>] {
         [left, right, bottom, top, near, far]
     }
 
     /// Can return true for a box that is near a corner but outside the frustum.
+    @inlinable
     public func intersects(_ box: BoundingBox3D) -> Bool {
         isInside(box, plane: left)
             && isInside(box, plane: right)
@@ -37,7 +40,8 @@ public struct Frustum: Equatable, Sendable {
             && isInside(box, plane: far)
     }
 
-    private func isInside(_ box: BoundingBox3D, plane: SIMD4<Float>) -> Bool {
+    @inlinable
+    internal func isInside(_ box: BoundingBox3D, plane: SIMD4<Float>) -> Bool {
         let normal = plane.xyz
         let positiveVertex = SIMD3<Float>(
             normal.x >= 0 ? box.max.x : box.min.x,

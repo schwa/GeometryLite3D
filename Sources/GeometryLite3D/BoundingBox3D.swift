@@ -5,11 +5,13 @@ public struct BoundingBox3D: Equatable, Sendable, Codable {
     public var min: SIMD3<Float>
     public var max: SIMD3<Float>
 
+    @inlinable
     public init(min: SIMD3<Float>, max: SIMD3<Float>) {
         self.min = min
         self.max = max
     }
 
+    @inlinable
     public func transformed(by transform: float4x4) -> Self {
         let corners = [
             SIMD3<Float>(min.x, min.y, min.z),
@@ -38,6 +40,7 @@ public struct BoundingBox3D: Equatable, Sendable, Codable {
 
 public extension BoundingBox3D {
     /// Returns nil for an empty sequence.
+    @inlinable
     init?<S: Sequence>(points: S) where S.Element == SIMD3<Float> {
         var iterator = points.makeIterator()
         guard let first = iterator.next() else {
@@ -55,27 +58,33 @@ public extension BoundingBox3D {
     /// Identity for `union`: inverted infinite bounds.
     static let empty = Self(min: SIMD3<Float>(repeating: .infinity), max: SIMD3<Float>(repeating: -.infinity))
 
+    @inlinable
     var isEmpty: Bool {
         any(min .> max)
     }
 
     /// Radius of the bounding sphere centered at `center`. Zero when empty.
+    @inlinable
     var radius: Float {
         isEmpty ? 0 : simd.length(size) * 0.5
     }
 
+    @inlinable
     var center: SIMD3<Float> {
         (min + max) * 0.5
     }
 
+    @inlinable
     var size: SIMD3<Float> {
         max - min
     }
 
+    @inlinable
     func union(_ other: Self) -> Self {
         Self(min: simd.min(min, other.min), max: simd.max(max, other.max))
     }
 
+    @inlinable
     func contains(_ point: SIMD3<Float>) -> Bool {
         all(point .>= min) && all(point .<= max)
     }

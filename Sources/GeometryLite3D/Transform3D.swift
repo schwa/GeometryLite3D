@@ -5,6 +5,7 @@ public struct Transform3D: Equatable, Sendable {
     public var rotation: simd_quatf
     public var scale: SIMD3<Float>
 
+    @inlinable
     public init(translation: SIMD3<Float> = .zero, rotation: simd_quatf = .identity, scale: SIMD3<Float> = .one) {
         self.translation = translation
         self.rotation = rotation
@@ -50,10 +51,12 @@ public extension Transform3D {
         }
     }
 
+    @inlinable
     var matrix: float4x4 {
         float4x4(translation: translation) * float4x4(rotation) * float4x4(scale: scale)
     }
 
+    @inlinable
     func interpolated(to other: Self, amount: Float) -> Self {
         Self(
             translation: mix(translation, other.translation, t: amount),

@@ -3,6 +3,7 @@ import simd
 public extension double4x4 {
     static let identity = double4x4(diagonal: [1, 1, 1, 1])
 
+    @inlinable
     init(translation: SIMD3<Double>) {
         self.init(
             SIMD4<Double>(1, 0, 0, 0),
@@ -12,14 +13,17 @@ public extension double4x4 {
         )
     }
 
+    @inlinable
     init(scale: SIMD3<Double>) {
         self.init(diagonal: SIMD4<Double>(scale, 1))
     }
 
+    @inlinable
     var canInvert: Bool {
         determinant != 0
     }
 
+    @inlinable
     var translation: SIMD3<Double> {
         get {
             self[3].xyz
@@ -29,15 +33,18 @@ public extension double4x4 {
         }
     }
 
+    @inlinable
     var upperLeft3x3: double3x3 {
         double3x3(columns: (columns.0.xyz, columns.1.xyz, columns.2.xyz))
     }
 
     /// True when the transform flips triangle winding.
+    @inlinable
     var isMirroring: Bool {
         determinant < 0
     }
 
+    @inlinable
     var normalMatrix: double3x3 {
         upperLeft3x3.inverse.transpose
     }
@@ -46,6 +53,7 @@ public extension double4x4 {
 public extension float4x4 {
     static let identity = float4x4(diagonal: [1, 1, 1, 1])
 
+    @inlinable
     init(xRotation: AngleF) {
         let radians = Float(xRotation.radians)
         let c = cos(radians)
@@ -58,6 +66,7 @@ public extension float4x4 {
         ])
     }
 
+    @inlinable
     init(yRotation: AngleF) {
         let radians = Float(yRotation.radians)
         let c = cos(radians)
@@ -70,6 +79,7 @@ public extension float4x4 {
         ])
     }
 
+    @inlinable
     init(zRotation: AngleF) {
         let radians = Float(zRotation.radians)
         let c = cos(radians)
@@ -82,6 +92,7 @@ public extension float4x4 {
         ])
     }
 
+    @inlinable
     init(translation: SIMD3<Float>) {
         self.init(
             SIMD4<Float>(1, 0, 0, 0),
@@ -91,6 +102,7 @@ public extension float4x4 {
         )
     }
 
+    @inlinable
     init(scale: SIMD3<Float>) {
         self.init(
             SIMD4<Float>(scale.x, 0, 0, 0),
@@ -100,10 +112,12 @@ public extension float4x4 {
         )
     }
 
+    @inlinable
     var canInvert: Bool {
         determinant != 0
     }
 
+    @inlinable
     var translation: SIMD3<Float> {
         get {
             self[3].xyz
@@ -113,6 +127,7 @@ public extension float4x4 {
         }
     }
 
+    @inlinable
     var upperLeft3x3: float3x3 {
         float3x3(columns: (
             SIMD3(columns.0.xyz),
@@ -122,14 +137,17 @@ public extension float4x4 {
     }
 
     /// True when the transform flips triangle winding.
+    @inlinable
     var isMirroring: Bool {
         determinant < 0
     }
 
+    @inlinable
     var normalMatrix: float3x3 {
         upperLeft3x3.inverse.transpose
     }
 
+    @inlinable
     var scalars: [Float] {
         withUnsafeBytes(of: self) { buffer in
             Array(buffer.bindMemory(to: Float.self))
