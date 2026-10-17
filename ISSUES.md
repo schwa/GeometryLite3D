@@ -658,3 +658,33 @@ closed: 2026-10-15T19:06:14Z
 intersect(triangle:) rejects a hit when the determinant is less than 1e-7. Direction is normalized, so the determinant scales with the triangle's edge lengths squared. Triangles with edges near 1e-4 (millimetre-sized in metres) give a determinant near 1e-8 and are missed. MetalSprocketsSceneGraph uses 1e-12.
 
 ---
+
+## 36: SIMD4.xyz and other SIMD helpers are slow when called from other modules
+
++++
+status: new
+priority: medium
+kind: bug
+created: 2026-10-17T12:22:15Z
++++
+
+The generic SIMD helpers in SIMD+Extensions.swift (SIMD4.xyz, SIMD3.xy, map, scalars) are not @inlinable. Other modules cannot specialize them, so every call goes through generic SIMD code and Swift metadata lookups. SIMD4.xyz also builds its result with an array literal (SIMD.init(arrayLiteral:)), which is slow in the unspecialized path.
+
+Measured in MetalSprocketsSceneGraph (Release build, 1,600-entry scene): SIMD4.xyz, called once per entry per frame to read a translation, took about 8% of frame time (244 of 2,945 main-thread samples). Most of that time was in SIMD.init(arrayLiteral:), SIMD.init<A>(_:) and __swift_instantiateGenericMetadata.
+
+---
+
+## 37: No public API is @inlinable
+
++++
+status: new
+priority: medium
+kind: feature
+created: 2026-10-17T12:22:15Z
++++
+
+No declaration in GeometryLite3D is marked @inlinable. Small hot helpers (SIMD extensions, Transform3D.matrix, Frustum.intersects, bounds transforms, Packed3 conversions) cannot be inlined or specialized by client modules, so they cost a full cross-module call, and generic ones also run unspecialized code.
+
+This shows up in per-frame renderer loops over thousands of entries (see the SIMD4.xyz issue for one measured case).
+
+---
