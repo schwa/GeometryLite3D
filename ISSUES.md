@@ -710,3 +710,21 @@ Acceptance: correct results for p closest to each vertex, each edge, and the fac
 Needed by SwiftMesh #178 (closest point and distance from a point to a mesh).
 
 ---
+
+## 39: Solid angle of a triangle seen from a point
+
++++
+status: new
+priority: medium
+kind: feature
+labels: effort:xs
+created: 2026-10-19T15:24:09Z
++++
+
+Add a function that returns the signed solid angle of triangle (a, b, c) seen from a point p (Van Oosterom and Strackee formula). The sign follows the triangle winding.
+
+Acceptance: an outward-wound closed cube gives a total of 4π from inside and 0 from outside; one face seen from the cube's center gives 4π/6.
+
+Needed by SwiftMesh #179 (inside test by generalized winding number).
+
+---
