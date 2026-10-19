@@ -43,34 +43,11 @@ public func closestPoint(onTriangle a: SIMD3<Float>, _ b: SIMD3<Float>, _ c: SIM
         let w = (d4 - d3) / ((d4 - d3) + (d5 - d6))
         return TriangleClosestPoint(point: b + w * (c - b), barycentrics: [0, 1 - w, w])
     }
+    // Equals the squared length of cross(ab, ac), and is positive here because degenerate triangles exit through a vertex or edge case above.
     let denominator = va + vb + vc
-    // A degenerate triangle has zero area, so the face case is meaningless. Use the closest edge instead.
-    guard denominator > 0, denominator.isFinite else {
-        return closestPointOnEdges(a, b, c, to: p)
-    }
     let v = vb / denominator
     let w = vc / denominator
     return TriangleClosestPoint(point: a + ab * v + ac * w, barycentrics: [1 - v - w, v, w])
-}
-
-private func closestPointOnEdges(_ a: SIMD3<Float>, _ b: SIMD3<Float>, _ c: SIMD3<Float>, to p: SIMD3<Float>) -> TriangleClosestPoint {
-    func onSegment(_ start: SIMD3<Float>, _ end: SIMD3<Float>) -> (point: SIMD3<Float>, t: Float) {
-        let edge = end - start
-        let lengthSquared = length_squared(edge)
-        let t = lengthSquared > 0 ? simd_clamp(dot(p - start, edge) / lengthSquared, 0, 1) : 0
-        return (start + t * edge, t)
-    }
-    let onAB = onSegment(a, b)
-    let onBC = onSegment(b, c)
-    let onCA = onSegment(c, a)
-    var best = TriangleClosestPoint(point: onAB.point, barycentrics: [1 - onAB.t, onAB.t, 0])
-    if distance_squared(onBC.point, p) < distance_squared(best.point, p) {
-        best = TriangleClosestPoint(point: onBC.point, barycentrics: [0, 1 - onBC.t, onBC.t])
-    }
-    if distance_squared(onCA.point, p) < distance_squared(best.point, p) {
-        best = TriangleClosestPoint(point: onCA.point, barycentrics: [onCA.t, 0, 1 - onCA.t])
-    }
-    return best
 }
 
 /// Signed solid angle of triangle (a, b, c) seen from `p` (Van Oosterom and Strackee). Positive when `p` is behind the triangle (its counter-clockwise normal points away from `p`), so an outward-wound closed mesh sums to 4π from inside and 0 from outside.
