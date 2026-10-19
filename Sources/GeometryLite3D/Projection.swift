@@ -8,15 +8,18 @@ public protocol ProjectionProtocol: Equatable, Sendable {
 }
 
 public extension ProjectionProtocol {
+    @inlinable
     func projectionMatrix(for viewSize: SIMD2<Float>) -> float4x4 {
         let aspectRatio = viewSize.x / viewSize.y
         return self.projectionMatrix(aspectRatio: aspectRatio)
     }
 
+    @inlinable
     func projectionMatrix(for viewSize: CGSize) -> float4x4 {
         projectionMatrix(for: .init(viewSize))
     }
 
+    @inlinable
     func projectionMatrix(width: Float, height: Float) -> float4x4 {
         projectionMatrix(for: [width, height])
     }
@@ -37,11 +40,13 @@ public struct PerspectiveProjection: ProjectionProtocol {
     public var verticalAngleOfView: AngleF
     public var depthMode: DepthMode
 
+    @inlinable
     public init(verticalAngleOfView: AngleF = .degrees(90), depthMode: DepthMode = .standard(zClip: 0.01 ... 100)) {
         self.verticalAngleOfView = verticalAngleOfView
         self.depthMode = depthMode
     }
 
+    @inlinable
     public var isReversedDepth: Bool {
         switch depthMode {
         case .standard:
@@ -52,6 +57,7 @@ public struct PerspectiveProjection: ProjectionProtocol {
         }
     }
 
+    @inlinable
     public func projectionMatrix(aspectRatio: Float) -> float4x4 {
         let fovy = verticalAngleOfView.radians
         let aspect = aspectRatio
@@ -104,11 +110,13 @@ public struct OrthographicProjection: ProjectionProtocol {
     public var halfHeight: Float
     public var depthMode: DepthMode
 
+    @inlinable
     public init(halfHeight: Float = 1, depthMode: DepthMode = .standard(zClip: 0.01 ... 100)) {
         self.halfHeight = halfHeight
         self.depthMode = depthMode
     }
 
+    @inlinable
     public var isReversedDepth: Bool {
         switch depthMode {
         case .standard:
@@ -119,6 +127,7 @@ public struct OrthographicProjection: ProjectionProtocol {
         }
     }
 
+    @inlinable
     public func projectionMatrix(aspectRatio: Float) -> float4x4 {
         let xScale = 1 / (halfHeight * aspectRatio)
         let yScale = 1 / halfHeight
@@ -161,6 +170,7 @@ public extension float4x4 {
     )
 
     /// View matrix for a camera at `eye` that looks along `forward`. If `forward` is parallel to `up`, a different up vector is used.
+    @inlinable
     static func viewMatrix(eye: SIMD3<Float>, forward: SIMD3<Float>, up: SIMD3<Float> = [0, 1, 0]) -> float4x4 {
         LookAt(position: eye, target: eye + normalize(forward), up: up).viewMatrix
     }

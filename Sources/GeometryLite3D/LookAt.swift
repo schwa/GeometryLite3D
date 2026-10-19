@@ -5,6 +5,7 @@ public struct LookAt: Equatable, Sendable {
     public var target: SIMD3<Float>
     public var up: SIMD3<Float>
 
+    @inlinable
     public init(position: SIMD3<Float>, target: SIMD3<Float>, up: SIMD3<Float>) {
         self.position = position
         self.target = target
@@ -13,6 +14,7 @@ public struct LookAt: Equatable, Sendable {
 }
 
 public extension LookAt {
+    @inlinable
     var cameraMatrix: float4x4 {
         let basis = OrthonormalBasis(forward: target - position, up: up)
         return float4x4(
@@ -23,6 +25,7 @@ public extension LookAt {
         )
     }
 
+    @inlinable
     var viewMatrix: float4x4 {
         cameraMatrix.inverse
     }

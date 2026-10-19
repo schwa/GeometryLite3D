@@ -732,3 +732,56 @@ Acceptance: an outward-wound closed cube gives a total of 4π from inside and 0 
 Needed by SwiftMesh #179 (inside test by generalized winding number).
 
 ---
+
+## 40: Make generic public helpers @inlinable
+
++++
+status: closed
+priority: medium
+kind: enhancement
+labels: performance
+created: 2026-10-19T16:47:02Z
+updated: 2026-10-19T18:36:38Z
+closed: 2026-10-19T18:36:38Z
++++
+
+Generic public API that is not @inlinable gets unspecialized calls through witness tables in client modules.
+
+Add @inlinable to:
+- Clamp.swift: clamped(to:)
+- Wrap.swift: wrapped(to:)
+- SIMD+Extensions.swift: xy, xyz, map, scalars
+- SIMD+ApproximateEquality.swift: generic isApproximatelyEqual
+- Packed3: init(x:y:z:), init(_:) conversions, subscript, *, init(arrayLiteral:)
+
+---
+
+## 41: Make small hot-path math @inlinable
+
++++
+status: closed
+priority: low
+kind: enhancement
+labels: performance
+created: 2026-10-19T16:47:02Z
+updated: 2026-10-19T18:36:38Z
+closed: 2026-10-19T18:36:38Z
++++
+
+Small non-generic public math is not @inlinable. SwiftPM's conservative cross-module optimization may not inline it.
+
+Add @inlinable to:
+- AngleF: operators, degrees, init(degrees:), init(radians:), radians(_:)
+- Ray3D: init, point(at:), intersect(triangle:), intersect(box:), clip/view-point inits
+- BoundingBox3D: init, center, size, radius, isEmpty, contains, union, transformed(by:)
+- Frustum: init(viewProjection:), intersects(_:)
+- ViewProjection: inits, matrix, project, unproject, clipPoint, viewPoint
+- SIMD+Matrix+Extensions: remaining inits/accessors (translation, scale, rotations, normalMatrix, ...), lookRotation
+- LookAt: init, cameraMatrix, viewMatrix
+- Transform3D: init, matrix
+- Projection: projectionMatrix variants, isReversedDepth, viewMatrix(eye:forward:up:)
+- Triangle.swift: closestPoint, solidAngle (if used in inner loops)
+
+Skip: stored properties, Codable, MDL init, Decomposition, Euler, CameraCone.
+
+---

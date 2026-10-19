@@ -7,6 +7,7 @@ public struct ViewProjection: Equatable, Sendable {
     public var isReversedDepth: Bool
     public var viewSize: SIMD2<Float>
 
+    @inlinable
     public init(viewMatrix: float4x4, projectionMatrix: float4x4, isReversedDepth: Bool, viewSize: SIMD2<Float>) {
         self.viewMatrix = viewMatrix
         self.projectionMatrix = projectionMatrix
@@ -14,6 +15,7 @@ public struct ViewProjection: Equatable, Sendable {
         self.viewSize = viewSize
     }
 
+    @inlinable
     public init(viewMatrix: float4x4, projection: some ProjectionProtocol, viewSize: SIMD2<Float>) {
         self.init(
             viewMatrix: viewMatrix,
@@ -23,19 +25,23 @@ public struct ViewProjection: Equatable, Sendable {
         )
     }
 
+    @inlinable
     public var matrix: float4x4 {
         projectionMatrix * viewMatrix
     }
 
+    @inlinable
     public var nearDepth: Float {
         isReversedDepth ? 1 : 0
     }
 
+    @inlinable
     public var frustum: Frustum {
         Frustum(viewProjection: matrix)
     }
 
     /// Returns (view x, view y, depth), or nil if the point is at or behind the camera plane.
+    @inlinable
     public func project(_ worldPoint: SIMD3<Float>) -> SIMD3<Float>? {
         let clip = matrix * SIMD4<Float>(worldPoint, 1)
         guard clip.w > 0 else {
@@ -46,6 +52,7 @@ public struct ViewProjection: Equatable, Sendable {
     }
 
     /// Inverse of `project`.
+    @inlinable
     public func unproject(_ viewPoint: SIMD3<Float>) -> SIMD3<Float> {
         let xy = clipPoint(viewPoint: viewPoint.xy)
         let clip = SIMD4<Float>(xy.x, xy.y, viewPoint.z, 1)
@@ -54,14 +61,17 @@ public struct ViewProjection: Equatable, Sendable {
     }
 
     /// Ray from the near plane through a view point.
+    @inlinable
     public func ray(through viewPoint: SIMD2<Float>) -> Ray3D {
         Ray3D(clipPoint: clipPoint(viewPoint: viewPoint), viewMatrix: viewMatrix, projectionMatrix: projectionMatrix, reversedDepth: isReversedDepth)
     }
 
+    @inlinable
     public func clipPoint(viewPoint: SIMD2<Float>) -> SIMD2<Float> {
         SIMD2<Float>(viewPoint.x / viewSize.x * 2 - 1, 1 - viewPoint.y / viewSize.y * 2)
     }
 
+    @inlinable
     public func viewPoint(clipPoint: SIMD2<Float>) -> SIMD2<Float> {
         SIMD2<Float>((clipPoint.x + 1) * 0.5 * viewSize.x, (1 - clipPoint.y) * 0.5 * viewSize.y)
     }

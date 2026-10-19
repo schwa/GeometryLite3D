@@ -4,9 +4,16 @@ public struct TriangleClosestPoint: Equatable, Sendable {
     public var point: SIMD3<Float>
     /// Weights for the triangle's vertices (a, b, c).
     public var barycentrics: SIMD3<Float>
+
+    @inlinable
+    public init(point: SIMD3<Float>, barycentrics: SIMD3<Float>) {
+        self.point = point
+        self.barycentrics = barycentrics
+    }
 }
 
 /// Closest point on triangle (a, b, c) to `p`. Uses the Voronoi-region method (Ericson, Real-Time Collision Detection, 5.1.5).
+@inlinable
 public func closestPoint(onTriangle a: SIMD3<Float>, _ b: SIMD3<Float>, _ c: SIMD3<Float>, to p: SIMD3<Float>) -> TriangleClosestPoint {
     let ab = b - a
     let ac = c - a
@@ -51,6 +58,7 @@ public func closestPoint(onTriangle a: SIMD3<Float>, _ b: SIMD3<Float>, _ c: SIM
 }
 
 /// Signed solid angle of triangle (a, b, c) seen from `p` (Van Oosterom and Strackee). Positive when `p` is behind the triangle (its counter-clockwise normal points away from `p`), so an outward-wound closed mesh sums to 4π from inside and 0 from outside.
+@inlinable
 public func solidAngle(ofTriangle a: SIMD3<Float>, _ b: SIMD3<Float>, _ c: SIMD3<Float>, from p: SIMD3<Float>) -> Float {
     let ra = a - p
     let rb = b - p

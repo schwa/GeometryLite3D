@@ -9,6 +9,7 @@ public struct Ray3D: Equatable, Sendable {
         self.direction = normalize(direction)
     }
 
+    @inlinable
     public func point(at distance: Float) -> SIMD3<Float> {
         origin + direction * distance
     }
@@ -16,6 +17,7 @@ public struct Ray3D: Equatable, Sendable {
 
 public extension Ray3D {
     /// Ray through a clip-space point. x and y are in -1...1, with y up. Depth is 0...1. If `reversedDepth` is true, the near plane is at 1.
+    @inlinable
     init(clipPoint: SIMD2<Float>, viewMatrix: float4x4, projectionMatrix: float4x4, reversedDepth: Bool = false) {
         let inverse = (projectionMatrix * viewMatrix).inverse
         let nearZ: Float = reversedDepth ? 1 : 0
@@ -27,6 +29,7 @@ public extension Ray3D {
     }
 
     /// Ray through a point in view coordinates (origin top-left, y down). Prefer `ViewProjection.ray(through:)`, which gets the depth direction from the projection.
+    @inlinable
     init(viewPoint: SIMD2<Float>, viewSize: SIMD2<Float>, viewMatrix: float4x4, projectionMatrix: float4x4, reversedDepth: Bool = false) {
         self = ViewProjection(viewMatrix: viewMatrix, projectionMatrix: projectionMatrix, isReversedDepth: reversedDepth, viewSize: viewSize).ray(through: viewPoint)
     }
@@ -37,14 +40,27 @@ public extension Ray3D {
         public var distance: Float
         /// Weights for the triangle's vertices (a, b, c).
         public var barycentrics: SIMD3<Float>
+
+        @inlinable
+        public init(distance: Float, barycentrics: SIMD3<Float>) {
+            self.distance = distance
+            self.barycentrics = barycentrics
+        }
     }
 
     struct BoxHit: Equatable, Sendable {
         public var distance: Float
         public var normal: SIMD3<Float>
+
+        @inlinable
+        public init(distance: Float, normal: SIMD3<Float>) {
+            self.distance = distance
+            self.normal = normal
+        }
     }
 
     /// Uses the Möller–Trumbore algorithm. Front faces are counter-clockwise when seen from the ray origin.
+    @inlinable
     func intersect(triangle a: SIMD3<Float>, _ b: SIMD3<Float>, _ c: SIMD3<Float>, cullBackFaces: Bool = false) -> TriangleHit? {
         // The determinant scales with edge length squared, so keep this small enough for millimetre triangles.
         let epsilon: Float = 1e-12
@@ -78,6 +94,7 @@ public extension Ray3D {
     }
 
     /// Uses the slab test. Returns nil if the box is behind the ray. If the ray origin is inside the box, the hit is at distance 0 with the normal opposite to the ray direction.
+    @inlinable
     func intersect(box: BoundingBox3D) -> BoxHit? {
         let inverseDirection = 1 / direction
         let t1 = (box.min - origin) * inverseDirection
