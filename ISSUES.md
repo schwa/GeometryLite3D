@@ -692,3 +692,21 @@ No declaration in GeometryLite3D is marked @inlinable. Small hot helpers (SIMD e
 This shows up in per-frame renderer loops over thousands of entries (see the SIMD4.xyz issue for one measured case).
 
 ---
+
+## 38: Closest point on a triangle to a point
+
++++
+status: new
+priority: medium
+kind: feature
+labels: effort:s
+created: 2026-10-19T15:24:09Z
++++
+
+Add a function that returns the closest point on triangle (a, b, c) to a point p, plus its barycentric coordinates. Use the Voronoi-region method (Ericson, Real-Time Collision Detection, 5.1.5).
+
+Acceptance: correct results for p closest to each vertex, each edge, and the face interior; degenerate triangles do not crash.
+
+Needed by SwiftMesh #178 (closest point and distance from a point to a mesh).
+
+---
