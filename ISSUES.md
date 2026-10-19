@@ -696,11 +696,13 @@ This shows up in per-frame renderer loops over thousands of entries (see the SIM
 ## 38: Closest point on a triangle to a point
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 labels: effort:s
 created: 2026-10-19T15:24:09Z
+updated: 2026-10-19T15:29:49Z
+closed: 2026-10-19T15:29:49Z
 +++
 
 Add a function that returns the closest point on triangle (a, b, c) to a point p, plus its barycentric coordinates. Use the Voronoi-region method (Ericson, Real-Time Collision Detection, 5.1.5).
@@ -714,11 +716,13 @@ Needed by SwiftMesh #178 (closest point and distance from a point to a mesh).
 ## 39: Solid angle of a triangle seen from a point
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 labels: effort:xs
 created: 2026-10-19T15:24:09Z
+updated: 2026-10-19T15:29:49Z
+closed: 2026-10-19T15:29:49Z
 +++
 
 Add a function that returns the signed solid angle of triangle (a, b, c) seen from a point p (Van Oosterom and Strackee formula). The sign follows the triangle winding.
