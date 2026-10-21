@@ -789,10 +789,12 @@ Skip: stored properties, Codable, MDL init, Decomposition, Euler, CameraCone.
 ## 42: float4x4.decompose returns a wrong, non-unit rotation near 180° about x
 
 +++
-status: new
+status: closed
 priority: high
 kind: bug
 created: 2026-10-21T20:47:59Z
+updated: 2026-10-21T20:55:41Z
+closed: 2026-10-21T20:55:41Z
 +++
 
 In `Decomposition.swift`, the "Q_xx is largest" branch (taken when 1 + trace <= 0.001, that is near-180° rotations whose axis is closest to x) computes y with a difference instead of a sum:

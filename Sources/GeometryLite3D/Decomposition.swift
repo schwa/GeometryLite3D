@@ -240,7 +240,7 @@ public extension float4x4 {
             let s = 0.5 / r
             rotation = SIMD4<Float>(
                 0.5 * r,
-                (column[1][0] - column[0][1]) * s,
+                (column[1][0] + column[0][1]) * s,
                 (column[2][0] + column[0][2]) * s,
                 (column[1][2] - column[2][1]) * s
             )
