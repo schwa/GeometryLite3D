@@ -98,7 +98,7 @@ struct DecompositionTests {
         simd_quatf(angle: .pi / 3, axis: simd_normalize(SIMD3<Float>(1, 2, 3))),
         simd_quatf(vector: simd_normalize(SIMD4<Float>(0.934, 0.107, 0.341, 0.0148))),
         simd_quatf(vector: simd_normalize(SIMD4<Float>(0.107, 0.934, 0.341, 0.0148))),
-        simd_quatf(vector: simd_normalize(SIMD4<Float>(0.107, 0.341, 0.934, 0.0148))),
+        simd_quatf(vector: simd_normalize(SIMD4<Float>(0.107, 0.341, 0.934, 0.0148)))
     ])
     func decomposeRotationRoundTrips(rotation: simd_quatf) throws {
         let components = try #require(float4x4(rotation).decompose)
