@@ -785,3 +785,42 @@ Add @inlinable to:
 Skip: stored properties, Codable, MDL init, Decomposition, Euler, CameraCone.
 
 ---
+
+## 42: float4x4.decompose returns a wrong, non-unit rotation near 180° about x
+
++++
+status: new
+priority: high
+kind: bug
+created: 2026-10-21T20:47:59Z
++++
+
+In `Decomposition.swift`, the "Q_xx is largest" branch (taken when 1 + trace <= 0.001, that is near-180° rotations whose axis is closest to x) computes y with a difference instead of a sum:
+
+```swift
+// Q_xx is largest.
+(column[1][0] - column[0][1]) * s,   // should be (column[1][0] + column[0][1]) * s
+```
+
+The Q_yy and Q_zz branches use sums for the off-axis terms, as they should.
+
+Result: the rotation is wrong and not unit length. Composing a Transform3D from it scales the matrix by the squared length, so repeated decompose/compose round trips shrink the object. Found in MetalSprocketsSceneGraph: physics writes each body pose back through decompose every step, and dice shrank step after step.
+
+Repro (float bit patterns logged from the dice demo):
+
+```swift
+let bits: [UInt32] = [0x3f86c96c, 0x3fb5b075, 0x3f1774cd,              // translation
+                      0x3f6f0dd7, 0x3ddbc806, 0x3eae95cb, 0x3c7312b4,  // rotation x, y, z, w
+                      0x3d80000b, 0x3d80000c, 0x3d800009]              // scale
+let v = bits.map(Float.init(bitPattern:))
+let pose = Transform3D(translation: [v[0], v[1], v[2]], rotation: simd_quatf(vector: [v[3], v[4], v[5], v[6]]), scale: [v[7], v[8], v[9]])
+let once = pose.matrix.decompose!
+// rotation in:  (0.934, 0.107, 0.341, w 0.0148), length 1
+// rotation out: (0.934, -0.005, 0.341, w 0.0148), length 0.99424
+let twice = Transform3D(translation: once.translation, rotation: once.rotation, scale: once.scale).matrix.decompose!
+// scale: 0.0625 in, 0.06178 after the second round trip
+```
+
+Done when: decompose round-trips rotations in all four branches (trace branch and each largest-diagonal branch), checked by comparing rotations (q or -q), not just scale or length. MetalSprocketsSceneGraph currently normalizes the rotation in Transform3D(decomposing:) as a workaround, which hides the shrink but not the wrong rotation.
+
+---
