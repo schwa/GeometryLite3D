@@ -852,14 +852,18 @@ Fix: rename `isReversedDepth` to `isReverseZ` (keep a deprecated alias) and use 
 ## 44: Rename DepthMode reversed cases to reverseZ
 
 +++
-status: new
+status: closed
 priority: low
 kind: enhancement
 created: 2026-10-22T20:55:31Z
+updated: 2026-10-22T20:56:44Z
+closed: 2026-10-22T20:56:44Z
 +++
 
 Follow-up to #43. `PerspectiveProjection.DepthMode.reversed(zClip:)`, `.reversedInfinite(zNear:)` and `OrthographicProjection.DepthMode.reversed(zClip:)` still use "reversed". MetalSprockets libraries use `reverseZ`.
 
 Fix: rename to e.g. `.reverseZ(zClip:)` / `.reverseZInfinite(zNear:)`, keeping deprecated static-func aliases if possible. Update SceneSprockets, MetalSprocketsPBR, MetalSprocketsGaussianSplats, and SceneSprocketsComposer.
+
+- `2026-10-22T20:56:44Z`: Won't fix: too pedantic. .reversed reads fine; not worth a breaking change across 4 repos.
 
 ---
