@@ -826,3 +826,23 @@ let twice = Transform3D(translation: once.translation, rotation: once.rotation, 
 Done when: decompose round-trips rotations in all four branches (trace branch and each largest-diagonal branch), checked by comparing rotations (q or -q), not just scale or length. MetalSprocketsSceneGraph currently normalizes the rotation in Transform3D(decomposing:) as a workaround, which hides the shrink but not the wrong rotation.
 
 ---
+
+## 43: Align reverse-Z naming with MetalSprocketsParticles
+
++++
+status: new
+priority: low
+kind: enhancement
+created: 2026-10-22T20:53:56Z
++++
+
+The MetalSprockets libraries now use `reverseZ` for reversed depth (near 1, far 0, `.greater`, clear to 0): MetalSprocketsParticles (`ParticleSystemRuntime.reverseZ`), and MetalSprocketsAddOns (ShadowMap, `float4x4.orthographic(reverseZ:)`, PointCloud, Slug).
+
+GeometryLite3D uses different terms in `Projection.swift`:
+- `PerspectiveProjection.isReversedDepth`
+- `DepthMode.reversed(zClip:)` and `.reversedInfinite(zNear:)`
+- Doc comments say "reversed depth".
+
+Fix: rename `isReversedDepth` to `isReverseZ` (keep a deprecated alias) and use "reverse Z" in the doc comments. Decide whether the `DepthMode` cases should be renamed too (e.g. `.reverseZ(zClip:)`); that touches SceneSprockets, MetalSprocketsPBR, MetalSprocketsGaussianSplats, and SceneSprocketsComposer.
+
+---
