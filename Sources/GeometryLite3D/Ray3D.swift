@@ -16,11 +16,11 @@ public struct Ray3D: Equatable, Sendable {
 }
 
 public extension Ray3D {
-    /// Ray through a clip-space point. x and y are in -1...1, with y up. Depth is 0...1. If `reversedDepth` is true, the near plane is at 1.
+    /// Ray through a clip-space point. x and y are in -1...1, with y up. Depth is 0...1. If `reverseZ` is true, the near plane is at 1.
     @inlinable
-    init(clipPoint: SIMD2<Float>, viewMatrix: float4x4, projectionMatrix: float4x4, reversedDepth: Bool = false) {
+    init(clipPoint: SIMD2<Float>, viewMatrix: float4x4, projectionMatrix: float4x4, reverseZ: Bool = false) {
         let inverse = (projectionMatrix * viewMatrix).inverse
-        let nearZ: Float = reversedDepth ? 1 : 0
+        let nearZ: Float = reverseZ ? 1 : 0
         let near = inverse * SIMD4<Float>(clipPoint.x, clipPoint.y, nearZ, 1)
         let other = inverse * SIMD4<Float>(clipPoint.x, clipPoint.y, 0.5, 1)
         let nearPoint = near.xyz / near.w
@@ -30,8 +30,20 @@ public extension Ray3D {
 
     /// Ray through a point in view coordinates (origin top-left, y down). Prefer `ViewProjection.ray(through:)`, which gets the depth direction from the projection.
     @inlinable
-    init(viewPoint: SIMD2<Float>, viewSize: SIMD2<Float>, viewMatrix: float4x4, projectionMatrix: float4x4, reversedDepth: Bool = false) {
-        self = ViewProjection(viewMatrix: viewMatrix, projectionMatrix: projectionMatrix, isReversedDepth: reversedDepth, viewSize: viewSize).ray(through: viewPoint)
+    init(viewPoint: SIMD2<Float>, viewSize: SIMD2<Float>, viewMatrix: float4x4, projectionMatrix: float4x4, reverseZ: Bool = false) {
+        self = ViewProjection(viewMatrix: viewMatrix, projectionMatrix: projectionMatrix, isReverseZ: reverseZ, viewSize: viewSize).ray(through: viewPoint)
+    }
+
+    @available(*, deprecated, renamed: "init(clipPoint:viewMatrix:projectionMatrix:reverseZ:)")
+    @inlinable
+    init(clipPoint: SIMD2<Float>, viewMatrix: float4x4, projectionMatrix: float4x4, reversedDepth: Bool) {
+        self.init(clipPoint: clipPoint, viewMatrix: viewMatrix, projectionMatrix: projectionMatrix, reverseZ: reversedDepth)
+    }
+
+    @available(*, deprecated, renamed: "init(viewPoint:viewSize:viewMatrix:projectionMatrix:reverseZ:)")
+    @inlinable
+    init(viewPoint: SIMD2<Float>, viewSize: SIMD2<Float>, viewMatrix: float4x4, projectionMatrix: float4x4, reversedDepth: Bool) {
+        self.init(viewPoint: viewPoint, viewSize: viewSize, viewMatrix: viewMatrix, projectionMatrix: projectionMatrix, reverseZ: reversedDepth)
     }
 }
 

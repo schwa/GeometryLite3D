@@ -830,10 +830,12 @@ Done when: decompose round-trips rotations in all four branches (trace branch an
 ## 43: Align reverse-Z naming with MetalSprocketsParticles
 
 +++
-status: new
+status: closed
 priority: low
 kind: enhancement
 created: 2026-10-22T20:53:56Z
+updated: 2026-10-22T20:55:31Z
+closed: 2026-10-22T20:55:31Z
 +++
 
 The MetalSprockets libraries now use `reverseZ` for reversed depth (near 1, far 0, `.greater`, clear to 0): MetalSprocketsParticles (`ParticleSystemRuntime.reverseZ`), and MetalSprocketsAddOns (ShadowMap, `float4x4.orthographic(reverseZ:)`, PointCloud, Slug).
@@ -844,5 +846,20 @@ GeometryLite3D uses different terms in `Projection.swift`:
 - Doc comments say "reversed depth".
 
 Fix: rename `isReversedDepth` to `isReverseZ` (keep a deprecated alias) and use "reverse Z" in the doc comments. Decide whether the `DepthMode` cases should be renamed too (e.g. `.reverseZ(zClip:)`); that touches SceneSprockets, MetalSprocketsPBR, MetalSprocketsGaussianSplats, and SceneSprocketsComposer.
+
+---
+
+## 44: Rename DepthMode reversed cases to reverseZ
+
++++
+status: new
+priority: low
+kind: enhancement
+created: 2026-10-22T20:55:31Z
++++
+
+Follow-up to #43. `PerspectiveProjection.DepthMode.reversed(zClip:)`, `.reversedInfinite(zNear:)` and `OrthographicProjection.DepthMode.reversed(zClip:)` still use "reversed". MetalSprockets libraries use `reverseZ`.
+
+Fix: rename to e.g. `.reverseZ(zClip:)` / `.reverseZInfinite(zNear:)`, keeping deprecated static-func aliases if possible. Update SceneSprockets, MetalSprocketsPBR, MetalSprocketsGaussianSplats, and SceneSprocketsComposer.
 
 ---

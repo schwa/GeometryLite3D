@@ -16,7 +16,7 @@ struct ProjectionHelpersTests {
 
     @Test
     func reversedDepthRemapsZToWMinusZ() {
-        let clip = float4x4.reversedDepth * SIMD4<Float>(1, 2, 0.25, 2)
+        let clip = float4x4.reverseZ * SIMD4<Float>(1, 2, 0.25, 2)
         #expect(clip == [1, 2, 1.75, 2])
     }
 
@@ -31,7 +31,7 @@ struct ProjectionHelpersTests {
             SIMD4<Float>(0, 0, -near / (far - near), 1)
         )
         let reversed = OrthographicProjection(halfHeight: 1, depthMode: .reversed(zClip: near...far)).projectionMatrix(aspectRatio: 1)
-        #expect((float4x4.reversedDepth * standardMetal).isApproximatelyEqual(to: reversed, absoluteTolerance: 1e-6))
+        #expect((float4x4.reverseZ * standardMetal).isApproximatelyEqual(to: reversed, absoluteTolerance: 1e-6))
     }
 
     @Test

@@ -4,15 +4,27 @@ import simd
 public struct ViewProjection: Equatable, Sendable {
     public var viewMatrix: float4x4
     public var projectionMatrix: float4x4
-    public var isReversedDepth: Bool
+    public var isReverseZ: Bool
     public var viewSize: SIMD2<Float>
 
+    @available(*, deprecated, renamed: "isReverseZ")
+    public var isReversedDepth: Bool {
+        get { isReverseZ }
+        set { isReverseZ = newValue }
+    }
+
     @inlinable
-    public init(viewMatrix: float4x4, projectionMatrix: float4x4, isReversedDepth: Bool, viewSize: SIMD2<Float>) {
+    public init(viewMatrix: float4x4, projectionMatrix: float4x4, isReverseZ: Bool, viewSize: SIMD2<Float>) {
         self.viewMatrix = viewMatrix
         self.projectionMatrix = projectionMatrix
-        self.isReversedDepth = isReversedDepth
+        self.isReverseZ = isReverseZ
         self.viewSize = viewSize
+    }
+
+    @available(*, deprecated, renamed: "init(viewMatrix:projectionMatrix:isReverseZ:viewSize:)")
+    @inlinable
+    public init(viewMatrix: float4x4, projectionMatrix: float4x4, isReversedDepth: Bool, viewSize: SIMD2<Float>) {
+        self.init(viewMatrix: viewMatrix, projectionMatrix: projectionMatrix, isReverseZ: isReversedDepth, viewSize: viewSize)
     }
 
     @inlinable
@@ -20,7 +32,7 @@ public struct ViewProjection: Equatable, Sendable {
         self.init(
             viewMatrix: viewMatrix,
             projectionMatrix: projection.projectionMatrix(for: viewSize),
-            isReversedDepth: projection.isReversedDepth,
+            isReverseZ: projection.isReverseZ,
             viewSize: viewSize
         )
     }
@@ -32,7 +44,7 @@ public struct ViewProjection: Equatable, Sendable {
 
     @inlinable
     public var nearDepth: Float {
-        isReversedDepth ? 1 : 0
+        isReverseZ ? 1 : 0
     }
 
     @inlinable
@@ -63,7 +75,7 @@ public struct ViewProjection: Equatable, Sendable {
     /// Ray from the near plane through a view point.
     @inlinable
     public func ray(through viewPoint: SIMD2<Float>) -> Ray3D {
-        Ray3D(clipPoint: clipPoint(viewPoint: viewPoint), viewMatrix: viewMatrix, projectionMatrix: projectionMatrix, reversedDepth: isReversedDepth)
+        Ray3D(clipPoint: clipPoint(viewPoint: viewPoint), viewMatrix: viewMatrix, projectionMatrix: projectionMatrix, reverseZ: isReverseZ)
     }
 
     @inlinable

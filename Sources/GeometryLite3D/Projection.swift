@@ -4,10 +4,13 @@ import simd
 public protocol ProjectionProtocol: Equatable, Sendable {
     func projectionMatrix(aspectRatio: Float) -> float4x4
     /// True when the near plane maps to depth 1.
-    var isReversedDepth: Bool { get }
+    var isReverseZ: Bool { get }
 }
 
 public extension ProjectionProtocol {
+    @available(*, deprecated, renamed: "isReverseZ")
+    var isReversedDepth: Bool { isReverseZ }
+
     @inlinable
     func projectionMatrix(for viewSize: SIMD2<Float>) -> float4x4 {
         let aspectRatio = viewSize.x / viewSize.y
@@ -31,9 +34,9 @@ public struct PerspectiveProjection: ProjectionProtocol {
     public enum DepthMode: Equatable, Sendable {
         /// Depth 0...1, with near at 0 and far at 1.
         case standard(zClip: ClosedRange<Float>)
-        /// Reversed depth with no far plane. The near plane maps to 1. Use a `.greater` depth test and clear depth to 0.
+        /// Reverse Z with no far plane. The near plane maps to 1. Use a `.greater` depth test and clear depth to 0.
         case reversedInfinite(zNear: Float)
-        /// Reversed depth with a far plane. Near maps to 1 and far maps to 0. Use a `.greater` depth test and clear depth to 0.
+        /// Reverse Z with a far plane. Near maps to 1 and far maps to 0. Use a `.greater` depth test and clear depth to 0.
         case reversed(zClip: ClosedRange<Float>)
     }
 
@@ -47,7 +50,7 @@ public struct PerspectiveProjection: ProjectionProtocol {
     }
 
     @inlinable
-    public var isReversedDepth: Bool {
+    public var isReverseZ: Bool {
         switch depthMode {
         case .standard:
             false
@@ -103,7 +106,7 @@ public struct OrthographicProjection: ProjectionProtocol {
     public enum DepthMode: Equatable, Sendable {
         /// Depth 0...1, with near at 0 and far at 1.
         case standard(zClip: ClosedRange<Float>)
-        /// Reversed depth. Near maps to 1 and far maps to 0. Use a `.greater` depth test and clear depth to 0.
+        /// Reverse Z. Near maps to 1 and far maps to 0. Use a `.greater` depth test and clear depth to 0.
         case reversed(zClip: ClosedRange<Float>)
     }
 
@@ -117,7 +120,7 @@ public struct OrthographicProjection: ProjectionProtocol {
     }
 
     @inlinable
-    public var isReversedDepth: Bool {
+    public var isReverseZ: Bool {
         switch depthMode {
         case .standard:
             false
@@ -161,8 +164,11 @@ public struct OrthographicProjection: ProjectionProtocol {
 // MARK: -
 
 public extension float4x4 {
-    /// Changes clip z to w - z. This swaps standard and reversed depth.
-    static let reversedDepth = float4x4(
+    @available(*, deprecated, renamed: "reverseZ")
+    static var reversedDepth: float4x4 { reverseZ }
+
+    /// Changes clip z to w - z. This swaps standard depth and reverse Z.
+    static let reverseZ = float4x4(
         SIMD4<Float>(1, 0, 0, 0),
         SIMD4<Float>(0, 1, 0, 0),
         SIMD4<Float>(0, 0, -1, 0),

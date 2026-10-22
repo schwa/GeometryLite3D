@@ -19,17 +19,17 @@ struct ViewProjectionTests {
 
     @Test
     func projectionsReportDepthDirection() {
-        #expect(!PerspectiveProjection(depthMode: .standard(zClip: 1...10)).isReversedDepth)
-        #expect(PerspectiveProjection(depthMode: .reversed(zClip: 1...10)).isReversedDepth)
-        #expect(PerspectiveProjection(depthMode: .reversedInfinite(zNear: 1)).isReversedDepth)
-        #expect(!OrthographicProjection(depthMode: .standard(zClip: 1...10)).isReversedDepth)
-        #expect(OrthographicProjection(depthMode: .reversed(zClip: 1...10)).isReversedDepth)
+        #expect(!PerspectiveProjection(depthMode: .standard(zClip: 1...10)).isReverseZ)
+        #expect(PerspectiveProjection(depthMode: .reversed(zClip: 1...10)).isReverseZ)
+        #expect(PerspectiveProjection(depthMode: .reversedInfinite(zNear: 1)).isReverseZ)
+        #expect(!OrthographicProjection(depthMode: .standard(zClip: 1...10)).isReverseZ)
+        #expect(OrthographicProjection(depthMode: .reversed(zClip: 1...10)).isReverseZ)
     }
 
     @Test(arguments: depthModes)
     func nearDepthMatchesDepthDirection(depthMode: PerspectiveProjection.DepthMode) {
         let viewProjection = makeViewProjection(depthMode)
-        #expect(viewProjection.nearDepth == (viewProjection.isReversedDepth ? 1 : 0))
+        #expect(viewProjection.nearDepth == (viewProjection.isReverseZ ? 1 : 0))
     }
 
     @Test(arguments: depthModes)

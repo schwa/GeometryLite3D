@@ -1,6 +1,6 @@
 import simd
 
-/// Six planes from a view-projection matrix. Each normal points into the frustum. Clip z must be in 0...w (standard or reversed depth).
+/// Six planes from a view-projection matrix. Each normal points into the frustum. Clip z must be in 0...w (standard or reverse Z).
 public struct Frustum: Equatable, Sendable {
     public var left: SIMD4<Float>
     public var right: SIMD4<Float>
