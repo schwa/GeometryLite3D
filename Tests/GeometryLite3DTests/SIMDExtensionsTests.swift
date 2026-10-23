@@ -19,7 +19,7 @@ struct SIMDExtensionsTests {
         let point = matrix * SIMD4<Float>(0, 1, 0, 1)
         #expect(abs(point.x) < 1e-6)
         #expect(abs(point.y) < 1e-6)
-        #expect(abs(point.z + 1) < 1e-6)
+        #expect(abs(point.z - 1) < 1e-6)
     }
 
     @Test
@@ -28,7 +28,7 @@ struct SIMDExtensionsTests {
         let point = matrix * SIMD4<Float>(1, 0, 0, 1)
         #expect(abs(point.x) < 1e-6)
         #expect(abs(point.y) < 1e-6)
-        #expect(abs(point.z - 1) < 1e-6)
+        #expect(abs(point.z + 1) < 1e-6)
     }
 
     @Test
@@ -36,8 +36,25 @@ struct SIMDExtensionsTests {
         let matrix = float4x4(zRotation: AngleF(degrees: 90))
         let point = matrix * SIMD4<Float>(1, 0, 0, 1)
         #expect(abs(point.x) < 1e-6)
-        #expect(abs(point.y + 1) < 1e-6)
+        #expect(abs(point.y - 1) < 1e-6)
         #expect(abs(point.z) < 1e-6)
+    }
+
+    @Test(arguments: [-170, -45, 10, 30, 135])
+    func axisRotationsMatchQuaternions(degrees: Float) {
+        let angle = AngleF(degrees: degrees)
+        let radians = Float(angle.radians)
+        let pairs: [(float4x4, SIMD3<Float>)] = [
+            (float4x4(xRotation: angle), [1, 0, 0]),
+            (float4x4(yRotation: angle), [0, 1, 0]),
+            (float4x4(zRotation: angle), [0, 0, 1])
+        ]
+        for (matrix, axis) in pairs {
+            let expected = float4x4(simd_quatf(angle: radians, axis: axis))
+            for column in 0..<4 {
+                #expect(simd_distance(matrix[column], expected[column]) < 1e-5)
+            }
+        }
     }
 
     @Test

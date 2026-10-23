@@ -871,11 +871,13 @@ Fix: rename to e.g. `.reverseZ(zClip:)` / `.reverseZInfinite(zNear:)`, keeping d
 ## 45: Investigate rotation direction of simd_float4x4(xRotation:/yRotation:/zRotation:)
 
 +++
-status: new
+status: closed
 priority: low
 kind: task
 labels: needs-info
 created: 2026-10-23T19:19:16Z
+updated: 2026-10-23T19:47:45Z
+closed: 2026-10-23T19:47:45Z
 +++
 
 It is not clear which direction the axis-rotation initializers in SIMD+Matrix+Extensions.swift rotate for positive angles.
