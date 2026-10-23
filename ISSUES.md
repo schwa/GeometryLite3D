@@ -867,3 +867,26 @@ Fix: rename to e.g. `.reverseZ(zClip:)` / `.reverseZInfinite(zNear:)`, keeping d
 - `2026-10-22T20:56:44Z`: Won't fix: too pedantic. .reversed reads fine; not worth a breaking change across 4 repos.
 
 ---
+
+## 45: Investigate rotation direction of simd_float4x4(xRotation:/yRotation:/zRotation:)
+
++++
+status: new
+priority: low
+kind: task
+labels: needs-info
+created: 2026-10-23T19:19:16Z
++++
+
+It is not clear which direction the axis-rotation initializers in SIMD+Matrix+Extensions.swift rotate for positive angles.
+
+Observation: in Radiance, a placement matrix built with simd_float4x4(zRotation:) and simd_float4x4(xRotation:) put an object at the wrong orientation for most yaw angles, though it looked right at ±90°. Building the same rotations with simd_quatf(angle:axis:) gave the expected orientation. This is one data point from one app, and other parts of that app's math could be the cause.
+
+The initializers pass nested arrays to simd_float4x4([...]). That initializer takes columns, so the first entry of zRotation, [c, -s, 0, 0], becomes column 0. That could mean positive angles rotate clockwise when viewed down the axis, unlike simd_quatf and the usual right-handed convention. It could also be intentional, for example a row-vector convention or matching existing callers.
+
+To investigate:
+- Compare each initializer with simd_float4x4(simd_quatf(angle:axis:)) for a few angles. Check xRotation, yRotation, and zRotation.
+- Check the documentation, tests, and callers (including Radiance's Transform.matrix and other packages) for the intended convention.
+- Decide whether the behavior or the documentation needs to change. Changing the behavior would break callers that rely on it.
+
+---
